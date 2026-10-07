@@ -29,12 +29,21 @@ const STATIC_GLYPH = Math.max(
   0,
 );
 
-interface LogoProps {
+/** Props do componente Logo. */
+type LogoProps = {
+  /** `mark` mostra só o símbolo; `full` mostra o símbolo e a palavra "Converter". @default 'mark' */
   variant?: 'mark' | 'full';
+  /** Cor do fundo onde o logo fica, que define a cor do anel da direita e da palavra. @default 'onLight' */
   tone?: 'onDark' | 'onLight';
+  /** Altura em pixels. A largura segue a proporção da variante. @default 48 */
   size?: number;
-}
+};
 
+/**
+ * Logo do Converter desenhado com `react-native-svg`. Os anéis se cruzam a cada
+ * 3,6 s e a moeda no diamante troca a cada 1,8 s entre as 10 moedas. Com
+ * "reduzir movimento" ligado no sistema, fica parado no R$.
+ */
 export function Logo({ variant = 'mark', tone = 'onLight', size = 48 }: LogoProps) {
   const reduceMotion = useReduceMotion();
   const animate = reduceMotion === false;
