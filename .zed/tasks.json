@@ -1,0 +1,52 @@
+[
+  {
+    "label": "📱 Start (Expo Go)",
+    "command": "pnpm",
+    "args": ["start"]
+  },
+  {
+    "label": "🌐 Start (Tunnel)",
+    "command": "pnpm",
+    "args": ["start:tunnel"]
+  },
+  {
+    "label": "🧹 Start (Clear Cache)",
+    "command": "pnpm",
+    "args": ["start:clear"]
+  },
+  {
+    "label": "🔍 Lint (Fix)",
+    "command": "pnpm",
+    "args": ["lint:fix"]
+  },
+  {
+    "label": "✨ Format (Oxfmt)",
+    "command": "pnpm",
+    "args": ["format"]
+  },
+  {
+    "label": "🔎 Typecheck",
+    "command": "pnpm",
+    "args": ["typecheck"]
+  },
+  {
+    "label": "🧪 Test",
+    "command": "pnpm",
+    "args": ["test"]
+  },
+  {
+    "label": "📊 Test Coverage",
+    "command": "pnpm",
+    "args": ["test:cov"]
+  },
+  {
+    "label": "🩺 Expo Doctor",
+    "command": "pnpm",
+    "args": ["doctor"]
+  },
+  {
+    "label": "✅ PR Check",
+    "command": "pnpm",
+    "args": ["pr"]
+  }
+]
