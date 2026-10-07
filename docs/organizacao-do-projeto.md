@@ -292,7 +292,7 @@ test/
 - **Template de PR**: tipo, link da task no Linear, tela no design, checklist de código (traduções, tema, services), qualidade (lint, format, typecheck, testes, Expo Go, claro e escuro), acessibilidade e prints antes/depois.
 - **Commits**: `tipo: descrição em inglês` (`feat:`, `fix:`, `test:`, `docs:`, `chore:`, `refactor:`, `version:`).
 
-Detalhes dos workflows e problemas comuns: [CI e releases](CI.md).
+Detalhes dos workflows e problemas comuns: [CI e releases](CI.md). Como rodar o app e os testes: [Como rodar e testar](como-rodar-e-testar.md).
 
 ### Lançar uma versão
 

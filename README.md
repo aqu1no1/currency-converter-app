@@ -50,6 +50,7 @@ import { TIME_IN_MS } from '@constants/time.constants';
 
 ## Documentação
 
+- [Como rodar e testar](docs/como-rodar-e-testar.md): abrir no Expo Go, testar à mão, testes automatizados e problemas comuns
 - [Organização do projeto](docs/organizacao-do-projeto.md): stack, pastas, convenções, tema, traduções e testes
 - [CI e releases](docs/CI.md)
 - [CHANGELOG](CHANGELOG.md)
