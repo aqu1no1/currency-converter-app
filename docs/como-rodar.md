@@ -21,7 +21,7 @@ O celular e o computador precisam estar **na mesma rede Wi-Fi**.
 
 ## 2. Variantes: beta e production
 
-O app tem duas variantes, escolhidas pela variável `APP_VARIANT` nos scripts (mesmo esquema do tchin-app):
+O app tem duas variantes, escolhidas pela variável `APP_VARIANT` nos scripts:
 
 | Variante     | Para quê                                    | Arquivo de env    | Nome no app        | Scheme                  |
 | ------------ | ------------------------------------------- | ----------------- | ------------------ | ----------------------- |
