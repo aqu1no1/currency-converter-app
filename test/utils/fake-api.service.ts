@@ -1,13 +1,15 @@
-type Method = 'get' | 'post' | 'patch' | 'put' | 'delete';
+import type { HttpClient } from '@interfaces/http-client.interface';
 
-export function createFakeApiService() {
+export type FakeApiService = {
+  [Method in keyof HttpClient]: jest.MockedFunction<HttpClient[Method]>;
+};
+
+export function createFakeApiService(): FakeApiService {
   return {
     get: jest.fn(),
     post: jest.fn(),
     patch: jest.fn(),
     put: jest.fn(),
     delete: jest.fn(),
-  } satisfies Record<Method, jest.Mock>;
+  };
 }
-
-export type FakeApiService = ReturnType<typeof createFakeApiService>;

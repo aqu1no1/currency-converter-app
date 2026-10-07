@@ -11,11 +11,14 @@ import {
 } from '@expo-google-fonts/instrument-sans';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
+import { ApiProvider } from '@contexts/ApiProvider';
+import { queryClient } from '@lib/query-client';
 import { ThemeProvider } from '@theme/ThemeProvider';
 
 void SplashScreen.preventAutoHideAsync();
@@ -44,8 +47,12 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider>
-      <Stack screenOptions={{ headerShown: false }} />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ApiProvider>
+        <ThemeProvider>
+          <Stack screenOptions={{ headerShown: false }} />
+        </ThemeProvider>
+      </ApiProvider>
+    </QueryClientProvider>
   );
 }

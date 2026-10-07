@@ -93,18 +93,18 @@ O `tsconfig.json` tem `"types": ["jest"]`, então `describe`, `it`, `expect` e `
 
 ## 5. Ferramentas prontas
 
-| Import                              | Para quê                                                                 |
-| ----------------------------------- | ------------------------------------------------------------------------ |
-| `@test/utils/render-with-providers` | `renderWithProviders(<Tela />)`: renderiza com os providers do app       |
-| `@test/utils/query-client`          | `createTestQueryClient()`: sem retry e sem coletar cache durante o teste |
-| `@test/utils/fake-api.service`      | `createFakeApiService()`: ApiService falso, cada método é um `jest.fn()` |
-| `test/fixtures/`                    | Respostas de exemplo da API                                              |
+| Import                              | Para quê                                                                                                                                                                                                 |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@test/utils/render-with-providers` | `renderWithProviders(<Tela />, { api })` e `renderHookWithProviders(hook, { api })`: renderizam com os providers do app (tema, React Query e `ApiProvider`); o `api` padrão é o `createFakeApiService()` |
+| `@test/utils/query-client`          | `createTestQueryClient()`: sem retry e sem coletar cache durante o teste                                                                                                                                 |
+| `@test/utils/fake-api.service`      | `createFakeApiService()`: ApiService falso, cada método é um `jest.fn()`                                                                                                                                 |
+| `test/fixtures/`                    | Respostas de exemplo da API                                                                                                                                                                              |
 
-Hoje o `renderWithProviders` só tem o React Query. Tema e traduções entram quando existirem (API-30 e API-31), e todo teste que usa o helper passa a ter os dois sem mudar nada.
+O `renderWithProviders` já traz o tema, o React Query e o `ApiProvider`. Para testar um hook ou uma tela com dados, passe um `createFakeApiService()` com as respostas configuradas no `api`.
 
 ### Como a API é simulada
 
-Os services recebem o `ApiService` no construtor. No teste, o service recebe o `createFakeApiService()` no lugar, e cada teste decide a resposta com `mockResolvedValueOnce` (sucesso) ou `mockRejectedValueOnce` (erro). Sem rede, sem Docker, e dá para conferir com que URL e parâmetros o service chamou a API.
+Os services recebem o `HttpClient` no construtor, e os hooks criam os services a partir do `useApi()`. No teste, o service (ou o `ApiProvider`, via `renderWithProviders`) recebe o `createFakeApiService()` no lugar, e cada teste decide a resposta com `mockResolvedValueOnce` (sucesso) ou `mockRejectedValueOnce` (erro). Sem rede, sem Docker, e dá para conferir com que URL e parâmetros o service chamou a API.
 
 ---
 
@@ -129,7 +129,7 @@ describe('Icon', () => {
 
 ### Service com a API simulada
 
-Os services chegam com a API-32; o formato é este.
+O `CurrencyService` recebe o `HttpClient` no construtor; no teste, entra o `createFakeApiService()`.
 
 ```ts
 import { CurrencyService } from '@services/currency.service';
