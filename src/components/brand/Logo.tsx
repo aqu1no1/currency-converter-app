@@ -2,10 +2,10 @@ import { useEffect, useId, useState } from 'react';
 import { Animated, Easing } from 'react-native';
 import Svg, { Circle, Defs, G, Mask, Path, Rect } from 'react-native-svg';
 
-import { BRAND_COLORS as BRAND } from '@constants/brand.constants';
 import { LOGO_CURRENCY_GLYPHS, LOGO_WORDMARK } from '@constants/logo.constants';
 import { TIME_IN_MS } from '@constants/time.constants';
 import { useReduceMotion } from '@hooks/useReduceMotion';
+import { useTheme } from '@theme/ThemeProvider';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedG = Animated.createAnimatedComponent(G);
@@ -40,6 +40,7 @@ type LogoProps = {
  * "reduzir movimento" ligado no sistema, fica parado no R$.
  */
 export function Logo({ variant = 'mark', tone = 'onLight', size = 48 }: LogoProps) {
+  const { colors } = useTheme();
   const reduceMotion = useReduceMotion();
   const animate = reduceMotion === false;
 
@@ -48,7 +49,7 @@ export function Logo({ variant = 'mark', tone = 'onLight', size = 48 }: LogoProp
   const [glyphOpacity] = useState(() => new Animated.Value(1));
   const [glyphIndex, setGlyphIndex] = useState(STATIC_GLYPH);
 
-  const contrast = tone === 'onDark' ? BRAND.white : BRAND.green;
+  const contrast = tone === 'onDark' ? colors.white : colors.primary;
   const glyph = LOGO_CURRENCY_GLYPHS[animate ? glyphIndex : STATIC_GLYPH];
 
   useEffect(() => {
@@ -118,7 +119,7 @@ export function Logo({ variant = 'mark', tone = 'onLight', size = 48 }: LogoProp
           cy={15}
           r={8.5}
           fill="none"
-          stroke={BRAND.mint}
+          stroke={colors.accent}
           strokeWidth={2}
         />
         <AnimatedCircle
@@ -133,14 +134,18 @@ export function Logo({ variant = 'mark', tone = 'onLight', size = 48 }: LogoProp
 
       <Path
         d={DIAMOND}
-        fill={BRAND.mint}
-        stroke={BRAND.mint}
+        fill={colors.accent}
+        stroke={colors.accent}
         strokeWidth={0.8}
         strokeLinejoin="round"
       />
 
       {glyph && (
-        <AnimatedG opacity={glyphOpacity} fill={BRAND.green} testID={`logo-currency-${glyph.code}`}>
+        <AnimatedG
+          opacity={glyphOpacity}
+          fill={colors.primary}
+          testID={`logo-currency-${glyph.code}`}
+        >
           <Path
             d={glyph.d}
             transform={`translate(${glyph.x} ${glyph.y}) scale(${glyph.scale} -${glyph.scale})`}

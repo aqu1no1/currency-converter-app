@@ -2,10 +2,11 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { StyleSheet } from 'react-native';
 import type { ReactTestRendererJSON } from 'react-test-renderer';
 
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { fireEvent, screen } from '@testing-library/react-native';
 
 import { Button } from '@components/ui/Button';
-import { BRAND_COLORS } from '@constants/brand.constants';
+import { lightColors } from '@constants/theme';
+import { renderWithProviders } from '@test/utils/render-with-providers';
 
 function buttonStyle() {
   return StyleSheet.flatten(screen.getByRole('button').props.style);
@@ -18,7 +19,7 @@ function textColor(label: string) {
 describe('Button', () => {
   it('calls onPress when pressed', () => {
     const onPress = jest.fn();
-    render(<Button onPress={onPress}>Começar</Button>);
+    renderWithProviders(<Button onPress={onPress}>Começar</Button>);
 
     fireEvent.press(screen.getByRole('button', { name: 'Começar' }));
 
@@ -26,27 +27,27 @@ describe('Button', () => {
   });
 
   it('uses the mint background and green text in the filled variant', () => {
-    render(<Button>Começar</Button>);
+    renderWithProviders(<Button>Começar</Button>);
 
-    expect(buttonStyle().backgroundColor).toBe(BRAND_COLORS.mint);
-    expect(textColor('Começar')).toBe(BRAND_COLORS.green);
+    expect(buttonStyle().backgroundColor).toBe(lightColors.accent);
+    expect(textColor('Começar')).toBe(lightColors.textOnAccent);
   });
 
   it('uses only the border and white text in the outline variant', () => {
-    render(<Button variant="outline">Converter agora</Button>);
+    renderWithProviders(<Button variant="outline">Converter agora</Button>);
 
     expect(buttonStyle()).toMatchObject({
       backgroundColor: 'transparent',
-      borderColor: BRAND_COLORS.outlineOnGreen,
+      borderColor: lightColors.borderOnBrand,
     });
-    expect(textColor('Converter agora')).toBe(BRAND_COLORS.white);
+    expect(textColor('Converter agora')).toBe(lightColors.textOnBrand);
   });
 
   it.each([
     ['left', 1],
     ['right', 0],
   ] as const)('places the icon on the %s', (iconPosition, labelIndex) => {
-    render(
+    renderWithProviders(
       <Button icon="arrowRight" iconPosition={iconPosition}>
         Começar
       </Button>,
@@ -59,7 +60,7 @@ describe('Button', () => {
 
     expect(screen.UNSAFE_getByType(MaterialCommunityIcons).props).toMatchObject({
       name: 'arrow-right',
-      color: BRAND_COLORS.green,
+      color: lightColors.textOnAccent,
     });
     expect(rendered).toHaveLength(2);
     expect(rendered.indexOf('Começar')).toBe(labelIndex);
@@ -67,7 +68,7 @@ describe('Button', () => {
 
   it('shows a loading indicator and ignores presses while loading', () => {
     const onPress = jest.fn();
-    render(
+    renderWithProviders(
       <Button loading onPress={onPress}>
         Começar
       </Button>,
@@ -83,7 +84,7 @@ describe('Button', () => {
 
   it('ignores presses and looks faded when disabled', () => {
     const onPress = jest.fn();
-    render(
+    renderWithProviders(
       <Button disabled onPress={onPress}>
         Começar
       </Button>,

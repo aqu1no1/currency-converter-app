@@ -1,16 +1,17 @@
 import { AccessibilityInfo } from 'react-native';
 
-import { act, render, screen } from '@testing-library/react-native';
+import { act, screen } from '@testing-library/react-native';
 
 import { Logo } from '@components/brand/Logo';
 import { TIME_IN_MS } from '@constants/time.constants';
+import { renderWithProviders } from '@test/utils/render-with-providers';
 
 function mockReduceMotion(enabled: boolean) {
   jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockResolvedValue(enabled);
 }
 
 async function renderLogo(ui: React.ReactElement) {
-  render(ui);
+  renderWithProviders(ui);
   await act(async () => {});
 }
 

@@ -11,27 +11,31 @@ import {
 } from 'react-native';
 
 import { Icon } from '@components/icons/Icon';
-import { BRAND_COLORS } from '@constants/brand.constants';
 import type { IconName } from '@constants/icons';
+import { type Colors, FONTS, RADIUS, SIZES, TYPE } from '@constants/theme';
+import { useTheme } from '@theme/ThemeProvider';
 
-const VARIANTS = {
-  filled: {
-    backgroundColor: BRAND_COLORS.mint,
-    borderColor: BRAND_COLORS.mint,
-    textColor: BRAND_COLORS.green,
-  },
-  outline: {
-    backgroundColor: 'transparent',
-    borderColor: BRAND_COLORS.outlineOnGreen,
-    textColor: BRAND_COLORS.white,
-  },
-} as const;
+function getVariantColors(variant: 'filled' | 'outline', colors: Colors) {
+  if (variant === 'outline') {
+    return {
+      backgroundColor: 'transparent',
+      borderColor: colors.borderOnBrand,
+      textColor: colors.textOnBrand,
+    };
+  }
+
+  return {
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
+    textColor: colors.textOnAccent,
+  };
+}
 
 /** Props do componente Button. */
 type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   /** Função de callback acionada ao pressionar o botão. */
   onPress?: (event: GestureResponderEvent) => void;
-  /** Variação visual: `filled` (fundo menta) para a ação principal, `outline` (só a borda) para a secundária. @default 'filled' */
+  /** Variação visual sobre o fundo da marca: `filled` (fundo `accent`) para a ação principal, `outline` (só a borda) para a secundária. @default 'filled' */
   variant?: 'filled' | 'outline';
   /** Nome do ícone do projeto (`@constants/icons`) exibido ao lado do texto. @default undefined */
   icon?: IconName;
@@ -76,7 +80,8 @@ export function Button({
   style,
   ...rest
 }: ButtonProps) {
-  const { backgroundColor, borderColor, textColor } = VARIANTS[variant];
+  const { colors } = useTheme();
+  const { backgroundColor, borderColor, textColor } = getVariantColors(variant, colors);
   const blocked = disabled || loading;
 
   const iconElement = icon ? <Icon name={icon} size={20} color={textColor} /> : null;
@@ -115,9 +120,9 @@ export function Button({
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: 52,
-    paddingHorizontal: 20,
-    borderRadius: 16,
+    minHeight: SIZES.button,
+    paddingHorizontal: SIZES.screenPadding,
+    borderRadius: RADIUS.button,
     borderWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -131,9 +136,9 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   label: {
-    fontSize: 16,
+    fontFamily: FONTS.bodySemiBold,
+    fontSize: TYPE.body,
     lineHeight: 24,
-    fontWeight: '600',
     textAlign: 'center',
     includeFontPadding: false,
   },
