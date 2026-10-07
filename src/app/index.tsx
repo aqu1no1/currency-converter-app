@@ -2,7 +2,6 @@ import { StyleSheet, View } from 'react-native';
 
 import { Logo } from '@components/brand/Logo';
 
-// Tela provisória até a de Boas-vindas (API-35).
 export default function Index() {
   return (
     <View style={styles.container}>

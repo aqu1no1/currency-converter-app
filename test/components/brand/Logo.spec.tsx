@@ -11,7 +11,6 @@ function mockReduceMotion(enabled: boolean) {
 
 async function renderLogo(ui: React.ReactElement) {
   render(ui);
-  // espera a leitura do "reduzir movimento"
   await act(async () => {});
 }
 

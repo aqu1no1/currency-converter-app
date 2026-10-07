@@ -1,6 +1,3 @@
-// Paths gerados a partir de src/assets/svg/logo/ e do logo animado do design.
-// Coordenadas no viewBox do símbolo (0 0 30 30); os glifos vêm da fonte com o eixo Y invertido.
-
 export interface LogoGlyph {
   code: string;
   x: number;
@@ -9,7 +6,6 @@ export interface LogoGlyph {
   d: string;
 }
 
-/** Moedas que passam no diamante, na ordem da animação. */
 export const LOGO_CURRENCY_GLYPHS: readonly LogoGlyph[] = [
   {
     code: 'USD',
@@ -83,7 +79,6 @@ export const LOGO_CURRENCY_GLYPHS: readonly LogoGlyph[] = [
   },
 ];
 
-/** Palavra "Converter" do logo completo. */
 export const LOGO_WORDMARK = {
   x: 40.0,
   y: 22.26,

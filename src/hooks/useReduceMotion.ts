@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AccessibilityInfo } from 'react-native';
 
-/**
- * Se o "reduzir movimento" do sistema está ligado.
- * Fica `null` até a primeira leitura, para nada animar antes de saber a resposta.
- */
 export function useReduceMotion() {
   const [reduceMotion, setReduceMotion] = useState<boolean | null>(null);
 

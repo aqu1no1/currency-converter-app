@@ -7,8 +7,6 @@ jest.mock('expo-localization', () => ({
   getCalendars: () => [{ timeZone: 'America/Sao_Paulo' }],
 }));
 
-// As fontes dos ícones contam como carregadas: sem isso o @expo/vector-icons
-// atualiza o estado depois do render e o teste avisa sobre act(...).
 jest.mock('expo-font', () => ({
   ...jest.requireActual('expo-font'),
   isLoaded: () => true,

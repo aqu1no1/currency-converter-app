@@ -16,7 +16,6 @@ const aliases = [
   'assets',
 ];
 
-/** @type {import('jest').Config} */
 module.exports = {
   preset: 'jest-expo',
   roots: ['<rootDir>/test'],

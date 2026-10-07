@@ -30,11 +30,8 @@ const STATIC_GLYPH = Math.max(
 );
 
 interface LogoProps {
-  /** `mark`: só o símbolo. `full`: símbolo + "Converter". */
   variant?: 'mark' | 'full';
-  /** Cor do fundo onde o logo fica. */
   tone?: 'onDark' | 'onLight';
-  /** Altura em pixels; a largura segue a proporção da variante. */
   size?: number;
 }
 

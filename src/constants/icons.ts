@@ -3,7 +3,6 @@ import type { ComponentProps } from 'react';
 
 type MaterialCommunityIconName = ComponentProps<typeof MaterialCommunityIcons>['name'];
 
-/** Nome do ícone no projeto → ícone do MaterialCommunityIcons (catálogo: https://icons.expo.fyi). */
 export const ICONS = {
   home: 'home-outline',
   homeActive: 'home',
