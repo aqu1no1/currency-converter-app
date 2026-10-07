@@ -197,17 +197,27 @@ Variável de ambiente nova: adicionar no `.env.example` **e** no `types/env.d.ts
 
 ## 4. Camada de API
 
-Fluxo: **tela → hook (`useQuery`) → service → `ApiService` → axios**.
+Fluxo: **tela → hook (`useQuery`) → service (criado com `useApi()`) → `ApiService` → axios**.
 
 - `services/api.service.ts`: classe `ApiService` singleton (`getInstance()`), com os métodos `get`, `post`, `patch`, `put` e `delete`, que já devolvem só o `data`.
   - Interceptor de request: envia o idioma atual no `Accept-Language`, para as mensagens de erro da API virem traduzidas.
-  - Interceptor de response: transforma qualquer falha num `ApiError` (`status`, `message` pronta para a tela, `code`; `status 0` = erro de rede).
+  - Interceptor de response: transforma qualquer falha num `ApiError` (`status`, `message` pronta para a tela, `code`, `isNetwork`). O `message` do NestJS chega como texto ou lista (validação); a lista vira um texto por linha. Sem resposta (rede ou timeout): `status 0` e `isNetwork = true`, com a mensagem traduzida de `errors`. Cancelamentos passam direto, sem virar `ApiError`.
   - Timeout de `10 * TIME_IN_MS.SECOND`.
-- `services/<recurso>.service.ts`: uma classe por recurso, que recebe o `ApiService` no construtor e define o `baseUrl` (`/exchange-rates`, `/sync`). Cada método valida a resposta com o schema Zod do DTO e aceita um `signal` para cancelamento.
-- `services/index.ts`: cria as instâncias (`new ExchangeRateService(api)`).
-- **Hooks**: um por consulta (`useLatestRates`, `useHistory`, `useSyncStatus`), com `queryKey` descritiva e o `signal` do React Query repassado ao service.
+- `interfaces/http-client.interface.ts`: interface `HttpClient` que o `ApiService` implementa. Os services dependem dela, e não do `ApiService`, então os testes passam o `createFakeApiService()` no lugar.
+- `services/<recurso>.service.ts`: uma classe por recurso (`CurrencyService.list`, `ExchangeRateService.convert/latest/history`, `SyncService.status`), que recebe o `HttpClient` no construtor e define o `baseUrl`. Cada método valida a resposta com o schema Zod do DTO (`utils/parse-response.util.ts`: resposta fora do formato vira `ApiError` com `code: 'INVALID_RESPONSE'`) e aceita um `signal` para cancelamento.
+- `contexts/ApiProvider.tsx`: `ApiProvider` (no `_layout.tsx`, por padrão com o `ApiService.getInstance()`) e o hook `useApi()`, que entrega o `HttpClient`. Os services **não** têm instância global: cada hook cria o seu a partir do `useApi()`:
+
+  ```ts
+  const api = useApi();
+  const exchangeRateService = useMemo(() => new ExchangeRateService(api), [api]);
+  ```
+
+- **Hooks**: um por consulta (`useCurrencies`, `useLatestRates`, `useHistory`, `useSyncStatus`), com `queryKey` descritiva e o `signal` do React Query repassado ao service.
 - `lib/query-client.ts`: `staleTime` de `5 * TIME_IN_MS.MINUTE`; retry só em erro de rede ou 5xx, no máximo 2 vezes. O retry fica só aqui, não no axios.
 - **URL da API**: `EXPO_PUBLIC_API_URL` no `.env.beta` (desenvolvimento) e no `.env.production`, com o IP da máquina na rede (o celular não acessa `localhost`). Tudo que começa com `EXPO_PUBLIC_` fica visível no app: nada secreto ali.
+
+- **Moedas**: `enums/currency-code.enum.ts` (`CurrencyCode`, as 10 da coluna `code` da tabela `currencies`) e `utils/currency.util.ts` (símbolos US$, R$, €, £, ¥, C$, A$, Fr, 元, AR$).
+- **Idioma da API**: a API responde em pt-BR e en; em espanhol, as mensagens de erro da API chegam em pt-BR (os textos do próprio app continuam em espanhol).
 
 Endpoints usados: `GET /currencies`, `GET /exchange-rates/convert`, `GET /exchange-rates/latest/:base`, `GET /exchange-rates/history`, `GET /sync/status` e `GET /sync`.
 

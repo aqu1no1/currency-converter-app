@@ -14,6 +14,7 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 - Fontes Bricolage Grotesque (títulos) e Instrument Sans (texto).
 - Tema claro e escuro: segue o celular por padrão e guarda a escolha.
 - Textos em português, inglês e espanhol, conforme o idioma do celular.
+- Comunicação com a API: moedas, conversão, últimas cotações, histórico e status da sincronização, com respostas validadas, mensagens de erro no idioma do app e aviso de falta de conexão.
 - Ícones de interface do MaterialCommunityIcons com nomes do projeto (`<Icon name="history" />`).
 
 ## [0.1.0] - 2026-10-07
