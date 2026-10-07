@@ -1,20 +1,138 @@
-import { StyleSheet, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet, Text, View } from 'react-native';
+import Animated, { Easing, FadeInUp, ReduceMotion } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Logo } from '@components/brand/Logo';
+import { Button } from '@components/ui/Button';
+import { FloatingCoins } from '@components/welcome/FloatingCoins';
+import { SUPPORTED_CURRENCIES } from '@constants/currencies.constants';
+import { FONTS, RADIUS, SIZES, TYPE } from '@constants/theme';
+import { useTheme } from '@theme/ThemeProvider';
 
-export default function Index() {
+const CONTENT_TOP = 56;
+const ACTIONS_BOTTOM = 40;
+const LOGO_SIZE = 180;
+
+function rise(delay: number) {
+  return FadeInUp.duration(500)
+    .delay(delay)
+    .easing(Easing.bezier(0.2, 0.7, 0.2, 1))
+    .withInitialValues({ opacity: 0, transform: [{ translateY: 14 }] })
+    .reduceMotion(ReduceMotion.System);
+}
+
+export default function Welcome() {
+  const { colors } = useTheme();
+  const { t } = useTranslation();
+  const { navigate } = useRouter();
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.container}>
-      <Logo variant="full" tone="onDark" size={42} />
+    <View style={[styles.screen, { backgroundColor: colors.surfaceBrand }]}>
+      <StatusBar style="light" />
+      <FloatingCoins />
+
+      <View style={[styles.content, { paddingTop: Math.max(CONTENT_TOP, insets.top) }]}>
+        <Animated.View entering={rise(0)}>
+          <Logo variant="mark" tone="onDark" size={LOGO_SIZE} />
+        </Animated.View>
+
+        <Animated.View entering={rise(80)} style={styles.texts}>
+          <Text accessibilityRole="header" style={[styles.title, { color: colors.textOnBrand }]}>
+            {t('common.appName')}
+          </Text>
+          <Text style={[styles.description, { color: colors.textOnBrandMuted }]}>
+            {t('welcome.description')}
+          </Text>
+        </Animated.View>
+
+        <Animated.View entering={rise(160)} style={styles.chips}>
+          {SUPPORTED_CURRENCIES.map((code) => (
+            <Text
+              key={code}
+              style={[styles.chip, { backgroundColor: colors.chipOnBrand, color: colors.accent }]}
+            >
+              {code}
+            </Text>
+          ))}
+        </Animated.View>
+      </View>
+
+      <Animated.View
+        entering={rise(160)}
+        style={[
+          styles.actions,
+          { paddingBottom: Math.max(ACTIONS_BOTTOM, insets.bottom + SIZES.sectionGap) },
+        ]}
+      >
+        <Button icon="arrowRight" iconPosition="right" onPress={() => navigate('/onboarding')}>
+          {t('welcome.start')}
+        </Button>
+        <Button variant="outline" icon="converter" onPress={() => navigate('/converter')}>
+          {t('welcome.convertNow')}
+        </Button>
+        <Text style={[styles.disclaimer, { color: colors.textOnBrandMuted }]}>
+          {t('welcome.disclaimer')}
+        </Text>
+      </Animated.View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
+    flex: 1,
+  },
+  content: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#0F3D2E',
+    gap: SIZES.sectionGap,
+    paddingHorizontal: SIZES.screenPadding,
+  },
+  texts: {
+    gap: SIZES.itemGap,
+  },
+  title: {
+    fontFamily: FONTS.display,
+    fontSize: TYPE.display,
+    lineHeight: TYPE.display * 1.05,
+    fontVariant: ['tabular-nums'],
+    textAlign: 'center',
+  },
+  description: {
+    fontFamily: FONTS.body,
+    fontSize: TYPE.body,
+    lineHeight: TYPE.body * 1.5,
+    textAlign: 'center',
+  },
+  chips: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 8,
+    maxWidth: 320,
+  },
+  chip: {
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: RADIUS.pill,
+    overflow: 'hidden',
+    fontFamily: FONTS.bodySemiBold,
+    fontSize: TYPE.caption,
+  },
+  actions: {
+    gap: SIZES.itemGap,
+    paddingTop: SIZES.sectionGap,
+    paddingHorizontal: SIZES.screenPadding,
+  },
+  disclaimer: {
+    fontFamily: FONTS.body,
+    fontSize: TYPE.caption,
+    lineHeight: TYPE.caption * 1.35,
+    textAlign: 'center',
   },
 });
