@@ -242,7 +242,15 @@ Regras:
 
 - Ícones de interface vêm do `@expo/vector-icons` (MaterialCommunityIcons). Cada ícone tem um nome do projeto em `constants/icons.ts`, e as telas usam `<Icon name="history" />` de `@components/icons/Icon`. **Nenhuma tela importa `@expo/vector-icons` direto**: para trocar um ícone no app inteiro, muda uma linha do mapa.
 - O `Icon` é decorativo (`accessible={false}`); quem tem `accessibilityLabel` é o botão em volta.
-- O logo é o componente `<Logo variant="mark | full" tone="onDark | onLight" size={...} />` de `@components/brand/Logo`, feito com `react-native-svg` a partir dos SVGs de `assets/svg/logo/` (o RN não abre `.svg` direto). Anima com `Animated` e fica parado no R$ com "reduzir movimento" ligado.
+- O logo é o componente `<Logo variant="mark | full" tone="onDark | onLight" size={...} />` de `@components/brand/Logo`, feito com `react-native-svg` (o RN não abre `.svg` direto). Anima com `Animated` (prévia em [`docs/assets/logo-animado.gif`](assets/logo-animado.gif)) e, com "reduzir movimento" ligado, mostra o logo estático com o "$".
+- Onde fica cada versão do logo:
+
+| Pasta                           | O quê                                                                            | Uso                                              |
+| ------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `src/assets/images/`            | `icon.png` (sem transparência), ícone adaptável, monocromático, splash e favicon | Ícone do app, splash e web (`app.config.ts`)     |
+| `src/assets/svg/logo/`          | SVGs estáticos (`mark`, `logo`, `app-icon`, em fundo claro e escuro)             | Referência do `Logo` e fonte para gerar os PNGs  |
+| `src/assets/svg/logo/animated/` | SVGs animados                                                                    | Referência da animação do `Logo` e uso na web    |
+| `store/`                        | PNGs prontos (ícone 1024 com cantos arredondados, símbolo e logo completo)       | Página das lojas e divulgação; não entram no app |
 
 ---
 
@@ -251,7 +259,8 @@ Regras:
 - Arquivos `.ts` por idioma e domínio: `src/locales/pt-BR/{common,tabs,converter,rates,history,settings,currencies,errors}.ts`, reunidos num `index.ts`. `en` e `es` seguem as mesmas chaves e são tipados como `Translations`, então o TypeScript acusa chave faltando.
 - `lib/i18n.ts` configura o i18next. Prioridade: idioma escolhido em Ajustes → idioma do celular → pt-BR.
 - `types/i18next.d.ts` dá autocomplete das chaves.
-- Nas telas, sempre `const { t } = useTranslations()`; **nunca texto fixo**.
+- Nas telas, sempre `const { t } = useTranslation()` (de `react-i18next`); **nunca texto fixo**.
+- Navegação com o router desestruturado: `const { navigate } = useRouter()`.
 - Dinheiro e datas com `Intl` no idioma ativo (`utils/format.util.ts`); datas das cotações com `timeZone: 'UTC'`.
 
 ---

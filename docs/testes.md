@@ -78,11 +78,12 @@ Alias novo no `tsconfig.json`? Ele entra sozinho no Jest se for uma pasta de `sr
 
 Mocks que valem para todos os testes:
 
-| Mock                | O que faz                                                                                                                 |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| AsyncStorage        | Usa o mock oficial em memória, **limpo antes de cada teste**                                                              |
-| `expo-localization` | O celular "está" em pt-BR, fuso de São Paulo                                                                              |
-| `expo-font`         | As fontes contam como carregadas, para o `@expo/vector-icons` não atualizar estado depois do render (aviso de `act(...)`) |
+| Mock                    | O que faz                                                                                                                                              |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| AsyncStorage            | Usa o mock oficial em memória, **limpo antes de cada teste**                                                                                           |
+| `expo-localization`     | O celular "está" em pt-BR, fuso de São Paulo                                                                                                           |
+| `react-native-worklets` | Mock dos worklets + `setUpTests()` do Reanimated, para animações com `useSharedValue` rodarem no Node (o estilo animado é lido com `getAnimatedStyle`) |
+| `expo-font`             | As fontes contam como carregadas, para o `@expo/vector-icons` não atualizar estado depois do render (aviso de `act(...)`)                              |
 
 ### Tipos
 
