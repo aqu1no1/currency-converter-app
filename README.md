@@ -47,3 +47,9 @@ Cada pasta tem um alias com o mesmo nome (`@components`, `@services`, `@constant
 ```ts
 import { TIME_IN_MS } from '@constants/time.constants';
 ```
+
+## Documentação
+
+- [Organização do projeto](docs/organizacao-do-projeto.md): stack, pastas, convenções, tema, traduções e testes
+- [CI e releases](docs/CI.md)
+- [CHANGELOG](CHANGELOG.md)
