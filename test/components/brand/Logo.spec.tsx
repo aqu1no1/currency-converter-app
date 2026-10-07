@@ -25,31 +25,34 @@ describe('Logo', () => {
     jest.restoreAllMocks();
   });
 
-  it('stays still on R$ when reduce motion is on', async () => {
+  it('shows the static logo with the $ when reduce motion is on', async () => {
     mockReduceMotion(true);
     await renderLogo(<Logo />);
 
-    expect(screen.getByTestId('logo-currency-BRL')).toBeTruthy();
+    expect(screen.getByTestId('logo-static')).toBeTruthy();
+    expect(screen.getByTestId('logo-currency-static')).toBeTruthy();
 
     await act(async () => {
       jest.advanceTimersByTime(10 * TIME_IN_MS.SECOND);
     });
 
-    expect(screen.getByTestId('logo-currency-BRL')).toBeTruthy();
+    expect(screen.getByTestId('logo-currency-static')).toBeTruthy();
+    expect(screen.queryByTestId('logo-currency-USD')).toBeNull();
   });
 
   it('cycles the currency in the diamond when motion is allowed', async () => {
     mockReduceMotion(false);
     await renderLogo(<Logo />);
 
-    expect(screen.getByTestId('logo-currency-BRL')).toBeTruthy();
+    expect(screen.queryByTestId('logo-static')).toBeNull();
+    expect(screen.getByTestId('logo-currency-USD')).toBeTruthy();
 
     await act(async () => {
       jest.advanceTimersByTime(2 * TIME_IN_MS.SECOND);
     });
 
-    expect(screen.queryByTestId('logo-currency-BRL')).toBeNull();
-    expect(screen.getByTestId('logo-currency-EUR')).toBeTruthy();
+    expect(screen.queryByTestId('logo-currency-USD')).toBeNull();
+    expect(screen.getByTestId('logo-currency-BRL')).toBeTruthy();
   });
 
   it('shows the wordmark only in the full variant', async () => {
@@ -63,8 +66,8 @@ describe('Logo', () => {
 
   it('keeps the variant proportions from the height', async () => {
     mockReduceMotion(true);
-    await renderLogo(<Logo variant="full" size={21} />);
+    await renderLogo(<Logo variant="full" size={27} />);
 
-    expect(screen.getByLabelText('Converter').props).toMatchObject({ width: 144, height: 21 });
+    expect(screen.getByLabelText('Converter').props).toMatchObject({ width: 144, height: 27 });
   });
 });
