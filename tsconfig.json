@@ -2,6 +2,7 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "types": ["jest"],
     "paths": {
       "@app/*": ["./src/app/*"],
       "@components/*": ["./src/components/*"],
@@ -17,7 +18,8 @@
       "@utils/*": ["./src/utils/*"],
       "@lib/*": ["./src/lib/*"],
       "@locales/*": ["./src/locales/*"],
-      "@assets/*": ["./src/assets/*"]
+      "@assets/*": ["./src/assets/*"],
+      "@test/*": ["./test/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "types/**/*.d.ts"],
