@@ -1,5 +1,14 @@
 import '@lib/i18n';
 
+import {
+  BricolageGrotesque_500Medium,
+  BricolageGrotesque_600SemiBold,
+} from '@expo-google-fonts/bricolage-grotesque';
+import {
+  InstrumentSans_400Regular,
+  InstrumentSans_500Medium,
+  InstrumentSans_600SemiBold,
+} from '@expo-google-fonts/instrument-sans';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useFonts } from 'expo-font';
@@ -13,6 +22,11 @@ void SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
+    BricolageGrotesque_500Medium,
+    BricolageGrotesque_600SemiBold,
+    InstrumentSans_400Regular,
+    InstrumentSans_500Medium,
+    InstrumentSans_600SemiBold,
     ...MaterialCommunityIcons.font,
     ...MaterialIcons.font,
   });
