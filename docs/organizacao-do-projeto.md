@@ -38,9 +38,10 @@ Como o App Converter é montado: stack, pastas, convenções, padrão visual, qu
 
 | Comando                             | O que faz                                                                          |
 | ----------------------------------- | ---------------------------------------------------------------------------------- |
-| `pnpm start`                        | Abre o Expo (QR code para o Expo Go)                                               |
-| `pnpm start:tunnel`                 | Mesmo, quando a rede bloqueia a conexão direta                                     |
-| `pnpm start:clear`                  | Abre limpando o cache (depois de mudar aliases ou instalar libs)                   |
+| `pnpm start:beta -c`                | Abre o Expo na variante beta, limpando o cache (dia a dia)                         |
+| `pnpm start`                        | Abre o Expo na variante production                                                 |
+| `pnpm start:tunnel`                 | Beta, quando a rede bloqueia a conexão direta                                      |
+| `pnpm start:clear`                  | Beta limpando o cache (o mesmo que `pnpm start:beta -c`)                           |
 | `pnpm lint` / `pnpm lint:fix`       | oxlint com checagem de tipos, sem aceitar avisos                                   |
 | `pnpm format` / `pnpm format:check` | oxfmt                                                                              |
 | `pnpm typecheck`                    | `tsc --noEmit`                                                                     |
@@ -66,7 +67,7 @@ currency-converter-app/
 ├── jest.config.js
 ├── .oxlintrc.json · .oxfmtrc.json
 ├── tsconfig.json             # strict + aliases
-├── .env.example
+├── .env.example              # modelo do .env.beta e do .env.production
 ├── CHANGELOG.md
 └── package.json · pnpm-lock.yaml
 ```
@@ -206,7 +207,7 @@ Fluxo: **tela → hook (`useQuery`) → service → `ApiService` → axios**.
 - `services/index.ts`: cria as instâncias (`new ExchangeRateService(api)`).
 - **Hooks**: um por consulta (`useLatestRates`, `useHistory`, `useSyncStatus`), com `queryKey` descritiva e o `signal` do React Query repassado ao service.
 - `lib/query-client.ts`: `staleTime` de `5 * TIME_IN_MS.MINUTE`; retry só em erro de rede ou 5xx, no máximo 2 vezes. O retry fica só aqui, não no axios.
-- **URL da API**: `EXPO_PUBLIC_API_URL` no `.env`, com o IP da máquina na rede (o celular não acessa `localhost`). Tudo que começa com `EXPO_PUBLIC_` fica visível no app: nada secreto ali.
+- **URL da API**: `EXPO_PUBLIC_API_URL` no `.env.beta` (desenvolvimento) e no `.env.production`, com o IP da máquina na rede (o celular não acessa `localhost`). Tudo que começa com `EXPO_PUBLIC_` fica visível no app: nada secreto ali.
 
 Endpoints usados: `GET /currencies`, `GET /exchange-rates/convert`, `GET /exchange-rates/latest/:base`, `GET /exchange-rates/history`, `GET /sync/status` e `GET /sync`.
 
@@ -263,6 +264,8 @@ Regras:
 
 ## 8. Testes
 
+Guia completo em [Testes](testes.md).
+
 Pasta `test/`, separada do `src/`, espelhando a estrutura do código:
 
 ```
@@ -292,7 +295,7 @@ test/
 - **Template de PR**: tipo, link da task no Linear, tela no design, checklist de código (traduções, tema, services), qualidade (lint, format, typecheck, testes, Expo Go, claro e escuro), acessibilidade e prints antes/depois.
 - **Commits**: `tipo: descrição em inglês` (`feat:`, `fix:`, `test:`, `docs:`, `chore:`, `refactor:`, `version:`).
 
-Detalhes dos workflows e problemas comuns: [CI e releases](CI.md). Como rodar o app e os testes: [Como rodar e testar](como-rodar-e-testar.md).
+Detalhes dos workflows e problemas comuns: [CI e releases](CI.md). Como rodar o app: [Como rodar o app](como-rodar.md). Testes: [Testes](testes.md).
 
 ### Lançar uma versão
 

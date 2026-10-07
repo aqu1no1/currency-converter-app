@@ -8,8 +8,8 @@ Pré-requisitos: Node 24, pnpm e o app **Expo Go** no celular.
 
 ```sh
 pnpm install
-cp .env.example .env   # coloque o IP da máquina em EXPO_PUBLIC_API_URL
-pnpm start             # escaneie o QR code com o Expo Go
+cp .env.example .env.beta   # coloque o IP da máquina em EXPO_PUBLIC_API_URL
+pnpm start:beta -c          # escaneie o QR code com o Expo Go
 ```
 
 O celular não acessa `localhost`: use o IP da máquina na rede. Tudo que começa com `EXPO_PUBLIC_` fica visível no app, então nada secreto vai ali.
@@ -50,7 +50,8 @@ import { TIME_IN_MS } from '@constants/time.constants';
 
 ## Documentação
 
-- [Como rodar e testar](docs/como-rodar-e-testar.md): abrir no Expo Go, testar à mão, testes automatizados e problemas comuns
+- [Como rodar o app](docs/como-rodar.md): variantes beta e production, Expo Go, conferir à mão e problemas comuns
+- [Testes](docs/testes.md): como os testes funcionam, onde ficam, como rodar e escrever
 - [Organização do projeto](docs/organizacao-do-projeto.md): stack, pastas, convenções, tema, traduções e testes
 - [CI e releases](docs/CI.md)
 - [CHANGELOG](CHANGELOG.md)
