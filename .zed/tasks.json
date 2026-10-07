@@ -1,51 +1,51 @@
 [
   {
-    "label": "📱 Start (Expo Go)",
+    "label": "\ud83e\uddea Start Beta (Expo Go)",
+    "command": "pnpm",
+    "args": ["start:beta", "-c"]
+  },
+  {
+    "label": "\ud83d\udcf1 Start Production (Expo Go)",
     "command": "pnpm",
     "args": ["start"]
   },
   {
-    "label": "🌐 Start (Tunnel)",
+    "label": "\ud83c\udf10 Start Beta (Tunnel)",
     "command": "pnpm",
     "args": ["start:tunnel"]
   },
   {
-    "label": "🧹 Start (Clear Cache)",
-    "command": "pnpm",
-    "args": ["start:clear"]
-  },
-  {
-    "label": "🔍 Lint (Fix)",
+    "label": "\ud83d\udd0d Lint (Fix)",
     "command": "pnpm",
     "args": ["lint:fix"]
   },
   {
-    "label": "✨ Format (Oxfmt)",
+    "label": "\u2728 Format (Oxfmt)",
     "command": "pnpm",
     "args": ["format"]
   },
   {
-    "label": "🔎 Typecheck",
+    "label": "\ud83d\udd0e Typecheck",
     "command": "pnpm",
     "args": ["typecheck"]
   },
   {
-    "label": "🧪 Test",
+    "label": "\ud83e\uddea Test",
     "command": "pnpm",
     "args": ["test"]
   },
   {
-    "label": "📊 Test Coverage",
+    "label": "\ud83d\udcca Test Coverage",
     "command": "pnpm",
     "args": ["test:cov"]
   },
   {
-    "label": "🩺 Expo Doctor",
+    "label": "\ud83e\ude7a Expo Doctor",
     "command": "pnpm",
     "args": ["doctor"]
   },
   {
-    "label": "✅ PR Check",
+    "label": "\u2705 PR Check",
     "command": "pnpm",
     "args": ["pr"]
   }
