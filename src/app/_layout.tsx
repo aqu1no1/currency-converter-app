@@ -1,3 +1,5 @@
+import '@lib/i18n';
+
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useFonts } from 'expo-font';
