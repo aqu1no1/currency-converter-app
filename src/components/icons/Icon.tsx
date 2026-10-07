@@ -1,8 +1,9 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
+import { BRAND_COLORS } from '@constants/brand.constants';
 import { ICONS, type IconName } from '@constants/icons';
 
-const DEFAULT_COLOR = '#14211B';
+const DEFAULT_COLOR = BRAND_COLORS.text;
 
 /** Props do componente Icon. */
 type IconProps = {

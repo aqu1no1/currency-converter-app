@@ -2,18 +2,13 @@ import { useEffect, useId, useState } from 'react';
 import { Animated, Easing } from 'react-native';
 import Svg, { Circle, Defs, G, Mask, Path, Rect } from 'react-native-svg';
 
+import { BRAND_COLORS as BRAND } from '@constants/brand.constants';
 import { LOGO_CURRENCY_GLYPHS, LOGO_WORDMARK } from '@constants/logo.constants';
 import { TIME_IN_MS } from '@constants/time.constants';
 import { useReduceMotion } from '@hooks/useReduceMotion';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedG = Animated.createAnimatedComponent(G);
-
-const BRAND = {
-  green: '#0F3D2E',
-  mint: '#9FE1CB',
-  white: '#FFFFFF',
-} as const;
 
 const DIAMOND = 'M15 10.5L19.5 15L15 19.5L10.5 15Z';
 const VIEW_BOX = { mark: '2 4.5 26 21', full: '2 4.5 144 21' } as const;
