@@ -124,6 +124,26 @@ Convenções do Expo Router: `_layout.tsx` envolve as rotas irmãs; `[param].tsx
 | Hook                  | `useSomething.ts`                 | `useLatestRates.ts`                |
 | Teste                 | `*.spec.ts(x)` / `*.int-spec.tsx` | `format.util.spec.ts`              |
 
+### Comentários
+
+Só em **componentes** e **variáveis de ambiente**. O resto do código fica sem comentários; explicações vão para o `docs/`, o README ou a PR.
+
+- **Componentes**: JSDoc no tipo das props (`/** Props do componente X. */`), em cada prop (com `@default` quando tiver valor padrão) e no próprio componente.
+- **Envs**: comentário no `.env.example` e JSDoc na variável em `types/env.d.ts`.
+
+```tsx
+/** Props do componente Icon. */
+type IconProps = {
+  /** Nome do ícone no projeto, mapeado em `@constants/icons`. */
+  name: IconName;
+  /** Tamanho do ícone em pixels. @default 24 */
+  size?: number;
+};
+
+/** Ícone de interface do MaterialCommunityIcons. */
+export function Icon({ name, size = 24 }: IconProps) {}
+```
+
 ### Aliases
 
 `@app`, `@components`, `@hooks`, `@services`, `@contexts`, `@theme`, `@constants`, `@dtos`, `@models`, `@interfaces`, `@enums`, `@utils`, `@lib`, `@locales` e `@assets`, cada um apontando para a pasta de mesmo nome em `src/`. Sempre importar pelo alias. O Expo lê os `paths` do `tsconfig.json`; o Jest repete os mesmos no `moduleNameMapper`.
