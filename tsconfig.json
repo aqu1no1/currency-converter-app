@@ -3,61 +3,23 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@app/*": [
-        "./src/app/*"
-      ],
-      "@components/*": [
-        "./src/components/*"
-      ],
-      "@hooks/*": [
-        "./src/hooks/*"
-      ],
-      "@services/*": [
-        "./src/services/*"
-      ],
-      "@contexts/*": [
-        "./src/contexts/*"
-      ],
-      "@theme/*": [
-        "./src/theme/*"
-      ],
-      "@constants/*": [
-        "./src/constants/*"
-      ],
-      "@dtos/*": [
-        "./src/dtos/*"
-      ],
-      "@models/*": [
-        "./src/models/*"
-      ],
-      "@interfaces/*": [
-        "./src/interfaces/*"
-      ],
-      "@enums/*": [
-        "./src/enums/*"
-      ],
-      "@utils/*": [
-        "./src/utils/*"
-      ],
-      "@lib/*": [
-        "./src/lib/*"
-      ],
-      "@locales/*": [
-        "./src/locales/*"
-      ],
-      "@assets/*": [
-        "./src/assets/*"
-      ]
+      "@app/*": ["./src/app/*"],
+      "@components/*": ["./src/components/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@services/*": ["./src/services/*"],
+      "@contexts/*": ["./src/contexts/*"],
+      "@theme/*": ["./src/theme/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@dtos/*": ["./src/dtos/*"],
+      "@models/*": ["./src/models/*"],
+      "@interfaces/*": ["./src/interfaces/*"],
+      "@enums/*": ["./src/enums/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@locales/*": ["./src/locales/*"],
+      "@assets/*": ["./src/assets/*"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts",
-    "types/**/*.d.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "types/**/*.d.ts"],
+  "exclude": ["node_modules"]
 }
