@@ -7,6 +7,12 @@ jest.mock('expo-localization', () => ({
   getCalendars: () => [{ timeZone: 'America/Sao_Paulo' }],
 }));
 
+jest.mock('expo-font', () => ({
+  ...jest.requireActual('expo-font'),
+  isLoaded: () => true,
+  loadAsync: () => Promise.resolve(),
+}));
+
 beforeEach(async () => {
   await mockAsyncStorage.clear();
 });

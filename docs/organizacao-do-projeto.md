@@ -89,7 +89,7 @@ src/
 ├── utils/         # funções utilitárias
 ├── lib/           # configuração de libs (react-query, i18n)
 ├── locales/       # traduções por idioma e domínio
-└── assets/        # imagens, logo
+└── assets/        # images/ (ícone, splash) e svg/logo/ (referência do Logo)
 ```
 
 ### Rotas (`src/app`)
@@ -123,6 +123,26 @@ Convenções do Expo Router: `_layout.tsx` envolve as rotas irmãs; `[param].tsx
 | Componente / Provider | PascalCase                        | `ListRow.tsx`, `ThemeProvider.tsx` |
 | Hook                  | `useSomething.ts`                 | `useLatestRates.ts`                |
 | Teste                 | `*.spec.ts(x)` / `*.int-spec.tsx` | `format.util.spec.ts`              |
+
+### Comentários
+
+Só em **componentes** e **variáveis de ambiente**. O resto do código fica sem comentários; explicações vão para o `docs/`, o README ou a PR.
+
+- **Componentes**: JSDoc no tipo das props (`/** Props do componente X. */`), em cada prop (com `@default` quando tiver valor padrão) e no próprio componente.
+- **Envs**: comentário no `.env.example` e JSDoc na variável em `types/env.d.ts`.
+
+```tsx
+/** Props do componente Icon. */
+type IconProps = {
+  /** Nome do ícone no projeto, mapeado em `@constants/icons`. */
+  name: IconName;
+  /** Tamanho do ícone em pixels. @default 24 */
+  size?: number;
+};
+
+/** Ícone de interface do MaterialCommunityIcons. */
+export function Icon({ name, size = 24 }: IconProps) {}
+```
 
 ### Aliases
 
@@ -216,6 +236,12 @@ Regras:
 | Espaçamento                      | Margem lateral 20 · entre seções 24 · entre itens 12 · padding de cartão 16                   |
 | Tamanhos                         | Linha de lista 64 · botão 52 · tecla 44 · toque mínimo 44 · ícone de moeda 40                 |
 | Cantos                           | Cartão 24 · lista 20 · botão e campo 16 · ícone, tecla e opção 12 · chips arredondados        |
+
+### Ícones e logo
+
+- Ícones de interface vêm do `@expo/vector-icons` (MaterialCommunityIcons). Cada ícone tem um nome do projeto em `constants/icons.ts`, e as telas usam `<Icon name="history" />` de `@components/icons/Icon`. **Nenhuma tela importa `@expo/vector-icons` direto**: para trocar um ícone no app inteiro, muda uma linha do mapa.
+- O `Icon` é decorativo (`accessible={false}`); quem tem `accessibilityLabel` é o botão em volta.
+- O logo é o componente `<Logo variant="mark | full" tone="onDark | onLight" size={...} />` de `@components/brand/Logo`, feito com `react-native-svg` a partir dos SVGs de `assets/svg/logo/` (o RN não abre `.svg` direto). Anima com `Animated` e fica parado no R$ com "reduzir movimento" ligado.
 
 ---
 

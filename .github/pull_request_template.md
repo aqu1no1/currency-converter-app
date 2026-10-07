@@ -42,6 +42,7 @@ Marque uma opção:
 - [ ] Código segue os padrões do projeto (pastas, nomes de arquivo e imports por alias)
 - [ ] Não há `console.log` desnecessários
 - [ ] Não há código comentado desnecessário
+- [ ] Componentes novos têm JSDoc nas props e no componente; o resto do código fica sem comentários
 - [ ] Nenhum texto fixo na tela: tudo passa pelo `t()` e está em `pt-BR`, `en` e `es`
 - [ ] Cores vêm do `useTheme()` (tokens semânticos, nada de hex fixo nem `colors.*` no `StyleSheet.create`)
 - [ ] Chamadas à API passam por um service e um hook do TanStack Query, com a resposta validada pelo Zod
