@@ -9,7 +9,11 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 ### Added
 
 - Ícone, ícone adaptável do Android e splash com a identidade do Converter.
-- Logo animado: os anéis se cruzam e a moeda no diamante troca a cada 1,8 s entre as 10 moedas. Com "reduzir movimento" ligado, fica parado no R$.
+- Logo novo, com quatro anéis em volta do diamante: estático no ícone, na splash e na loja, e animado no app (os anéis se cruzam e a moeda no diamante troca a cada 1,8 s entre as 10 moedas). Com "reduzir movimento" ligado, mostra o logo estático com o "$".
+- Tela de Boas-vindas com o logo, as 10 moedas, os botões "Começar" e "Converter agora" e moedas flutuando no fundo (paradas com "reduzir movimento").
+- Fontes Bricolage Grotesque (títulos) e Instrument Sans (texto).
+- Tema claro e escuro: segue o celular por padrão e guarda a escolha.
+- Textos em português, inglês e espanhol, conforme o idioma do celular.
 - Ícones de interface do MaterialCommunityIcons com nomes do projeto (`<Icon name="history" />`).
 
 ## [0.1.0] - 2026-10-07

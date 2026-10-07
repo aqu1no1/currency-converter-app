@@ -3,6 +3,8 @@ import type { ReactElement, ReactNode } from 'react';
 import { QueryClientProvider, type QueryClient } from '@tanstack/react-query';
 import { render, type RenderOptions } from '@testing-library/react-native';
 
+import { ThemeProvider } from '@theme/ThemeProvider';
+
 import { createTestQueryClient } from './query-client';
 
 interface ProvidersOptions extends Omit<RenderOptions, 'wrapper'> {
@@ -14,7 +16,11 @@ export function renderWithProviders(
   { queryClient = createTestQueryClient(), ...options }: ProvidersOptions = {},
 ) {
   function Wrapper({ children }: { children: ReactNode }) {
-    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+    return (
+      <ThemeProvider>
+        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      </ThemeProvider>
+    );
   }
 
   return { queryClient, ...render(ui, { wrapper: Wrapper, ...options }) };

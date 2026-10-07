@@ -23,7 +23,8 @@ yarn-error.*
 *.pem
 
 .env
-.env*.local
+.env.*
+!.env.example
 
 *.tsbuildinfo
 

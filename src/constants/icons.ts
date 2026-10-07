@@ -11,6 +11,7 @@ export const ICONS = {
   history: 'chart-line',
   settings: 'tune-variant',
   swap: 'swap-vertical',
+  arrowRight: 'arrow-right',
   chevronRight: 'chevron-right',
   chevronDown: 'chevron-down',
   backspace: 'backspace-outline',
