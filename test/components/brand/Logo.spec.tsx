@@ -11,7 +11,7 @@ function mockReduceMotion(enabled: boolean) {
 }
 
 async function renderLogo(ui: React.ReactElement) {
-  renderWithProviders(ui);
+  await renderWithProviders(ui);
   await act(async () => {});
 }
 

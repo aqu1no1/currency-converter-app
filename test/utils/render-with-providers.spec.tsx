@@ -11,8 +11,8 @@ function Probe() {
 }
 
 describe('renderWithProviders', () => {
-  it('wraps the tree with a QueryClientProvider', () => {
-    renderWithProviders(<Probe />);
+  it('wraps the tree with a QueryClientProvider', async () => {
+    await renderWithProviders(<Probe />);
     expect(screen.getByText('with query client')).toBeTruthy();
   });
 });

@@ -17,7 +17,7 @@ const AnimatedG = Animated.createAnimatedComponent(G);
 
 const DIAMOND = 'M15 10.5L19.5 15L15 19.5L10.5 15Z';
 const DIAMOND_GAP = 'M15 8.94L21.06 15L15 21.06L8.94 15Z';
-const VIEW_BOX = { mark: '1.5 1.5 27 27', full: '1.5 1.5 144 27' } as const;
+const VIEW_BOX = { mark: '0 0 30 30', full: '1.5 1.5 144 27' } as const;
 const ASPECT_RATIO = { mark: 1, full: 144 / 27 } as const;
 
 const RING_RADIUS = 6.2;

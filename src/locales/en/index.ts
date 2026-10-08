@@ -1,21 +1,23 @@
 import type { Translations } from '@locales/pt-BR';
 
+import { common } from './common';
+import { converter } from './converter';
+import { currencies } from './currencies';
+import { errors } from './errors';
+import { history } from './history';
+import { rates } from './rates';
+import { settings } from './settings';
+import { tabs } from './tabs';
+import { welcome } from './welcome';
+
 export const en: Translations = {
-  common: {
-    appName: 'Converter',
-    comingSoon: 'Coming soon',
-  },
-  errors: {
-    network: 'No connection to the server. Check your internet and try again.',
-    timeout: 'The server took too long to respond. Try again.',
-    invalidResponse: 'We got an unexpected response from the server.',
-    unexpected: 'Something went wrong. Try again.',
-  },
-  welcome: {
-    description:
-      'Convert between 10 currencies with central bank rates, updated every day and with history since 2000.',
-    start: 'Get started',
-    convertNow: 'Convert now',
-    disclaimer: 'Reference rates. Spread and fees not included.',
-  },
+  common,
+  tabs,
+  converter,
+  rates,
+  history,
+  settings,
+  currencies,
+  errors,
+  welcome,
 };

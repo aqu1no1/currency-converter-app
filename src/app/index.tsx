@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, { Easing, FadeInUp, ReduceMotion } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -10,11 +11,13 @@ import { Button } from '@components/ui/Button';
 import { FloatingCoins } from '@components/welcome/FloatingCoins';
 import { SUPPORTED_CURRENCIES } from '@constants/currencies.constants';
 import { FONTS, RADIUS, SIZES, TYPE } from '@constants/theme';
+import { useCurrencies } from '@hooks/useCurrencies';
+import { useWelcomeGate } from '@hooks/useWelcomeGate';
 import { useTheme } from '@theme/ThemeProvider';
 
 const CONTENT_TOP = 56;
 const ACTIONS_BOTTOM = 40;
-const LOGO_SIZE = 180;
+const LOGO_SIZE = 200;
 
 function rise(delay: number) {
   return FadeInUp.duration(500)
@@ -27,8 +30,19 @@ function rise(delay: number) {
 export default function Welcome() {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const { navigate } = useRouter();
+  const { navigate, replace } = useRouter();
   const insets = useSafeAreaInsets();
+  const { data: currencies } = useCurrencies();
+  const { isReady, shouldShowWelcome, markWelcomeCompleted } = useWelcomeGate();
+  const currencyCodes = currencies?.length
+    ? currencies.map(({ code }) => code)
+    : SUPPORTED_CURRENCIES;
+
+  useEffect(() => {
+    if (isReady && !shouldShowWelcome) replace('/converter');
+  }, [isReady, replace, shouldShowWelcome]);
+
+  if (!isReady || !shouldShowWelcome) return null;
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.surfaceBrand }]}>
@@ -50,7 +64,7 @@ export default function Welcome() {
         </Animated.View>
 
         <Animated.View entering={rise(160)} style={styles.chips}>
-          {SUPPORTED_CURRENCIES.map((code) => (
+          {currencyCodes.map((code) => (
             <Text
               key={code}
               style={[styles.chip, { backgroundColor: colors.chipOnBrand, color: colors.accent }]}
@@ -68,10 +82,10 @@ export default function Welcome() {
           { paddingBottom: Math.max(ACTIONS_BOTTOM, insets.bottom + SIZES.sectionGap) },
         ]}
       >
-        <Button icon="arrowRight" iconPosition="right" onPress={() => navigate('/onboarding')}>
+        <Button tone="brand" onPress={() => navigate('/onboarding')}>
           {t('welcome.start')}
         </Button>
-        <Button variant="outline" icon="converter" onPress={() => navigate('/converter')}>
+        <Button tone="brand" variant="outline" onPress={() => void markWelcomeCompleted()}>
           {t('welcome.convertNow')}
         </Button>
         <Text style={[styles.disclaimer, { color: colors.textOnBrandMuted }]}>

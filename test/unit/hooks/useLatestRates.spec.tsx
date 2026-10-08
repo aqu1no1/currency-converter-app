@@ -5,7 +5,7 @@ import { latestRatesFixture } from '@test/fixtures/api.fixtures';
 import { createFakeApiService } from '@test/utils/fake-api.service';
 import { renderHookWithProviders } from '@test/utils/render-with-providers';
 
-function renderLatestRates(base: string, api = createFakeApiService()) {
+async function renderLatestRates(base: string, api = createFakeApiService()) {
   return renderHookWithProviders(({ code }: { code: string }) => useLatestRates(code), {
     api,
     initialProps: { code: base },
@@ -17,7 +17,7 @@ describe('useLatestRates', () => {
     const api = createFakeApiService();
     api.get.mockResolvedValueOnce(latestRatesFixture);
 
-    const { result } = renderLatestRates('BRL', api);
+    const { result } = await renderLatestRates('BRL', api);
 
     await waitFor(() => expect(result.current.data).toEqual(latestRatesFixture));
     expect(api.get).toHaveBeenCalledWith('/exchange-rates/latest/BRL', {
@@ -36,7 +36,7 @@ describe('useLatestRates', () => {
         }),
     );
 
-    const { result, rerender } = renderLatestRates('BRL', api);
+    const { result, rerender } = await renderLatestRates('BRL', api);
     await waitFor(() => expect(signals).toHaveLength(1));
 
     rerender({ code: 'USD' });

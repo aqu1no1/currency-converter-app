@@ -17,38 +17,45 @@ function textColor(label: string) {
 }
 
 describe('Button', () => {
-  it('calls onPress when pressed', () => {
+  it('calls onPress when pressed', async () => {
     const onPress = jest.fn();
-    renderWithProviders(<Button onPress={onPress}>Começar</Button>);
+    await renderWithProviders(<Button onPress={onPress}>Começar</Button>);
 
     fireEvent.press(screen.getByRole('button', { name: 'Começar' }));
 
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
-  it('uses the mint background and green text in the filled variant', () => {
-    renderWithProviders(<Button>Começar</Button>);
+  it('uses the theme primary color and white text in the filled variant', async () => {
+    await renderWithProviders(<Button>Começar</Button>);
+
+    expect(buttonStyle().backgroundColor).toBe(lightColors.primary);
+    expect(textColor('Começar')).toBe(lightColors.white);
+  });
+
+  it('uses only the theme border and primary text in the outline variant', async () => {
+    await renderWithProviders(<Button variant="outline">Converter agora</Button>);
+
+    expect(buttonStyle()).toMatchObject({
+      backgroundColor: 'transparent',
+      borderColor: lightColors.borderStrong,
+    });
+    expect(textColor('Converter agora')).toBe(lightColors.textPrimary);
+  });
+
+  it('uses accent colors over a brand background', async () => {
+    await renderWithProviders(<Button tone="brand">Começar</Button>);
 
     expect(buttonStyle().backgroundColor).toBe(lightColors.accent);
     expect(textColor('Começar')).toBe(lightColors.textOnAccent);
   });
 
-  it('uses only the border and white text in the outline variant', () => {
-    renderWithProviders(<Button variant="outline">Converter agora</Button>);
-
-    expect(buttonStyle()).toMatchObject({
-      backgroundColor: 'transparent',
-      borderColor: lightColors.borderOnBrand,
-    });
-    expect(textColor('Converter agora')).toBe(lightColors.textOnBrand);
-  });
-
   it.each([
     ['left', 1],
     ['right', 0],
-  ] as const)('places the icon on the %s', (iconPosition, labelIndex) => {
-    renderWithProviders(
-      <Button icon="arrowRight" iconPosition={iconPosition}>
+  ] as const)('places the icon on the %s', async (iconPosition, labelIndex) => {
+    await renderWithProviders(
+      <Button tone="brand" icon="arrowRight" iconPosition={iconPosition}>
         Começar
       </Button>,
     );
@@ -66,9 +73,9 @@ describe('Button', () => {
     expect(rendered.indexOf('Começar')).toBe(labelIndex);
   });
 
-  it('shows a loading indicator and ignores presses while loading', () => {
+  it('shows a loading indicator and ignores presses while loading', async () => {
     const onPress = jest.fn();
-    renderWithProviders(
+    await renderWithProviders(
       <Button loading onPress={onPress}>
         Começar
       </Button>,
@@ -82,9 +89,9 @@ describe('Button', () => {
     expect(onPress).not.toHaveBeenCalled();
   });
 
-  it('ignores presses and looks faded when disabled', () => {
+  it('ignores presses and looks faded when disabled', async () => {
     const onPress = jest.fn();
-    renderWithProviders(
+    await renderWithProviders(
       <Button disabled onPress={onPress}>
         Começar
       </Button>,

@@ -10,3 +10,5 @@ export enum CurrencyCode {
   CNY = 'CNY',
   ARS = 'ARS',
 }
+
+export type CurrencyCodeValue = `${CurrencyCode}`;

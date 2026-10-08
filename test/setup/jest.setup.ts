@@ -2,7 +2,13 @@ import '@lib/i18n';
 import { setUpTests } from 'react-native-reanimated';
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 
-jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
+jest.mock('@react-native-async-storage/async-storage', () => {
+  const storage = jest.requireActual(
+    '@react-native-async-storage/async-storage/jest/async-storage-mock',
+  );
+
+  return storage.default ?? storage;
+});
 
 jest.mock('react-native-worklets', () => require('react-native-worklets/lib/module/mock'));
 

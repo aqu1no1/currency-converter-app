@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'react-native';
 
 import { STORAGE_KEYS } from '@constants/storage';
@@ -17,6 +18,8 @@ type ThemeContextValue = {
   colors: Colors;
   /** Escolha do usuário: `system` segue o celular. @default 'system' */
   scheme: ThemeScheme;
+  /** `true` quando a preferência persistida já foi carregada. */
+  ready: boolean;
   /** Troca o tema e salva a escolha no AsyncStorage. */
   setScheme: (scheme: ThemeScheme) => void;
 };
@@ -43,6 +46,7 @@ type ThemeProviderProps = {
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const systemScheme = useColorScheme();
   const [scheme, setSchemeState] = useState<ThemeScheme>('system');
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -52,8 +56,11 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
         if (mounted && SCHEMES.includes(saved as ThemeScheme)) {
           setSchemeState(saved as ThemeScheme);
         }
+        if (mounted) setReady(true);
       })
-      .catch(() => undefined);
+      .catch(() => {
+        if (mounted) setReady(true);
+      });
 
     return () => {
       mounted = false;
@@ -67,14 +74,20 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       dark,
       colors: dark ? darkColors : lightColors,
       scheme,
+      ready,
       setScheme: (next) => {
         setSchemeState(next);
         AsyncStorage.setItem(STORAGE_KEYS.theme, next).catch(() => undefined);
       },
     };
-  }, [scheme, systemScheme]);
+  }, [ready, scheme, systemScheme]);
 
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={value}>
+      <StatusBar style={value.dark ? 'light' : 'dark'} />
+      {children}
+    </ThemeContext.Provider>
+  );
 }
 
 export function useTheme() {

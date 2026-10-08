@@ -11,8 +11,8 @@ function renderedIcon() {
 }
 
 describe('Icon', () => {
-  it('uses the theme text color and size 24 by default', () => {
-    renderWithProviders(<Icon name="history" />);
+  it('uses the theme text color and size 24 by default', async () => {
+    await renderWithProviders(<Icon name="history" />);
 
     expect(renderedIcon()).toMatchObject({
       name: 'chart-line',
@@ -21,20 +21,20 @@ describe('Icon', () => {
     });
   });
 
-  it('uses the color and size passed by prop', () => {
-    renderWithProviders(<Icon name="close" color="#9FE1CB" size={18} />);
+  it('uses the color and size passed by prop', async () => {
+    await renderWithProviders(<Icon name="close" color="#9FE1CB" size={18} />);
 
     expect(renderedIcon()).toMatchObject({ name: 'close', color: '#9FE1CB', size: 18 });
   });
 
-  it('is decorative for screen readers', () => {
-    renderWithProviders(<Icon name="check" />);
+  it('is decorative for screen readers', async () => {
+    await renderWithProviders(<Icon name="check" />);
 
     expect(renderedIcon()).toMatchObject({ accessible: false });
   });
 
-  it.each(Object.keys(ICONS) as IconName[])('renders %s', (name) => {
-    renderWithProviders(<Icon name={name} />);
+  it.each(Object.keys(ICONS) as IconName[])('renders %s', async (name) => {
+    await renderWithProviders(<Icon name={name} />);
 
     expect(renderedIcon().name).toBe(ICONS[name]);
     expect(MaterialCommunityIcons.glyphMap).toHaveProperty(ICONS[name]);
