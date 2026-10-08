@@ -5,13 +5,26 @@ import type { IconName } from '@constants/icons';
 import { RADIUS, SIZES } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
+/** Propriedades do botão circular de ícone. */
 type IconButtonProps = {
+  /** Ícone escolhido no catálogo do projeto. */
   name: IconName;
+  /** Rótulo obrigatório para leitores de tela. */
   accessibilityLabel: string;
+  /** Ação executada ao tocar. */
   onPress: () => void;
+  /** Se verdadeiro, desabilita e atenua o botão. @default false */
   disabled?: boolean;
 };
 
+/**
+ * Botão de ícone com área tocável mínima de 44×44.
+ *
+ * @example
+ * ```tsx
+ * <IconButton name="settings" accessibilityLabel={t('tabs.settings')} onPress={openSettings} />
+ * ```
+ */
 export function IconButton({
   name,
   accessibilityLabel,

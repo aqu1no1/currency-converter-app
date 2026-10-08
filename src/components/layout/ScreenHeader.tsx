@@ -5,12 +5,24 @@ import type { IconName } from '@constants/icons';
 import { FONTS, SIZES, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
+/** Propriedades do cabeçalho de tela. */
 type ScreenHeaderProps = {
+  /** Título principal do cabeçalho. */
   title: string;
+  /** Linha contextual opcional acima do título. */
   context?: string;
+  /** Ação opcional alinhada à direita. */
   action?: { icon: IconName; accessibilityLabel: string; onPress: () => void };
 };
 
+/**
+ * Cabeçalho com contexto, título e ação acessível opcional.
+ *
+ * @example
+ * ```tsx
+ * <ScreenHeader title={t('settings.title')} context={t('common.appName')} />
+ * ```
+ */
 export function ScreenHeader({ title, context, action }: ScreenHeaderProps) {
   const { colors } = useTheme();
 

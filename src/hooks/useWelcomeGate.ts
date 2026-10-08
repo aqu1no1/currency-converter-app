@@ -3,6 +3,14 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { STORAGE_KEYS } from '@constants/storage';
 
+/**
+ * Lê e persiste se as boas-vindas já foram concluídas ou ignoradas.
+ *
+ * @example
+ * ```tsx
+ * const { isReady, shouldShowWelcome, markWelcomeCompleted } = useWelcomeGate();
+ * ```
+ */
 export function useWelcomeGate() {
   const [shouldShowWelcome, setShouldShowWelcome] = useState(true);
   const [isReady, setIsReady] = useState(false);

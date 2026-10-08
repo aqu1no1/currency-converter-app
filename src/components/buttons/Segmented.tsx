@@ -4,17 +4,32 @@ import { FONTS, RADIUS, SIZES, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
 export type SegmentedOption<Value extends string = string> = {
+  /** Texto visível da opção. */
   label: string;
+  /** Valor estável retornado ao selecionar a opção. */
   value: Value;
 };
 
+/** Propriedades do seletor segmentado. */
 type SegmentedProps<Value extends string> = {
+  /** Opções disponíveis. */
   options: readonly SegmentedOption<Value>[];
+  /** Valor atualmente selecionado. */
   value: Value;
+  /** Callback para nova seleção. */
   onChange: (value: Value) => void;
+  /** Nome acessível do grupo. */
   accessibilityLabel: string;
 };
 
+/**
+ * Seletor segmentado com alvos tocáveis de pelo menos 44 px.
+ *
+ * @example
+ * ```tsx
+ * <Segmented options={periods} value={period} onChange={setPeriod} accessibilityLabel={t('history.period')} />
+ * ```
+ */
 export function Segmented<Value extends string>({
   options,
   value,

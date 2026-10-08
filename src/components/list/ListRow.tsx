@@ -5,15 +5,30 @@ import type { IconName } from '@constants/icons';
 import { FONTS, SIZES, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
+/** Propriedades de uma linha de lista. */
 type ListRowProps = {
+  /** Texto principal. */
   title: string;
+  /** Texto secundário abaixo do título. */
   subtitle?: string;
+  /** Valor alinhado à direita. */
   value?: string;
+  /** Ícone opcional à esquerda. */
   icon?: IconName;
+  /** Ação opcional ao tocar na linha. */
   onPress?: () => void;
+  /** Estilo adicional da linha. */
   style?: StyleProp<ViewStyle>;
 };
 
+/**
+ * Linha com ícone, textos e valor opcional.
+ *
+ * @example
+ * ```tsx
+ * <ListRow title="Dólar americano" subtitle="USD" value="R$ 5,20" onPress={openCurrency} />
+ * ```
+ */
 export function ListRow({ title, subtitle, value, icon, onPress, style }: ListRowProps) {
   const { colors } = useTheme();
   const content = (

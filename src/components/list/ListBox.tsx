@@ -4,8 +4,20 @@ import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { RADIUS } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-type ListBoxProps = PropsWithChildren<{ style?: StyleProp<ViewStyle> }>;
+/** Propriedades do contêiner de linhas de lista. */
+type ListBoxProps = PropsWithChildren<{
+  /** Estilo adicional do contêiner. */
+  style?: StyleProp<ViewStyle>;
+}>;
 
+/**
+ * Agrupa linhas em uma superfície com borda e raio padronizados.
+ *
+ * @example
+ * ```tsx
+ * <ListBox><ListRow title={currencyName} value={formattedRate} /></ListBox>
+ * ```
+ */
 export function ListBox({ children, style }: ListBoxProps) {
   const { colors } = useTheme();
 

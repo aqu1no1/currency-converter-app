@@ -6,14 +6,34 @@ import { SIZES, FONTS, TYPE, RADIUS } from '@constants/theme';
 import type { CurrencyCodeValue } from '@enums/currency-code.enum';
 import { formatDate, formatMoney } from '@utils/format.util';
 
-export type HistoryPoint = { value: number; label: string; date?: string };
+/** Ponto de cotação no histórico. */
+export type HistoryPoint = {
+  /** Valor numérico da cotação. */
+  value: number;
+  /** Rótulo curto do eixo X. */
+  label: string;
+  /** Data ISO completa usada no tooltip. */
+  date?: string;
+};
 
+/** Propriedades do gráfico interativo de histórico. */
 type HistoryChartProps = {
+  /** Pontos em ordem cronológica. */
   data: readonly HistoryPoint[];
+  /** Código da moeda usada no tooltip. */
   currency: CurrencyCodeValue;
+  /** Descrição acessível do gráfico. */
   accessibilityLabel: string;
 };
 
+/**
+ * Gráfico com área preenchida e tooltip de valor/data ao tocar.
+ *
+ * @example
+ * ```tsx
+ * <HistoryChart data={history} currency="BRL" accessibilityLabel={chartDescription} />
+ * ```
+ */
 export function HistoryChart({ data, currency, accessibilityLabel }: HistoryChartProps) {
   const { width: screenWidth } = useWindowDimensions();
   const { colors } = useTheme();

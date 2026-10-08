@@ -5,12 +5,24 @@ import { useTheme } from '@theme/ThemeProvider';
 
 type PillTone = 'info' | 'success' | 'warning' | 'error';
 
+/** Propriedades do selo compacto de status. */
 type PillProps = {
+  /** Texto exibido. */
   label: string;
+  /** Semântica visual do status. @default 'info' */
   tone?: PillTone;
+  /** Estilo adicional. */
   style?: StyleProp<TextStyle>;
 };
 
+/**
+ * Selo compacto com cores semânticas do tema.
+ *
+ * @example
+ * ```tsx
+ * <Pill label={statusLabel} tone="success" />
+ * ```
+ */
 export function Pill({ label, tone = 'info', style }: PillProps) {
   const { colors } = useTheme();
   const palette = {

@@ -17,7 +17,21 @@ const SYMBOLS: Record<CurrencyCodeValue, string> = {
   ARS: '$',
 };
 
-export function CurrencyBadge({ code }: { code: CurrencyCodeValue }) {
+/** Propriedades do selo visual de moeda. */
+type CurrencyBadgeProps = {
+  /** Código ISO da moeda. */
+  code: CurrencyCodeValue;
+};
+
+/**
+ * Mostra o símbolo de uma moeda em um bloco de 40×40.
+ *
+ * @example
+ * ```tsx
+ * <CurrencyBadge code="USD" />
+ * ```
+ */
+export function CurrencyBadge({ code }: CurrencyBadgeProps) {
   const { colors } = useTheme();
 
   return (

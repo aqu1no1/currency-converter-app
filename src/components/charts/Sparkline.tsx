@@ -4,12 +4,24 @@ import { useWindowDimensions, View } from 'react-native';
 import { SIZES } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
+/** Propriedades do gráfico compacto sem eixos. */
 type SparklineProps = {
+  /** Valores em ordem cronológica. */
   values: readonly number[];
+  /** Altura em pixels. @default 60 */
   height?: number;
+  /** Descrição acessível do gráfico. */
   accessibilityLabel: string;
 };
 
+/**
+ * Série temporal curta com linha menta e área preenchida.
+ *
+ * @example
+ * ```tsx
+ * <Sparkline values={lastMonthRates} accessibilityLabel={chartDescription} />
+ * ```
+ */
 export function Sparkline({ values, height = 60, accessibilityLabel }: SparklineProps) {
   const { width: screenWidth } = useWindowDimensions();
   const { colors } = useTheme();
