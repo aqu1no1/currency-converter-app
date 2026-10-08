@@ -13,7 +13,9 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 - Tela de Boas-vindas com o logo, as 10 moedas, os botões "Começar" e "Converter agora" e moedas flutuando no fundo (paradas com "reduzir movimento").
 - Fontes Bricolage Grotesque (títulos) e Instrument Sans (texto).
 - Tema claro e escuro: segue o celular por padrão e guarda a escolha.
-- Textos em português, inglês e espanhol, conforme o idioma do celular.
+- Textos em português, inglês e espanhol, conforme o idioma salvo ou o idioma do celular, com formatação localizada de valores e datas.
+- Componentes compartilhados de layout, cards, listas, moedas, botões, feedback e gráficos para as telas do app.
+- Nome exibido do aplicativo atualizado para "Converter".
 - Comunicação com a API: moedas, conversão, últimas cotações, histórico e status da sincronização, com respostas validadas, mensagens de erro no idioma do app e aviso de falta de conexão.
 - Ícones de interface do MaterialCommunityIcons com nomes do projeto (`<Icon name="history" />`).
 

@@ -1,21 +1,23 @@
 import type { Translations } from '@locales/pt-BR';
 
+import { common } from './common';
+import { converter } from './converter';
+import { currencies } from './currencies';
+import { errors } from './errors';
+import { history } from './history';
+import { rates } from './rates';
+import { settings } from './settings';
+import { tabs } from './tabs';
+import { welcome } from './welcome';
+
 export const es: Translations = {
-  common: {
-    appName: 'Converter',
-    comingSoon: 'Próximamente',
-  },
-  errors: {
-    network: 'Sin conexión con el servidor. Revisa tu internet e inténtalo de nuevo.',
-    timeout: 'El servidor tardó en responder. Inténtalo de nuevo.',
-    invalidResponse: 'Recibimos una respuesta inesperada del servidor.',
-    unexpected: 'Algo salió mal. Inténtalo de nuevo.',
-  },
-  welcome: {
-    description:
-      'Convierte entre 10 monedas con cotizaciones de bancos centrales, actualizadas todos los días y con historial desde 2000.',
-    start: 'Empezar',
-    convertNow: 'Convertir ahora',
-    disclaimer: 'Tasas de referencia. No incluyen spread ni comisiones.',
-  },
+  common,
+  tabs,
+  converter,
+  rates,
+  history,
+  settings,
+  currencies,
+  errors,
+  welcome,
 };

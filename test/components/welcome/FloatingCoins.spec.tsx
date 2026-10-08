@@ -15,7 +15,7 @@ function mockReduceMotion(enabled: boolean) {
 }
 
 async function renderCoins() {
-  renderWithProviders(<FloatingCoins />);
+  await renderWithProviders(<FloatingCoins />);
   await act(async () => {});
 }
 

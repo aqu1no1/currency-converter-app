@@ -20,18 +20,20 @@ describe('ThemeProvider', () => {
     jest.restoreAllMocks();
   });
 
-  it('follows the phone when nothing is saved', () => {
+  it('follows the phone when nothing is saved', async () => {
     mockSystemScheme('dark');
     const { result } = renderTheme();
 
     expect(result.current).toMatchObject({ scheme: 'system', dark: true, colors: darkColors });
+    await waitFor(() => expect(result.current.ready).toBe(true));
   });
 
-  it('uses the light palette when the phone is light', () => {
+  it('uses the light palette when the phone is light', async () => {
     mockSystemScheme('light');
     const { result } = renderTheme();
 
     expect(result.current).toMatchObject({ dark: false, colors: lightColors });
+    await waitFor(() => expect(result.current.ready).toBe(true));
   });
 
   it('uses the saved choice over the phone', async () => {
@@ -40,7 +42,31 @@ describe('ThemeProvider', () => {
     const { result } = renderTheme();
 
     await waitFor(() => expect(result.current.scheme).toBe('dark'));
+    expect(result.current.ready).toBe(true);
     expect(result.current.colors).toBe(darkColors);
+  });
+
+  it('follows system theme changes when scheme is system', async () => {
+    let systemScheme: 'light' | 'dark' = 'light';
+    jest.spyOn(ReactNative, 'useColorScheme').mockImplementation(() => systemScheme);
+    const { result, rerender } = renderTheme();
+
+    await waitFor(() => expect(result.current.ready).toBe(true));
+    expect(result.current.dark).toBe(false);
+
+    systemScheme = 'dark';
+    rerender(undefined);
+
+    expect(result.current.dark).toBe(true);
+  });
+
+  it('restores the saved light choice over a dark phone setting', async () => {
+    mockSystemScheme('dark');
+    await AsyncStorage.setItem(STORAGE_KEYS.theme, 'light');
+    const { result } = renderTheme();
+
+    await waitFor(() => expect(result.current.ready).toBe(true));
+    expect(result.current).toMatchObject({ scheme: 'light', dark: false, colors: lightColors });
   });
 
   it('ignores an invalid saved value', async () => {
@@ -56,6 +82,7 @@ describe('ThemeProvider', () => {
   it('switches the theme and saves the choice', async () => {
     mockSystemScheme('light');
     const { result } = renderTheme();
+    await waitFor(() => expect(result.current.ready).toBe(true));
 
     await act(async () => {
       result.current.setScheme('dark');

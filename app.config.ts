@@ -11,12 +11,12 @@ loadEnv({ path: `.env.${variant}`, override: true, quiet: true });
 
 const VARIANTS = {
   production: {
-    name: 'App Converter',
+    name: 'Converter',
     scheme: 'currencyconverter',
     bundleIdentifier: 'com.aqu1no1.currencyconverter',
   },
   beta: {
-    name: 'App Converter Beta',
+    name: 'Converter Beta',
     scheme: 'currencyconverterbeta',
     bundleIdentifier: 'com.aqu1no1.currencyconverter.beta',
   },
