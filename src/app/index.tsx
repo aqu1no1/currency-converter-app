@@ -10,6 +10,7 @@ import { Logo } from '@components/brand/Logo';
 import { Button } from '@components/ui/Button';
 import { FloatingCoins } from '@components/welcome/FloatingCoins';
 import { SUPPORTED_CURRENCIES } from '@constants/currencies.constants';
+import { APP_ROUTES } from '@constants/routes.constants';
 import { FONTS, RADIUS, SIZES, TYPE } from '@constants/theme';
 import { useCurrencies } from '@hooks/useCurrencies';
 import { useWelcomeGate } from '@hooks/useWelcomeGate';
@@ -33,16 +34,21 @@ export default function Welcome() {
   const { navigate, replace } = useRouter();
   const insets = useSafeAreaInsets();
   const { data: currencies } = useCurrencies();
-  const { isReady, shouldShowWelcome, markWelcomeCompleted } = useWelcomeGate();
+  const { isReady, shouldShowWelcome, completedOnLoad, markWelcomeCompleted } = useWelcomeGate();
   const currencyCodes = currencies?.length
     ? currencies.map(({ code }) => code)
     : SUPPORTED_CURRENCIES;
 
   useEffect(() => {
-    if (isReady && !shouldShowWelcome) replace('/converter');
-  }, [isReady, replace, shouldShowWelcome]);
+    if (isReady && completedOnLoad) replace(APP_ROUTES.home);
+  }, [completedOnLoad, isReady, replace]);
 
-  if (!isReady || !shouldShowWelcome) return null;
+  async function openConverter() {
+    await markWelcomeCompleted();
+    replace(APP_ROUTES.converter);
+  }
+
+  if (!isReady || completedOnLoad || !shouldShowWelcome) return null;
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.surfaceBrand }]}>
@@ -82,10 +88,10 @@ export default function Welcome() {
           { paddingBottom: Math.max(ACTIONS_BOTTOM, insets.bottom + SIZES.sectionGap) },
         ]}
       >
-        <Button tone="brand" onPress={() => navigate('/onboarding')}>
+        <Button tone="brand" onPress={() => navigate(APP_ROUTES.onboarding)}>
           {t('welcome.start')}
         </Button>
-        <Button tone="brand" variant="outline" onPress={() => void markWelcomeCompleted()}>
+        <Button tone="brand" variant="outline" onPress={() => void openConverter()}>
           {t('welcome.convertNow')}
         </Button>
         <Text style={[styles.disclaimer, { color: colors.textOnBrandMuted }]}>

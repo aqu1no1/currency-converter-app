@@ -1,0 +1,25 @@
+export const onboarding = {
+  progress: 'Paso {{step}} de 3',
+  skip: 'Saltar',
+  converterEyebrow: 'Convertir',
+  step1Title: 'Una cuenta, diez monedas',
+  step1Body:
+    'Escribe un importe una vez y descubre al instante cuánto vale en las demás monedas. Toca cualquier moneda para convertir desde ella.',
+  youType: 'Escribes',
+  seeEveryCurrency: 'y ves todas las monedas',
+  step2Title: 'Mira cómo cambió el tipo de cambio',
+  step2Body:
+    'Sigue la cotización del dólar estadounidense al real brasileño durante el último año.',
+  pair: '1 USD en BRL',
+  variation: '{{direction}} {{value}} en 12 meses',
+  minimum: 'Mínimo',
+  maximum: 'Máximo',
+  since2000: 'Desde 2000',
+  preferencesEyebrow: 'Preferencias',
+  step3Title: 'A tu manera',
+  step3Body: 'Elige la moneda que más usas y el idioma de la app.',
+  primaryCurrency: 'Moneda principal',
+  language: 'Idioma',
+  changeLater: 'Puedes cambiarlo todo después en Ajustes.',
+  start: 'Empezar',
+};

@@ -14,8 +14,10 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { ApiProvider } from '@contexts/ApiProvider';
+import { PreferencesProvider, usePreferences } from '@contexts/PreferencesContext';
 import { i18nReady } from '@lib/i18n';
 import { queryClient } from '@lib/query-client';
 import { ThemeProvider, useTheme } from '@theme/ThemeProvider';
@@ -50,19 +52,24 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ApiProvider>
-        <ThemeProvider>
-          <RootNavigator fontsReady={fontsReady} localeReady={localeReady} />
-        </ThemeProvider>
-      </ApiProvider>
-    </QueryClientProvider>
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <ApiProvider>
+            <PreferencesProvider>
+              <RootNavigator fontsReady={fontsReady} localeReady={localeReady} />
+            </PreferencesProvider>
+          </ApiProvider>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }
 
 function RootNavigator({ fontsReady, localeReady }: { fontsReady: boolean; localeReady: boolean }) {
   const { ready: themeReady } = useTheme();
-  const ready = fontsReady && localeReady && themeReady;
+  const { ready: preferencesReady } = usePreferences();
+  const ready = fontsReady && localeReady && themeReady && preferencesReady;
 
   useEffect(() => {
     if (ready) void SplashScreen.hideAsync();

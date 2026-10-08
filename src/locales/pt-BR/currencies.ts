@@ -9,4 +9,5 @@ export const currencies = {
   CHF: 'Franco suíço',
   CNY: 'Yuan chinês',
   ARS: 'Peso argentino',
+  emptyFavorites: 'Nenhuma moeda favorita selecionada.',
 };

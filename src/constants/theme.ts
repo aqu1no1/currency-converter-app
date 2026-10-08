@@ -26,6 +26,7 @@ export interface Colors {
   focusRing: string;
   white: string;
   surfaceBrand: string;
+  surfaceBrandOverlay: string;
   textOnBrand: string;
   textOnBrandMuted: string;
   borderOnBrand: string;
@@ -40,6 +41,7 @@ const brand = {
   accent: '#9FE1CB',
   white: '#FFFFFF',
   surfaceBrand: '#0F3D2E',
+  surfaceBrandOverlay: 'rgba(255,255,255,0.08)',
   textOnBrand: '#FFFFFF',
   textOnBrandMuted: '#CFE3D6',
   borderOnBrand: 'rgba(255,255,255,0.32)',

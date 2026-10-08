@@ -2,13 +2,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
 import { act, fireEvent, renderRouter, screen, waitFor } from 'expo-router/testing-library';
-import { AccessibilityInfo } from 'react-native';
+import { AccessibilityInfo, Text } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import Converter from '@app/(tabs)/converter';
 import Welcome from '@app/index';
-import Onboarding from '@app/onboarding/index';
 import { STORAGE_KEYS } from '@constants/storage';
 import { ApiProvider } from '@contexts/ApiProvider';
+import { PreferencesProvider } from '@contexts/PreferencesContext';
 import { ThemeProvider } from '@theme/ThemeProvider';
 import { createFakeApiService } from '@test/utils/fake-api.service';
 import { createTestQueryClient } from '@test/utils/query-client';
@@ -19,15 +20,27 @@ function createLayout(api = createFakeApiService()) {
 
   return function Layout() {
     return (
-      <ThemeProvider>
-        <QueryClientProvider client={queryClient}>
-          <ApiProvider api={api}>
-            <Stack screenOptions={{ headerShown: false }} />
-          </ApiProvider>
-        </QueryClientProvider>
-      </ThemeProvider>
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <QueryClientProvider client={queryClient}>
+            <ApiProvider api={api}>
+              <PreferencesProvider>
+                <Stack screenOptions={{ headerShown: false }} />
+              </PreferencesProvider>
+            </ApiProvider>
+          </QueryClientProvider>
+        </ThemeProvider>
+      </SafeAreaProvider>
     );
   };
+}
+
+function OnboardingDestination() {
+  return <Text>Onboarding destination</Text>;
+}
+
+function HomeDestination() {
+  return <Text>Home destination</Text>;
 }
 
 async function renderWelcome(api = createFakeApiService()) {
@@ -35,7 +48,8 @@ async function renderWelcome(api = createFakeApiService()) {
     {
       _layout: createLayout(api),
       index: Welcome,
-      'onboarding/index': Onboarding,
+      'onboarding/index': OnboardingDestination,
+      '(tabs)/home': HomeDestination,
       '(tabs)/converter': Converter,
     },
     { initialUrl: '/' },
@@ -89,12 +103,12 @@ describe('Welcome screen', () => {
     expect(await AsyncStorage.getItem(STORAGE_KEYS.welcomeCompleted)).toBe('true');
   });
 
-  it('opens the converter directly after the welcome was completed', async () => {
+  it('opens home directly after the welcome was completed', async () => {
     await AsyncStorage.setItem(STORAGE_KEYS.welcomeCompleted, 'true');
 
     const router = await renderWelcome();
 
-    expect(router.getPathname()).toBe('/converter');
+    expect(router.getPathname()).toBe('/home');
     expect(screen.queryByRole('button', { name: 'Começar' })).toBeNull();
   });
 

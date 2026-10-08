@@ -19,6 +19,43 @@ export function formatMoney(
     .replace(/[\u00a0\u202f]/g, ' ');
 }
 
+export function formatRateMoney(
+  amount: number,
+  currency: CurrencyCodeValue,
+  language = currentLanguage(),
+) {
+  const defaultDigits =
+    new Intl.NumberFormat(language, {
+      style: 'currency',
+      currency,
+    }).resolvedOptions().maximumFractionDigits ?? 2;
+  const digits = Math.abs(amount) < 0.1 ? Math.max(defaultDigits, 4) : defaultDigits;
+
+  return new Intl.NumberFormat(language, {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  })
+    .format(amount)
+    .replace(/[\u00a0\u202f]/g, ' ');
+}
+
+export function formatRate(value: number, language = currentLanguage()) {
+  return new Intl.NumberFormat(language, {
+    minimumFractionDigits: 4,
+    maximumFractionDigits: 4,
+  }).format(value);
+}
+
+export function formatTime(value: Date | string | number, language = currentLanguage()) {
+  return new Intl.DateTimeFormat(language, {
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'UTC',
+  }).format(value instanceof Date ? value : new Date(value));
+}
+
 export function formatDate(
   value: Date | string | number,
   language = currentLanguage(),
