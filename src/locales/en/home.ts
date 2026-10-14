@@ -6,6 +6,8 @@ export const home = {
   favoritesTitle: 'Your currencies in {{currency}}',
   seeAll: 'See all',
   syncedTodayAt: 'Synced today at {{time}}',
+  syncedYesterdayAt: 'Synced yesterday at {{time}}',
+  syncedOnAt: 'Synced on {{date}} at {{time}}',
   syncFailed: 'The latest update failed',
   syncUnavailable: 'Could not load synchronization status',
   retryRates: 'Could not load exchange rates',

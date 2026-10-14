@@ -52,7 +52,13 @@ export function formatTime(value: Date | string | number, language = currentLang
   return new Intl.DateTimeFormat(language, {
     hour: '2-digit',
     minute: '2-digit',
-    timeZone: 'UTC',
+  }).format(value instanceof Date ? value : new Date(value));
+}
+
+export function formatShortDate(value: Date | string | number, language = currentLanguage()) {
+  return new Intl.DateTimeFormat(language, {
+    day: '2-digit',
+    month: '2-digit',
   }).format(value instanceof Date ? value : new Date(value));
 }
 

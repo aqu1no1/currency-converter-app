@@ -90,7 +90,7 @@ describe('Home screen', () => {
     expect(screen.getByText('R$ 6,89')).toBeTruthy();
     expect(screen.getByText('R$ 0,0034')).toBeTruthy();
     expect(screen.getByText('R$ 0,0330')).toBeTruthy();
-    expect(await screen.findByText('Sincronizado hoje às 09:00')).toBeTruthy();
+    expect(await screen.findByText('Sincronizado em 29/09 às 06:00')).toBeTruthy();
     expect(api.get).toHaveBeenCalledWith('/exchange-rates/history', {
       params: { from: 'USD', to: 'BRL', start: expect.any(String), end: expect.any(String) },
       signal: expect.any(AbortSignal),
@@ -109,7 +109,7 @@ describe('Home screen', () => {
 
   it('refreshes the home queries with pull to refresh', async () => {
     const { api } = await renderHome();
-    await screen.findByText('Sincronizado hoje às 09:00');
+    await screen.findByText('Sincronizado em 29/09 às 06:00');
     const initialCalls = api.get.mock.calls.length;
     const refreshControl = screen.UNSAFE_getByType(RefreshControl);
 

@@ -5,8 +5,15 @@ import { ListRow } from '@components/list/ListRow';
 import { Icon } from '@components/icons/Icon';
 import { RADIUS, SIZES } from '@constants/theme';
 import type { SyncRunStatusDto } from '@dtos/sync-status.dto';
-import { formatTime } from '@utils/format.util';
+import { getRelativeDay, type RelativeDay } from '@utils/date.util';
+import { formatShortDate, formatTime } from '@utils/format.util';
 import { useTheme } from '@theme/ThemeProvider';
+
+const SYNCED_MESSAGE_KEYS = {
+  today: 'home.syncedTodayAt',
+  yesterday: 'home.syncedYesterdayAt',
+  other: 'home.syncedOnAt',
+} as const satisfies Record<RelativeDay, string>;
 
 type HomeSyncStatusProps = {
   lastRun: SyncRunStatusDto | null;
@@ -33,7 +40,10 @@ export function HomeSyncStatus({ lastRun, hasError, onPress }: HomeSyncStatusPro
   const time = lastRun?.finishedAt ?? lastRun?.startedAt;
   const message =
     succeeded && time
-      ? t('home.syncedTodayAt', { time: formatTime(time) })
+      ? t(SYNCED_MESSAGE_KEYS[getRelativeDay(time)], {
+          date: formatShortDate(time),
+          time: formatTime(time),
+        })
       : failed || hasError
         ? t('home.syncFailed')
         : t('home.syncUnavailable');

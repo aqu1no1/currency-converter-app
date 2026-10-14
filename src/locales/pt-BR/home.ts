@@ -6,6 +6,8 @@ export const home = {
   favoritesTitle: 'Suas moedas em {{currency}}',
   seeAll: 'Ver todas',
   syncedTodayAt: 'Sincronizado hoje às {{time}}',
+  syncedYesterdayAt: 'Sincronizado ontem às {{time}}',
+  syncedOnAt: 'Sincronizado em {{date}} às {{time}}',
   syncFailed: 'A última atualização falhou',
   syncUnavailable: 'Não foi possível consultar a sincronização',
   retryRates: 'Não foi possível carregar as cotações',
