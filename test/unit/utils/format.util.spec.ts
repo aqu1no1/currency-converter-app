@@ -1,4 +1,4 @@
-import { formatDate, formatMoney } from '@utils/format.util';
+import { formatDate, formatMoney, formatRateMoney } from '@utils/format.util';
 
 describe('format util', () => {
   it('formats money in Brazilian Portuguese', () => {
@@ -7,6 +7,11 @@ describe('format util', () => {
 
   it('formats money in English', () => {
     expect(formatMoney(1234.5, 'BRL', 'en')).toBe('R$1,234.50');
+  });
+
+  it('keeps precision for small converted currency rates', () => {
+    expect(formatRateMoney(0.0034, 'BRL', 'pt-BR')).toBe('R$ 0,0034');
+    expect(formatRateMoney(5.89, 'BRL', 'pt-BR')).toBe('R$ 5,89');
   });
 
   it('formats rate dates in UTC', () => {

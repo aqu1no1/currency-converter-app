@@ -1,33 +1,31 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { FONTS, RADIUS, SIZES, TYPE } from '@constants/theme';
+import { FONTS, RADIUS, SIZES } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
 export type SegmentedOption<Value extends string = string> = {
-  /** Texto visível da opção. */
   label: string;
-  /** Valor estável retornado ao selecionar a opção. */
+
   value: Value;
 };
 
-/** Propriedades do seletor segmentado. */
 type SegmentedProps<Value extends string> = {
-  /** Opções disponíveis. */
   options: readonly SegmentedOption<Value>[];
-  /** Valor atualmente selecionado. */
+
   value: Value;
-  /** Callback para nova seleção. */
+
   onChange: (value: Value) => void;
-  /** Nome acessível do grupo. */
+
   accessibilityLabel: string;
 };
 
 /**
- * Seletor segmentado com alvos tocáveis de pelo menos 44 px.
+ * [EN] Renders a single-choice segmented control inside a soft track.
+ * [PT-BR] Renderiza um seletor segmentado de escolha única dentro de um trilho suave.
  *
  * @example
  * ```tsx
- * <Segmented options={periods} value={period} onChange={setPeriod} accessibilityLabel={t('history.period')} />
+ * <Segmented options={LANGUAGE_OPTIONS} value={language} onChange={setLanguage} accessibilityLabel={t('settings.language')} />
  * ```
  */
 export function Segmented<Value extends string>({
@@ -36,12 +34,13 @@ export function Segmented<Value extends string>({
   onChange,
   accessibilityLabel,
 }: SegmentedProps<Value>) {
-  const { colors, dark } = useTheme();
+  const { colors } = useTheme();
 
   return (
     <View
+      accessibilityRole="radiogroup"
       accessibilityLabel={accessibilityLabel}
-      style={[styles.track, { backgroundColor: colors.surfaceAlternate }]}
+      style={[styles.track, { backgroundColor: colors.surfaceTrack }]}
     >
       {options.map((option) => {
         const selected = option.value === value;
@@ -51,19 +50,17 @@ export function Segmented<Value extends string>({
             accessibilityRole="radio"
             accessibilityState={{ selected }}
             onPress={() => onChange(option.value)}
-            style={[
+            style={({ pressed }) => [
               styles.option,
-              selected && {
-                backgroundColor: dark ? colors.accent : colors.accentSoft,
-                borderColor: colors.accent,
-              },
+              selected && { backgroundColor: colors.surfacePrimary },
+              pressed && styles.pressed,
             ]}
           >
             <Text
               numberOfLines={1}
               style={[
                 styles.label,
-                { color: selected && dark ? colors.textOnAccent : colors.textPrimary },
+                { color: selected ? colors.textHeading : colors.textSecondary },
               ]}
             >
               {option.label}
@@ -76,16 +73,15 @@ export function Segmented<Value extends string>({
 }
 
 const styles = StyleSheet.create({
-  track: { flexDirection: 'row', padding: 4, gap: 4, borderRadius: RADIUS.pill },
+  track: { flexDirection: 'row', padding: 4, gap: 4, borderRadius: RADIUS.button },
   option: {
     minHeight: SIZES.touchTarget,
     flex: 1,
     paddingHorizontal: 8,
-    borderWidth: 1,
-    borderColor: 'transparent',
-    borderRadius: RADIUS.pill,
+    borderRadius: RADIUS.option,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  label: { fontFamily: FONTS.bodySemiBold, fontSize: TYPE.secondary },
+  pressed: { transform: [{ scale: 0.97 }] },
+  label: { fontFamily: FONTS.bodySemiBold, fontSize: 14 },
 });

@@ -5,4 +5,5 @@ export const common = {
   cancel: 'Cancelar',
   save: 'Guardar',
   back: 'Volver',
+  continue: 'Continuar',
 };

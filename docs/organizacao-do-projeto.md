@@ -67,7 +67,7 @@ currency-converter-app/
 ├── jest.config.js
 ├── .oxlintrc.json · .oxfmtrc.json
 ├── tsconfig.json             # strict + aliases
-├── .env.example              # modelo do .env.beta e do .env.production
+├── .env.example              # modelo do único arquivo .env local
 ├── CHANGELOG.md
 └── package.json · pnpm-lock.yaml
 ```
@@ -214,7 +214,7 @@ Fluxo: **tela → hook (`useQuery`) → service (criado com `useApi()`) → `Api
 
 - **Hooks**: um por consulta (`useCurrencies`, `useLatestRates`, `useHistory`, `useSyncStatus`), com `queryKey` descritiva e o `signal` do React Query repassado ao service.
 - `lib/query-client.ts`: `staleTime` de `5 * TIME_IN_MS.MINUTE`; retry só em erro de rede ou 5xx, no máximo 2 vezes. O retry fica só aqui, não no axios.
-- **URL da API**: `EXPO_PUBLIC_API_URL` no `.env.beta` (desenvolvimento) e no `.env.production`, com o IP da máquina na rede (o celular não acessa `localhost`). Tudo que começa com `EXPO_PUBLIC_` fica visível no app: nada secreto ali.
+- **URL da API**: `EXPO_PUBLIC_API_URL` no único `.env`, com o IP da máquina na rede (o celular não acessa `localhost`). O mesmo arquivo vale para beta e production; um build que precise de outra URL pode defini-la no ambiente, que tem precedência sobre o arquivo. Tudo que começa com `EXPO_PUBLIC_` fica visível no app: nada secreto ali.
 
 - **Moedas**: `enums/currency-code.enum.ts` (`CurrencyCode`, as 10 da coluna `code` da tabela `currencies`) e `utils/currency.util.ts` (símbolos US$, R$, €, £, ¥, C$, A$, Fr, 元, AR$).
 - **Idioma da API**: a API responde em pt-BR e en; em espanhol, as mensagens de erro da API chegam em pt-BR (os textos do próprio app continuam em espanhol).

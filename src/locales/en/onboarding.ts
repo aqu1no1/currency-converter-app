@@ -1,0 +1,25 @@
+export const onboarding = {
+  progress: 'Step {{step}} of 3',
+  skip: 'Skip',
+  converterEyebrow: 'Converter',
+  step1Title: 'One account, ten currencies',
+  step1Body:
+    'Enter an amount once and instantly see what it is worth in every other currency. Tap any currency to convert from it.',
+  youType: 'You enter',
+  seeEveryCurrency: 'and see every currency',
+  step2Title: 'See how exchange rates changed',
+  step2Body:
+    'Official rates since 2000 for every currency pair, with low, high and the change over 7 days, 30 days or 1 year.',
+  pair: '1 USD in BRL',
+  variation: '{{direction}} {{value}} in 12 months',
+  minimum: 'Low',
+  maximum: 'High',
+  since: 'Since',
+  preferencesEyebrow: 'Preferences',
+  step3Title: 'Your way',
+  step3Body: 'Choose the currency you use most and the app language.',
+  primaryCurrency: 'Main currency',
+  language: 'Language',
+  changeLater: 'You can change everything later in Settings.',
+  start: 'Get started',
+};

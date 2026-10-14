@@ -5,32 +5,29 @@ import { ApiService } from '@services/api.service';
 
 const ApiContext = createContext<HttpClient | null>(null);
 
-/** Props do componente ApiProvider. */
 type ApiProviderProps = {
-  /** Cliente HTTP entregue pelo `useApi()`. Nos testes, entra o `createFakeApiService()`. @default ApiService.getInstance() */
   api?: HttpClient;
-  /** Árvore que passa a enxergar o cliente HTTP. */
+
   children: ReactNode;
 };
 
 /**
- * Entrega o cliente HTTP do app para os hooks, que criam os services a partir
- * dele. Fica no `_layout.tsx`, dentro do `QueryClientProvider`.
+ * [EN] Provides the HTTP client to the component tree.
+ * [PT-BR] Disponibiliza o cliente HTTP para a árvore de componentes.
  *
  * @example
  * ```tsx
- * <ApiProvider>
- *   <Stack />
- * </ApiProvider>
- *
- * const api = useApi();
- * const exchangeRateService = useMemo(() => new ExchangeRateService(api), [api]);
+ * <ApiProvider><Stack /></ApiProvider>
  * ```
  */
 export function ApiProvider({ api = ApiService.getInstance(), children }: ApiProviderProps) {
   return <ApiContext.Provider value={api}>{children}</ApiContext.Provider>;
 }
 
+/**
+ * [EN] Returns the HTTP client provided by the nearest ApiProvider.
+ * [PT-BR] Retorna o cliente HTTP disponibilizado pelo ApiProvider mais próximo.
+ */
 export function useApi(): HttpClient {
   const api = useContext(ApiContext);
 

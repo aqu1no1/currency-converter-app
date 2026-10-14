@@ -8,7 +8,7 @@ Pré-requisitos: Node 24, pnpm e o app **Expo Go** no celular.
 
 ```sh
 pnpm install
-cp .env.example .env.beta   # coloque o IP da máquina em EXPO_PUBLIC_API_URL
+cp .env.example .env        # coloque o IP da máquina em EXPO_PUBLIC_API_URL
 pnpm start:beta -c          # escaneie o QR code com o Expo Go
 ```
 

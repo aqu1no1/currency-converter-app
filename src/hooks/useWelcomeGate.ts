@@ -1,18 +1,16 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { STORAGE_KEYS } from '@constants/storage';
-
+import { persistWelcomeCompletion } from '@utils/welcome.util';
 /**
- * Lê e persiste se as boas-vindas já foram concluídas ou ignoradas.
- *
- * @example
- * ```tsx
- * const { isReady, shouldShowWelcome, markWelcomeCompleted } = useWelcomeGate();
- * ```
+ * Loads, exposes, and persists whether the welcome screen has been completed.
+ * Carrega, expõe e persiste se a tela de boas-vindas já foi concluída.
  */
+
 export function useWelcomeGate() {
   const [shouldShowWelcome, setShouldShowWelcome] = useState(true);
+  const [completedOnLoad, setCompletedOnLoad] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -22,7 +20,9 @@ export function useWelcomeGate() {
       .then((value) => {
         if (!mounted) return;
 
-        setShouldShowWelcome(value !== 'true');
+        const completed = value === 'true';
+        setShouldShowWelcome(!completed);
+        setCompletedOnLoad(completed);
         setIsReady(true);
       })
       .catch(() => {
@@ -36,8 +36,8 @@ export function useWelcomeGate() {
 
   const markWelcomeCompleted = useCallback(async () => {
     setShouldShowWelcome(false);
-    await AsyncStorage.setItem(STORAGE_KEYS.welcomeCompleted, 'true').catch(() => undefined);
+    await persistWelcomeCompletion();
   }, []);
 
-  return { isReady, shouldShowWelcome, markWelcomeCompleted };
+  return { isReady, shouldShowWelcome, completedOnLoad, markWelcomeCompleted };
 }

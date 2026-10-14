@@ -20,3 +20,9 @@ export function isCurrencyCode(value: string): value is CurrencyCode {
 export function getCurrencySymbol(code: string): string {
   return isCurrencyCode(code) ? CURRENCY_SYMBOLS[code] : code;
 }
+
+export function getCurrencySymbolSize(code: string): number {
+  const { length } = getCurrencySymbol(code);
+  if (length > 2) return 12;
+  return length > 1 ? 14 : 18;
+}

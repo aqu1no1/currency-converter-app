@@ -15,7 +15,7 @@ describe('Icon', () => {
     await renderWithProviders(<Icon name="history" />);
 
     expect(renderedIcon()).toMatchObject({
-      name: 'chart-line',
+      name: 'trending-up',
       color: lightColors.textPrimary,
       size: 24,
     });

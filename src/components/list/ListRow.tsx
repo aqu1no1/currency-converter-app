@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { Icon } from '@components/icons/Icon';
@@ -5,37 +6,52 @@ import type { IconName } from '@constants/icons';
 import { FONTS, SIZES, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-/** Propriedades de uma linha de lista. */
 type ListRowProps = {
-  /** Texto principal. */
+  leading?: ReactNode;
+
   title: string;
-  /** Texto secundário abaixo do título. */
+
   subtitle?: string;
-  /** Valor alinhado à direita. */
+
   value?: string;
-  /** Ícone opcional à esquerda. */
+  trailing?: ReactNode;
+
   icon?: IconName;
-  /** Ação opcional ao tocar na linha. */
+
   onPress?: () => void;
-  /** Estilo adicional da linha. */
+
   style?: StyleProp<ViewStyle>;
 };
-
 /**
- * Linha com ícone, textos e valor opcional.
+ * [EN] Displays a list item with optional leading content, subtitle, and value.
+ * [PT-BR] Exibe um item de lista com conteúdo inicial, subtítulo e valor opcionais.
  *
  * @example
  * ```tsx
  * <ListRow title="Dólar americano" subtitle="USD" value="R$ 5,20" onPress={openCurrency} />
  * ```
  */
-export function ListRow({ title, subtitle, value, icon, onPress, style }: ListRowProps) {
+
+export function ListRow({
+  title,
+  subtitle,
+  value,
+  icon,
+  leading,
+  trailing,
+  onPress,
+  style,
+}: ListRowProps) {
   const { colors } = useTheme();
   const content = (
     <>
+      {leading}
       {icon ? <Icon name={icon} size={22} color={colors.textSecondary} /> : null}
       <View style={styles.copy}>
-        <Text numberOfLines={1} style={[styles.title, { color: colors.textPrimary }]}>
+        <Text
+          numberOfLines={1}
+          style={[subtitle ? styles.title : styles.label, { color: colors.textPrimary }]}
+        >
           {title}
         </Text>
         {subtitle ? (
@@ -44,11 +60,12 @@ export function ListRow({ title, subtitle, value, icon, onPress, style }: ListRo
           </Text>
         ) : null}
       </View>
-      {value ? <Text style={[styles.value, { color: colors.textPrimary }]}>{value}</Text> : null}
+      {value ? <Text style={[styles.value, { color: colors.textHeading }]}>{value}</Text> : null}
+      {trailing}
     </>
   );
 
-  const rowStyle = [styles.row, { borderBottomColor: colors.divider }, style];
+  const rowStyle = [styles.row, style];
   return onPress ? (
     <Pressable accessibilityRole="button" onPress={onPress} style={rowStyle}>
       {content}
@@ -61,14 +78,24 @@ export function ListRow({ title, subtitle, value, icon, onPress, style }: ListRo
 const styles = StyleSheet.create({
   row: {
     minHeight: SIZES.listRow,
-    paddingHorizontal: SIZES.itemGap,
+    paddingVertical: SIZES.itemGap,
+    paddingHorizontal: SIZES.cardPadding,
     flexDirection: 'row',
     alignItems: 'center',
     gap: SIZES.itemGap,
-    borderBottomWidth: StyleSheet.hairlineWidth,
   },
   copy: { flex: 1, gap: 2 },
-  title: { fontFamily: FONTS.bodySemiBold, fontSize: TYPE.body },
-  subtitle: { fontFamily: FONTS.body, fontSize: TYPE.caption },
-  value: { fontFamily: FONTS.bodyMedium, fontSize: TYPE.value },
+  title: { fontFamily: FONTS.bodySemiBold, fontSize: TYPE.body, lineHeight: TYPE.body * 1.35 },
+  label: { fontFamily: FONTS.body, fontSize: TYPE.body, lineHeight: TYPE.body * 1.35 },
+  subtitle: {
+    fontFamily: FONTS.body,
+    fontSize: TYPE.secondary,
+    lineHeight: TYPE.secondary * 1.35,
+  },
+  value: {
+    fontFamily: FONTS.display,
+    fontSize: TYPE.value,
+    lineHeight: TYPE.value * 1.2,
+    fontVariant: ['tabular-nums'],
+  },
 });

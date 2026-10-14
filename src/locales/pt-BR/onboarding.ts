@@ -1,0 +1,25 @@
+export const onboarding = {
+  progress: 'Passo {{step}} de 3',
+  skip: 'Pular',
+  converterEyebrow: 'Converter',
+  step1Title: 'Uma conta, dez moedas',
+  step1Body:
+    'Digite um valor uma vez e veja na hora quanto ele vale em todas as outras moedas. Toque em qualquer uma para converter a partir dela.',
+  youType: 'Você digita',
+  seeEveryCurrency: 'e vê em todas as moedas',
+  step2Title: 'Veja como o câmbio mudou',
+  step2Body:
+    'Cotações oficiais desde 2000 para cada par de moedas, com mínima, máxima e a variação de 7 dias, 30 dias ou 1 ano.',
+  pair: '1 USD em BRL',
+  variation: '{{direction}} {{value}} em 12 meses',
+  minimum: 'Mínima',
+  maximum: 'Máxima',
+  since: 'Desde',
+  preferencesEyebrow: 'Preferências',
+  step3Title: 'Do seu jeito',
+  step3Body: 'Escolha a moeda que você mais usa e o idioma do app.',
+  primaryCurrency: 'Moeda principal',
+  language: 'Idioma',
+  changeLater: 'Dá para mudar tudo depois em Ajustes.',
+  start: 'Começar',
+};

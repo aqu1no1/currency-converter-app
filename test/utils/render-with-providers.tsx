@@ -10,6 +10,7 @@ import {
 } from '@testing-library/react-native';
 
 import { ApiProvider } from '@contexts/ApiProvider';
+import { PreferencesProvider, usePreferences } from '@contexts/PreferencesContext';
 import type { HttpClient } from '@interfaces/http-client.interface';
 import { ThemeProvider, useTheme } from '@theme/ThemeProvider';
 
@@ -21,12 +22,13 @@ type ProvidersOptions = {
   api?: HttpClient;
 };
 
-function ThemeReadySignal({ onReady }: { onReady: () => void }) {
-  const { ready } = useTheme();
+function ProvidersReadySignal({ onReady }: { onReady: () => void }) {
+  const { ready: themeReady } = useTheme();
+  const { ready: preferencesReady } = usePreferences();
 
   useEffect(() => {
-    if (ready) onReady();
-  }, [onReady, ready]);
+    if (themeReady && preferencesReady) onReady();
+  }, [onReady, preferencesReady, themeReady]);
 
   return null;
 }
@@ -39,9 +41,13 @@ function createWrapper({
   function Wrapper({ children }: { children: ReactNode }) {
     return (
       <ThemeProvider>
-        <ThemeReadySignal onReady={onThemeReady} />
         <QueryClientProvider client={queryClient}>
-          <ApiProvider api={api}>{children}</ApiProvider>
+          <ApiProvider api={api}>
+            <PreferencesProvider>
+              <ProvidersReadySignal onReady={onThemeReady} />
+              {children}
+            </PreferencesProvider>
+          </ApiProvider>
         </QueryClientProvider>
       </ThemeProvider>
     );

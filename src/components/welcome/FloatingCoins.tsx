@@ -27,21 +27,26 @@ const COINS = [
   { symbol: '元', left: 0.12, top: 0.7, size: 44, font: 16, seconds: 9, phase: 3 / 9 },
 ] as const;
 
-/** Props do componente Coin. */
 type CoinProps = (typeof COINS)[number] & {
-  /** Largura da tela, usada para converter `left` (fração) em pixels. */
   width: number;
-  /** Altura da tela, usada para converter `top` (fração) em pixels. */
+
   height: number;
-  /** Se `false`, a moeda fica parada na posição inicial. */
+
   animate: boolean;
 };
-
 /**
- * Uma moeda do fundo: círculo com o símbolo, subindo 16px e voltando num ciclo
- * suave (cosseno). Começa no ponto `phase` do ciclo, para as moedas não andarem
- * juntas, como o `animation-delay` negativo do design.
+ * [EN] Renders one decorative currency coin with an optional floating animation.
+ * [PT-BR] Renderiza uma moeda decorativa com animação flutuante opcional.
+ *
+ * @example
+ * ```tsx
+ * <View style={{ flex: 1 }}>
+ * <FloatingCoins />
+ * <Conteudo />
+ * </View>
+ * ```
  */
+
 function Coin({
   symbol,
   left,
@@ -105,21 +110,16 @@ function Coin({
     </Animated.View>
   );
 }
-
 /**
- * Fundo animado da tela de Boas-vindas: seis moedas ($, €, £, ¥, R$ e 元) que
- * sobem e descem devagar, em ciclos de 8 a 12 s, como o frame "App · Boas-vindas"
- * do design. É decorativo: não recebe toque e fica fora do leitor de tela. Com
- * "reduzir movimento" ligado no sistema, as moedas ficam paradas.
+ * [EN] Places six decorative floating currency symbols behind the welcome screen.
+ * [PT-BR] Posiciona seis símbolos de moeda flutuantes no fundo das boas-vindas.
  *
  * @example
  * ```tsx
- * <View style={{ flex: 1 }}>
- *   <FloatingCoins />
- *   <Conteudo />
- * </View>
+ * <FloatingCoins {...exampleProps} />
  * ```
  */
+
 export function FloatingCoins() {
   const { width, height } = useWindowDimensions();
   const reduceMotion = useReduceMotion();

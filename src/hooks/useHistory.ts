@@ -8,6 +8,10 @@ import { ExchangeRateService } from '@services/exchange-rate.service';
 export function historyQueryKey({ from, to, start, end }: HistoryParams) {
   return ['exchange-rates', 'history', from, to, start, end] as const;
 }
+/**
+ * Loads historical exchange rates for a currency pair and date range.
+ * Carrega o histórico de cotações de um par de moedas e intervalo de datas.
+ */
 
 export function useHistory(params: HistoryParams) {
   const api = useApi();

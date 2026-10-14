@@ -17,7 +17,20 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 - Componentes compartilhados de layout, cards, listas, moedas, botões, feedback e gráficos para as telas do app.
 - Nome exibido do aplicativo atualizado para "Converter".
 - Comunicação com a API: moedas, conversão, últimas cotações, histórico e status da sincronização, com respostas validadas, mensagens de erro no idioma do app e aviso de falta de conexão.
+- Navegação por cinco abas, preferências persistidas de moeda principal e favoritas, e tela Início com cotação USD/BRL, gráfico de 30 dias, favoritas e status de sincronização.
+- Onboarding em três etapas com conversões de exemplo offline, introdução ao histórico e seleção persistida de moeda principal e idioma.
 - Ícones de interface do MaterialCommunityIcons com nomes do projeto (`<Icon name="history" />`).
+
+### Changed
+
+- Boas-vindas, onboarding e Início seguem o design: espaçamentos, tipografia, símbolos das moedas (US$, AR$, C$, A$), seletor de idioma, gráfico de 12 meses com destaque no último valor e lista de favoritas com o título no plural ("Suas moedas em reais").
+- Um único arquivo `.env` para as variantes beta e production; o app avisa ao iniciar se `EXPO_PUBLIC_API_URL` estiver faltando.
+
+### Fixed
+
+- Cotações de exemplo do primeiro passo do onboarding não apareciam.
+- Mínima, máxima e "Desde" do segundo passo apareciam coladas e cortadas, e o texto encostava nos botões em telas menores.
+- Símbolos das moedas invisíveis no tema escuro e área clara em volta da barra de abas.
 
 ## [0.1.0] - 2026-10-07
 

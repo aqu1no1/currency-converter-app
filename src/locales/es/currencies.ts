@@ -9,4 +9,17 @@ export const currencies = {
   CHF: 'Franco suizo',
   CNY: 'Yuan chino',
   ARS: 'Peso argentino',
+  emptyFavorites: 'No hay monedas favoritas seleccionadas.',
+  plural: {
+    USD: 'dólares estadounidenses',
+    BRL: 'reales',
+    EUR: 'euros',
+    GBP: 'libras esterlinas',
+    JPY: 'yenes',
+    CAD: 'dólares canadienses',
+    AUD: 'dólares australianos',
+    CHF: 'francos suizos',
+    CNY: 'yuanes',
+    ARS: 'pesos argentinos',
+  },
 };

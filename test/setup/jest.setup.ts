@@ -12,6 +12,11 @@ jest.mock('@react-native-async-storage/async-storage', () => {
 
 jest.mock('react-native-worklets', () => require('react-native-worklets/lib/module/mock'));
 
+jest.mock('@shopify/flash-list', () => {
+  const { FlatList } = require('react-native');
+  return { FlashList: FlatList };
+});
+
 setUpTests();
 
 jest.mock('expo-localization', () => ({

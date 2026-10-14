@@ -3,20 +3,19 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { FONTS, SIZES, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-/** Propriedades do estado de carregamento. */
 type LoadingStateProps = {
-  /** Mensagem opcional traduzida pela tela chamadora. */
   message?: string;
 };
-
 /**
- * Indicador de carregamento acessível e colorido pelo tema.
+ * [EN] Shows an accessible loading indicator and optional message.
+ * [PT-BR] Exibe um indicador acessível de carregamento e uma mensagem opcional.
  *
  * @example
  * ```tsx
  * <LoadingState message={loadingLabel} />
  * ```
  */
+
 export function LoadingState({ message }: LoadingStateProps) {
   const { colors } = useTheme();
 
