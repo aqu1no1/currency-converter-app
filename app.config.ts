@@ -5,9 +5,13 @@ import { version } from './package.json';
 
 type AppVariant = 'production' | 'beta';
 
-const variant: AppVariant = process.env.APP_VARIANT === 'beta' ? 'beta' : 'production';
+loadEnv({ path: '.env', quiet: true });
 
-loadEnv({ path: `.env.${variant}`, override: true, quiet: true });
+if (!process.env.EXPO_PUBLIC_API_URL) {
+  throw new Error('Missing EXPO_PUBLIC_API_URL. Copy .env.example to .env and set the API URL.');
+}
+
+const variant: AppVariant = process.env.APP_VARIANT === 'beta' ? 'beta' : 'production';
 
 const VARIANTS = {
   production: {

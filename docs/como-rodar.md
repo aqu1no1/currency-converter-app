@@ -23,14 +23,14 @@ O celular e o computador precisam estar **na mesma rede Wi-Fi**.
 
 O app tem duas variantes, escolhidas pela variável `APP_VARIANT` nos scripts:
 
-| Variante     | Para quê                                    | Arquivo de env    | Nome no app        | Scheme                  |
-| ------------ | ------------------------------------------- | ----------------- | ------------------ | ----------------------- |
-| `beta`       | Desenvolvimento, apontando para a API local | `.env.beta`       | App Converter Beta | `currencyconverterbeta` |
-| `production` | A API publicada (quando existir)            | `.env.production` | App Converter      | `currencyconverter`     |
+| Variante     | Para quê                                    | Arquivo de env | Nome no app        | Scheme                  |
+| ------------ | ------------------------------------------- | -------------- | ------------------ | ----------------------- |
+| `beta`       | Desenvolvimento, apontando para a API local | `.env`         | App Converter Beta | `currencyconverterbeta` |
+| `production` | A API publicada (quando existir)            | `.env`         | App Converter      | `currencyconverter`     |
 
-O `app.config.ts` lê o `APP_VARIANT`, carrega o `.env.<variante>` (que vence o `.env`, se existir) e ajusta nome, scheme e identificador do app. A variante fica em `Constants.expoConfig.extra.variant`.
+O `app.config.ts` carrega sempre o único arquivo `.env`. `APP_VARIANT` continua selecionando apenas o nome, scheme e identificador do app; ela não troca a URL da API. A variante fica em `Constants.expoConfig.extra.variant`. Se um build precisar usar uma API diferente, defina `EXPO_PUBLIC_API_URL` no ambiente do build; essa variável tem precedência sobre o `.env`.
 
-Os dois arquivos ficam fora do Git; o modelo é o `.env.example`.
+O `.env` fica fora do Git; o modelo é o `.env.example`.
 
 ---
 
@@ -40,10 +40,10 @@ Os dois arquivos ficam fora do Git; o modelo é o `.env.example`.
 git clone https://github.com/aqu1no1/currency-converter-app.git
 cd currency-converter-app
 pnpm install
-cp .env.example .env.beta
+cp .env.example .env
 ```
 
-No `.env.beta`, troque o IP pelo da sua máquina na rede (o celular não acessa `localhost`):
+No `.env`, troque o IP pelo da sua máquina na rede (o celular não acessa `localhost`):
 
 ```sh
 hostname -I | awk '{print $1}'   # Linux
@@ -75,7 +75,7 @@ O jeito do dia a dia:
 pnpm start:beta -c
 ```
 
-O `-c` (`--clear`) limpa o cache do Metro, então mudanças no `.env.beta`, nos aliases ou no `app.config.ts` sempre entram. Depois:
+O `-c` (`--clear`) limpa o cache do Metro, então mudanças no `.env`, nos aliases ou no `app.config.ts` sempre entram. Depois:
 
 - **Android:** abra o Expo Go e escaneie o QR code do terminal.
 - **iPhone:** escaneie com a câmera; ela abre no Expo Go.
@@ -140,13 +140,13 @@ Para ver de novo telas que só aparecem uma vez (como a de Boas-vindas), limpe o
 
 ## 6. Problemas comuns
 
-| Problema                                               | Como resolver                                                                                                       |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| O Expo Go não conecta / fica carregando                | Confira se estão na mesma rede; senão, `pnpm start:tunnel`                                                          |
-| Firewall bloqueando (Linux)                            | `sudo ufw allow 8081/tcp` (Metro) e `sudo ufw allow 3000/tcp` (API)                                                 |
-| "Project is incompatible with this version of Expo Go" | Atualize o Expo Go na loja                                                                                          |
-| O app não acha a API                                   | IP errado no `.env.beta` ou API parada; teste `http://<seu-ip>:3000/health` no navegador do celular e suba com `-c` |
-| Mudança no `.env.beta` não aparece                     | Suba com `pnpm start:beta -c`; confira se não está rodando `pnpm start` (production)                                |
-| `Unable to resolve module`                             | `pnpm install` e `pnpm start:beta -c`; se persistir, `node-linker=hoisted` no `.npmrc`                              |
-| Expo Doctor reclama de versão                          | `pnpm expo install --fix`                                                                                           |
-| `pnpm doctor` mostra checks do pnpm, não do Expo       | Use `pnpm run doctor` (sem `run`, cai no doctor do próprio pnpm)                                                    |
+| Problema                                               | Como resolver                                                                                                  |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| O Expo Go não conecta / fica carregando                | Confira se estão na mesma rede; senão, `pnpm start:tunnel`                                                     |
+| Firewall bloqueando (Linux)                            | `sudo ufw allow 8081/tcp` (Metro) e `sudo ufw allow 3000/tcp` (API)                                            |
+| "Project is incompatible with this version of Expo Go" | Atualize o Expo Go na loja                                                                                     |
+| O app não acha a API                                   | IP errado no `.env` ou API parada; teste `http://<seu-ip>:3000/health` no navegador do celular e suba com `-c` |
+| Mudança no `.env` não aparece                          | Suba com `pnpm start:beta -c` para limpar o cache do Metro                                                     |
+| `Unable to resolve module`                             | `pnpm install` e `pnpm start:beta -c`; se persistir, `node-linker=hoisted` no `.npmrc`                         |
+| Expo Doctor reclama de versão                          | `pnpm expo install --fix`                                                                                      |
+| `pnpm doctor` mostra checks do pnpm, não do Expo       | Use `pnpm run doctor` (sem `run`, cai no doctor do próprio pnpm)                                               |

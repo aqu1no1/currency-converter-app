@@ -6,7 +6,6 @@ import { useTheme } from '@theme/ThemeProvider';
 
 /** Propriedades do contêiner de linhas de lista. */
 type ListBoxProps = PropsWithChildren<{
-  /** Estilo adicional do contêiner. */
   style?: StyleProp<ViewStyle>;
 }>;
 
