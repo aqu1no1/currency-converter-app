@@ -4,28 +4,31 @@ import { useWindowDimensions, View } from 'react-native';
 import { SIZES } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-type SparklineProps = {
+interface SparklineProps {
+  /** Valores do período, do mais antigo ao mais recente. */
   values: readonly number[];
-
+  /** Altura do gráfico em pontos. */
   height?: number;
-
+  /** Largura do gráfico; por padrão, a largura da tela menos o padding. */
   width?: number;
-
+  /** Descrição do gráfico lida pelo leitor de tela. */
   accessibilityLabel: string;
-};
+}
+
 /**
- * [EN] Draws a compact trend chart without axes.
- * [PT-BR] Desenha um gráfico compacto de tendência sem eixos.
+ * Linha de tendência compacta, sem eixos nem preenchimento.
+ *
+ * A variação ocupa toda a altura, independente da faixa de valores. Não renderiza
+ * nada com menos de 2 valores.
  *
  * @example
  * ```tsx
- * <Sparkline values={lastMonthRates} accessibilityLabel={chartDescription} />
+ * <Sparkline values={lastMonthRates} width={chartWidth} accessibilityLabel={t('home.rateTrend')} />
  * ```
  */
-
 export function Sparkline({ values, height = 64, width, accessibilityLabel }: SparklineProps) {
-  const { width: screenWidth } = useWindowDimensions();
   const { colors } = useTheme();
+  const { width: screenWidth } = useWindowDimensions();
 
   if (values.length < 2) return null;
 

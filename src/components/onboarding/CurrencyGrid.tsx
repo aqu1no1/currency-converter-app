@@ -7,25 +7,34 @@ import { SIZES } from '@constants/theme';
 import type { CurrencyCodeValue } from '@enums/currency-code.enum';
 import { CurrencyOption } from '@components/onboarding/CurrencyOption';
 
-type CurrencyGridProps = {
+interface CurrencyGridProps {
+  /** Moeda marcada. */
   selectedCurrency: CurrencyCodeValue;
+  /** Chamado com a moeda tocada. */
   onSelectCurrency: (currency: CurrencyCodeValue) => void;
+  /** Nome do grupo lido pelo leitor de tela. */
   accessibilityLabel: string;
-};
+}
 
 const CURRENCY_CODES = DISPLAY_CURRENCY_ORDER;
 const CURRENCY_COLUMNS = 5;
 const CURRENCY_GAP = 8;
+
 /**
- * [EN] Renders the supported currencies as a two-row, five-column selector.
- * [PT-BR] Renderiza as moedas disponíveis em um seletor de duas linhas e cinco colunas.
+ * Grade de escolha da moeda principal: 10 moedas em 2 linhas de 5 colunas.
+ *
+ * Segue a ordem do design (`DISPLAY_CURRENCY_ORDER`) e funciona como um grupo
+ * de opções para o leitor de tela.
  *
  * @example
  * ```tsx
- * <CurrencyGrid selectedCurrency={primaryCurrency} onSelectCurrency={setPrimaryCurrency} accessibilityLabel={t('settings.primaryCurrency')} />
+ * <CurrencyGrid
+ *   selectedCurrency={primaryCurrency}
+ *   onSelectCurrency={setPrimaryCurrency}
+ *   accessibilityLabel={t('onboarding.primaryCurrency')}
+ * />
  * ```
  */
-
 export function CurrencyGrid({
   selectedCurrency,
   onSelectCurrency,

@@ -3,15 +3,28 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { STORAGE_KEYS } from '@constants/storage';
 import { persistWelcomeCompletion } from '@utils/welcome.util';
-/**
- * Loads, exposes, and persists whether the welcome screen has been completed.
- * Carrega, expõe e persiste se a tela de boas-vindas já foi concluída.
- */
 
+/**
+ * Controla se a tela de Boas-vindas deve aparecer.
+ *
+ * Lê do aparelho se as Boas-vindas já foram concluídas. `completedOnLoad` indica
+ * que o app deve ir direto ao Início; `markWelcomeCompleted` salva a conclusão
+ * (por exemplo, ao tocar em "Converter agora").
+ *
+ * @example
+ * ```tsx
+ * const { isReady, shouldShowWelcome, completedOnLoad, markWelcomeCompleted } = useWelcomeGate();
+ * ```
+ */
 export function useWelcomeGate() {
   const [shouldShowWelcome, setShouldShowWelcome] = useState(true);
   const [completedOnLoad, setCompletedOnLoad] = useState(false);
   const [isReady, setIsReady] = useState(false);
+
+  const markWelcomeCompleted = useCallback(async () => {
+    setShouldShowWelcome(false);
+    await persistWelcomeCompletion();
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -32,11 +45,6 @@ export function useWelcomeGate() {
     return () => {
       mounted = false;
     };
-  }, []);
-
-  const markWelcomeCompleted = useCallback(async () => {
-    setShouldShowWelcome(false);
-    await persistWelcomeCompletion();
   }, []);
 
   return { isReady, shouldShowWelcome, completedOnLoad, markWelcomeCompleted };

@@ -5,11 +5,16 @@ import { useApi } from '@contexts/ApiProvider';
 import { SyncService } from '@services/sync.service';
 
 export const syncStatusQueryKey = ['sync', 'status'] as const;
-/**
- * Loads the latest synchronization status.
- * Carrega o status da sincronização mais recente.
- */
 
+/**
+ * Busca o status da sincronização das cotações na API (`GET /sync/status`).
+ *
+ * @example
+ * ```tsx
+ * const sync = useSyncStatus();
+ * const lastRun = sync.data?.lastRun ?? null;
+ * ```
+ */
 export function useSyncStatus() {
   const api = useApi();
   const syncService = useMemo(() => new SyncService(api), [api]);

@@ -21,27 +21,36 @@ import { useTheme } from '@theme/ThemeProvider';
 
 const CARET_BLINK = 0.5 * TIME_IN_MS.SECOND;
 
-type ConverterAmountCardProps = {
+interface ConverterAmountCardProps {
+  /** Moeda ativa, de onde parte a conversão. */
   code: CurrencyCodeValue;
-
+  /** Nome traduzido da moeda ativa. */
   name: string;
-
+  /** Valor digitado já formatado com o símbolo (ex.: `R$ 1.234,5`). */
   amount: string;
-
+  /** Texto de ajuda abaixo do valor. */
   hint: string;
-
+  /** Rótulo lido antes do valor pelo leitor de tela. */
   accessibilityLabel: string;
-};
+}
+
 /**
- * [EN] Shows the active currency and the typed amount with a blinking caret.
- * [PT-BR] Mostra a moeda ativa e o valor digitado com um cursor piscando.
+ * Card do Converter com a moeda ativa e o valor digitado.
+ *
+ * O valor aparece em display 40, com um cursor piscando a cada meio segundo
+ * (parado com "reduzir movimento"), e diminui a fonte para caber em uma linha.
  *
  * @example
  * ```tsx
- * <ConverterAmountCard code="BRL" name={t('currencies.BRL')} amount="R$ 100" hint={t('converter.hint')} accessibilityLabel={t('converter.amountLabel')} />
+ * <ConverterAmountCard
+ *   code={base}
+ *   name={t(`currencies.${base}`)}
+ *   amount={`${getCurrencySymbol(base)} ${formatAmountInput(amount)}`}
+ *   hint={t('converter.hint')}
+ *   accessibilityLabel={t('converter.amountLabel')}
+ * />
  * ```
  */
-
 export function ConverterAmountCard({
   code,
   name,
@@ -50,8 +59,12 @@ export function ConverterAmountCard({
   accessibilityLabel,
 }: ConverterAmountCardProps) {
   const { colors } = useTheme();
+
   const reduceMotion = useReduceMotion();
+
   const caretOpacity = useSharedValue(1);
+
+  const caretStyle = useAnimatedStyle(() => ({ opacity: caretOpacity.get() }));
 
   useEffect(() => {
     if (reduceMotion !== false) {
@@ -69,8 +82,6 @@ export function ConverterAmountCard({
 
     return () => cancelAnimation(caretOpacity);
   }, [caretOpacity, reduceMotion]);
-
-  const caretStyle = useAnimatedStyle(() => ({ opacity: caretOpacity.get() }));
 
   return (
     <DarkCard style={styles.card}>

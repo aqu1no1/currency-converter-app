@@ -9,23 +9,31 @@ export type SegmentedOption<Value extends string = string> = {
   value: Value;
 };
 
-type SegmentedProps<Value extends string> = {
+interface SegmentedProps<Value extends string> {
+  /** Opções exibidas lado a lado, cada uma com rótulo e valor. */
   options: readonly SegmentedOption<Value>[];
-
+  /** Valor da opção marcada. */
   value: Value;
-
+  /** Chamado com o valor da opção tocada. */
   onChange: (value: Value) => void;
-
+  /** Nome do grupo lido pelo leitor de tela. */
   accessibilityLabel: string;
-};
+}
 
 /**
- * [EN] Renders a single-choice segmented control inside a soft track.
- * [PT-BR] Renderiza um seletor segmentado de escolha única dentro de um trilho suave.
+ * Seletor de escolha única com as opções lado a lado dentro de um trilho.
+ *
+ * A opção marcada fica com fundo da superfície; as outras ficam com texto
+ * secundário sobre o trilho. Usado para idioma e para os períodos do histórico.
  *
  * @example
  * ```tsx
- * <Segmented options={LANGUAGE_OPTIONS} value={language} onChange={setLanguage} accessibilityLabel={t('settings.language')} />
+ * <Segmented
+ *   options={LANGUAGE_OPTIONS}
+ *   value={language}
+ *   onChange={setLanguage}
+ *   accessibilityLabel={t('onboarding.language')}
+ * />
  * ```
  */
 export function Segmented<Value extends string>({

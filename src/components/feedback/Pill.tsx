@@ -5,23 +5,26 @@ import { useTheme } from '@theme/ThemeProvider';
 
 type PillTone = 'info' | 'success' | 'warning' | 'error' | 'onBrand' | 'onBrandSolid';
 
-type PillProps = {
+interface PillProps {
+  /** Texto do selo. */
   label: string;
-
+  /** Cor do selo: `info`, `success`, `warning`, `error`, ou `onBrand`/`onBrandSolid` para cards escuros. */
   tone?: PillTone;
-
+  /** Estilo extra do texto. */
   style?: StyleProp<TextStyle>;
-};
+}
+
 /**
- * [EN] Displays a compact status label with semantic styling.
- * [PT-BR] Exibe um rótulo compacto de status com estilo semântico.
+ * Selo compacto em formato de pílula, para status e rótulos curtos.
+ *
+ * Os tons `onBrand` e `onBrandSolid` são para usar sobre o card verde escuro,
+ * como "USD → BRL" no Início e a variação de 12 meses no onboarding.
  *
  * @example
  * ```tsx
- * <Pill label={statusLabel} tone="success" />
+ * <Pill label={t('home.featuredPairCode')} tone="onBrand" />
  * ```
  */
-
 export function Pill({ label, tone = 'info', style }: PillProps) {
   const { colors } = useTheme();
   const palette = {

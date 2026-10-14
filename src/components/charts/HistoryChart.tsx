@@ -16,43 +16,54 @@ export type HistoryPoint = {
   date?: string;
 };
 
-type HistoryChartProps = {
+interface HistoryChartProps {
+  /** Pontos do gráfico, do mais antigo ao mais recente. */
   data: readonly HistoryPoint[];
-
+  /** Moeda usada para formatar o valor no tooltip. */
   currency: CurrencyCodeValue;
-
+  /** Descrição do gráfico lida pelo leitor de tela. */
   accessibilityLabel: string;
-
+  /** Mostra pontos e o tooltip com valor e data ao tocar. */
   interactive?: boolean;
-
+  /** Anima o desenho da linha ao abrir. */
   animated?: boolean;
-
+  /** Altura do gráfico em pontos. */
   height?: number;
-
+  /** Largura do gráfico; por padrão, a largura da tela menos o padding. */
   width?: number;
-
+  /** Começa o eixo vertical no menor valor, para a variação ocupar toda a altura. */
   fitData?: boolean;
-
+  /** Mostra os eixos e os rótulos. */
   showAxes?: boolean;
-
+  /** Desenha a linha curva em vez de reta. */
   curved?: boolean;
-
+  /** Espessura da linha. */
   thickness?: number;
-
+  /** Opacidade fixa do preenchimento; sem ela, o preenchimento é um degradê. */
   fillOpacity?: number;
-
+  /** Destaca o último ponto com uma bolinha. */
   highlightLast?: boolean;
-};
+}
+
 /**
- * [EN] Draws exchange-rate history with optional axes, animation, and selection.
- * [PT-BR] Desenha o histórico de cotações com eixos, animação e seleção opcionais.
+ * Gráfico de linha do histórico de cotações, feito com `react-native-gifted-charts`.
+ *
+ * Os pontos são distribuídos na largura disponível. Sem eixos, vira o gráfico
+ * compacto do onboarding; com `interactive`, mostra o valor e a data do ponto tocado.
  *
  * @example
  * ```tsx
- * <HistoryChart data={history} currency="BRL" accessibilityLabel={chartDescription} />
+ * <HistoryChart
+ *   data={points}
+ *   currency="BRL"
+ *   height={170}
+ *   showAxes={false}
+ *   curved={false}
+ *   highlightLast
+ *   accessibilityLabel={t('onboarding.step2Title')}
+ * />
  * ```
  */
-
 export function HistoryChart({
   data,
   currency,
@@ -68,8 +79,8 @@ export function HistoryChart({
   fillOpacity,
   highlightLast = false,
 }: HistoryChartProps) {
-  const { width: screenWidth } = useWindowDimensions();
   const { colors } = useTheme();
+  const { width: screenWidth } = useWindowDimensions();
 
   if (data.length < 2) return null;
   const minValue = Math.min(...data.map(({ value }) => value));

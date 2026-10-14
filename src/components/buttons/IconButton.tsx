@@ -5,25 +5,27 @@ import type { IconName } from '@constants/icons';
 import { RADIUS, SIZES } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-type IconButtonProps = {
+interface IconButtonProps {
+  /** Ícone exibido no centro. */
   name: IconName;
-
+  /** Nome lido pelo leitor de tela, já que o botão não tem texto. */
   accessibilityLabel: string;
-
+  /** Ação do toque. */
   onPress: () => void;
-
+  /** Bloqueia o toque e deixa o botão translúcido. */
   disabled?: boolean;
-};
+}
+
 /**
- * [EN] Renders an accessible circular button with an icon.
- * [PT-BR] Renderiza um botão circular acessível com um ícone.
+ * Botão circular de 44 com um ícone, usado em cabeçalhos.
+ *
+ * Tem fundo da superfície e borda clara, como o botão de Ajustes do Início.
  *
  * @example
  * ```tsx
  * <IconButton name="settings" accessibilityLabel={t('tabs.settings')} onPress={openSettings} />
  * ```
  */
-
 export function IconButton({
   name,
   accessibilityLabel,

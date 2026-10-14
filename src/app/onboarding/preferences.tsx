@@ -11,6 +11,7 @@ import { Screen } from '@components/layout/Screen';
 import { SIZES, FONTS, TYPE } from '@constants/theme';
 import { APP_ROUTES } from '@constants/routes.constants';
 import { useCompleteOnboarding } from '@hooks/useCompleteOnboarding';
+import type { CurrencyCodeValue } from '@enums/currency-code.enum';
 import { resolveLanguage, setLanguage, type Language } from '@lib/i18n';
 import { usePreferences } from '@contexts/PreferencesContext';
 import { useTheme } from '@theme/ThemeProvider';
@@ -20,23 +21,21 @@ const LANGUAGE_OPTIONS: readonly SegmentedOption<Language>[] = [
   { label: 'English', value: 'en' },
   { label: 'Español', value: 'es' },
 ];
-/**
- * [EN] Lets the user choose a primary currency and app language.
- * [PT-BR] Permite escolher a moeda principal e o idioma do app.
- *
- * @example
- * ```tsx
- * <OnboardingPreferencesStep />
- * ```
- */
 
-const OnboardingPreferencesStep = () => {
+export default function OnboardingPreferencesStep() {
   const { colors } = useTheme();
   const { t, i18n } = useTranslation();
   const { navigate } = useRouter();
   const { primaryCurrency, setPrimaryCurrency } = usePreferences();
+
   const completeOnboarding = useCompleteOnboarding();
+
   const language = resolveLanguage(i18n.resolvedLanguage ?? i18n.language);
+
+  const selectCurrency = (next: CurrencyCodeValue) => void setPrimaryCurrency(next);
+  const changeLanguage = (next: Language) => void setLanguage(next);
+  const goBack = () => navigate(APP_ROUTES.onboardingHistory);
+  const finish = () => void completeOnboarding();
 
   return (
     <Screen contentStyle={styles.screen}>
@@ -59,7 +58,7 @@ const OnboardingPreferencesStep = () => {
             </Text>
             <CurrencyGrid
               selectedCurrency={primaryCurrency}
-              onSelectCurrency={(next) => void setPrimaryCurrency(next)}
+              onSelectCurrency={selectCurrency}
               accessibilityLabel={t('onboarding.primaryCurrency')}
             />
           </View>
@@ -71,7 +70,7 @@ const OnboardingPreferencesStep = () => {
             <Segmented
               options={LANGUAGE_OPTIONS}
               value={language}
-              onChange={(nextLanguage) => void setLanguage(nextLanguage)}
+              onChange={changeLanguage}
               accessibilityLabel={t('onboarding.language')}
             />
           </View>
@@ -84,15 +83,13 @@ const OnboardingPreferencesStep = () => {
 
       <OnboardingFooter
         backLabel={t('common.back')}
-        onBack={() => navigate(APP_ROUTES.onboardingHistory)}
+        onBack={goBack}
         primaryLabel={t('onboarding.start')}
-        onPrimary={() => void completeOnboarding()}
+        onPrimary={finish}
       />
     </Screen>
   );
-};
-
-export default OnboardingPreferencesStep;
+}
 
 const styles = StyleSheet.create({
   screen: { paddingTop: 8, paddingBottom: SIZES.itemGap },

@@ -11,23 +11,10 @@ type ApiProviderProps = {
   children: ReactNode;
 };
 
-/**
- * [EN] Provides the HTTP client to the component tree.
- * [PT-BR] Disponibiliza o cliente HTTP para a árvore de componentes.
- *
- * @example
- * ```tsx
- * <ApiProvider><Stack /></ApiProvider>
- * ```
- */
 export function ApiProvider({ api = ApiService.getInstance(), children }: ApiProviderProps) {
   return <ApiContext.Provider value={api}>{children}</ApiContext.Provider>;
 }
 
-/**
- * [EN] Returns the HTTP client provided by the nearest ApiProvider.
- * [PT-BR] Retorna o cliente HTTP disponibilizado pelo ApiProvider mais próximo.
- */
 export function useApi(): HttpClient {
   const api = useContext(ApiContext);
 

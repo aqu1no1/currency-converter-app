@@ -5,19 +5,10 @@ import { Screen } from '@components/layout/Screen';
 import { ScreenHeader } from '@components/layout/ScreenHeader';
 import { FONTS, SIZES, TAB_SCREEN_EDGES, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
-/**
- * [EN] Displays exchange-rate history for the selected currency pair.
- * [PT-BR] Exibe o histórico de cotações do par de moedas selecionado.
- *
- * @example
- * ```tsx
- * <HistoryScreen />
- * ```
- */
 
-const HistoryScreen = () => {
-  const { t } = useTranslation();
+export default function HistoryScreen() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Screen edges={TAB_SCREEN_EDGES}>
@@ -27,9 +18,7 @@ const HistoryScreen = () => {
       </Text>
     </Screen>
   );
-};
-
-export default HistoryScreen;
+}
 
 const styles = StyleSheet.create({
   placeholder: { marginTop: SIZES.sectionGap, fontFamily: FONTS.body, fontSize: TYPE.body },

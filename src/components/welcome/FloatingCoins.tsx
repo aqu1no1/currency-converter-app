@@ -28,25 +28,24 @@ const COINS = [
 ] as const;
 
 type CoinProps = (typeof COINS)[number] & {
+  /** Largura da tela, usada para posicionar a moeda. */
   width: number;
-
+  /** Altura da tela, usada para posicionar a moeda. */
   height: number;
-
+  /** Se a moeda flutua; falso com "reduzir movimento". */
   animate: boolean;
 };
+
 /**
- * [EN] Renders one decorative currency coin with an optional floating animation.
- * [PT-BR] Renderiza uma moeda decorativa com animação flutuante opcional.
+ * Uma moeda decorativa das Boas-vindas, com símbolo, posição e ritmo próprios.
+ *
+ * Sobe e desce 16 pontos em loop, começando na fase definida em `COINS`.
  *
  * @example
  * ```tsx
- * <View style={{ flex: 1 }}>
- * <FloatingCoins />
- * <Conteudo />
- * </View>
+ * <Coin {...COINS[0]} width={width} height={height} animate />
  * ```
  */
-
 function Coin({
   symbol,
   left,
@@ -61,6 +60,12 @@ function Coin({
 }: CoinProps) {
   const { colors } = useTheme();
   const progress = useSharedValue<number>(phase);
+
+  const floating = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: (-FLOAT_DISTANCE * (1 - Math.cos(2 * Math.PI * progress.get()))) / 2 },
+    ],
+  }));
 
   useEffect(() => {
     if (!animate) {
@@ -81,12 +86,6 @@ function Coin({
 
     return () => cancelAnimation(progress);
   }, [animate, seconds, phase, progress]);
-
-  const floating = useAnimatedStyle(() => ({
-    transform: [
-      { translateY: (-FLOAT_DISTANCE * (1 - Math.cos(2 * Math.PI * progress.get()))) / 2 },
-    ],
-  }));
 
   return (
     <Animated.View
@@ -110,16 +109,21 @@ function Coin({
     </Animated.View>
   );
 }
+
 /**
- * [EN] Places six decorative floating currency symbols behind the welcome screen.
- * [PT-BR] Posiciona seis símbolos de moeda flutuantes no fundo das boas-vindas.
+ * Moedas decorativas flutuando no fundo da tela de Boas-vindas.
+ *
+ * São seis símbolos ($, €, £, ¥, R$, 元) em posições relativas à tela, cada um com
+ * seu próprio ritmo. Ficam parados com "reduzir movimento" e são ignorados pelo
+ * leitor de tela.
  *
  * @example
  * ```tsx
- * <FloatingCoins {...exampleProps} />
+ * <View style={{ flex: 1 }}>
+ *   <FloatingCoins />
+ * </View>
  * ```
  */
-
 export function FloatingCoins() {
   const { width, height } = useWindowDimensions();
   const reduceMotion = useReduceMotion();

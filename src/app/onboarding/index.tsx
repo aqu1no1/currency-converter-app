@@ -30,31 +30,27 @@ const FALLBACK_RATES: Record<TargetCurrency, number> = {
   GBP: 0.1441,
   ARS: 279.78,
 };
-/**
- * [EN] Shows how one amount converts into several currencies.
- * [PT-BR] Mostra como um valor é convertido para várias moedas.
- *
- * @example
- * ```tsx
- * <OnboardingFirstStep />
- * ```
- */
 
-const OnboardingFirstStep = () => {
+export default function OnboardingFirstStep() {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const { navigate } = useRouter();
   const { data } = useLatestRates('BRL');
+
   const completeOnboarding = useCompleteOnboarding();
+
   const rates = data?.rates;
   const rows: OnboardingRate[] = TARGET_CURRENCIES.map((code) => ({
     code,
     amount: 100 * (rates?.[code] ?? FALLBACK_RATES[code]),
   }));
 
+  const goNext = () => navigate(APP_ROUTES.onboardingHistory);
+  const skip = () => void completeOnboarding();
+
   return (
     <Screen contentStyle={styles.screen}>
-      <OnboardingHeader step={1} onSkip={() => void completeOnboarding()} />
+      <OnboardingHeader step={1} onSkip={skip} />
 
       <ScrollView
         style={styles.scroll}
@@ -87,15 +83,10 @@ const OnboardingFirstStep = () => {
         />
       </ScrollView>
 
-      <OnboardingFooter
-        primaryLabel={t('common.continue')}
-        onPrimary={() => navigate(APP_ROUTES.onboardingHistory)}
-      />
+      <OnboardingFooter primaryLabel={t('common.continue')} onPrimary={goNext} />
     </Screen>
   );
-};
-
-export default OnboardingFirstStep;
+}
 
 const styles = StyleSheet.create({
   screen: { paddingTop: 8, paddingBottom: SIZES.itemGap },

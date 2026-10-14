@@ -5,23 +5,25 @@ import { type Edge, SafeAreaView } from 'react-native-safe-area-context';
 import { SIZES } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-type ScreenProps = PropsWithChildren<{
+interface ScreenProps extends PropsWithChildren {
+  /** Estilo extra da área segura. */
   style?: StyleProp<ViewStyle>;
-
+  /** Estilo extra do conteúdo (que tem padding horizontal de 20). */
   contentStyle?: StyleProp<ViewStyle>;
-
+  /** Bordas da área segura aplicadas; nas abas, `TAB_SCREEN_EDGES` deixa a inferior para a barra. */
   edges?: readonly Edge[];
-}>;
+}
+
 /**
- * [EN] Provides a safe-area screen container with shared horizontal spacing.
- * [PT-BR] Fornece um contêiner de tela com safe area e espaçamento horizontal padrão.
+ * Contêiner base das telas, com área segura, fundo do tema e padding horizontal.
  *
  * @example
  * ```tsx
- * <Screen><ScreenHeader title={t('tabs.home')} /></Screen>
+ * <Screen edges={TAB_SCREEN_EDGES}>
+ *   <ScreenHeader title={t('tabs.converter')} />
+ * </Screen>
  * ```
  */
-
 export function Screen({ children, style, contentStyle, edges }: ScreenProps) {
   const { colors } = useTheme();
 

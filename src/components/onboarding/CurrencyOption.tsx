@@ -5,29 +5,31 @@ import type { CurrencyCodeValue } from '@enums/currency-code.enum';
 import { getCurrencySymbol, getCurrencySymbolSize } from '@utils/currency.util';
 import { useTheme } from '@theme/ThemeProvider';
 
-type CurrencyOptionProps = {
+interface CurrencyOptionProps {
+  /** Moeda da opção. */
   code: CurrencyCodeValue;
-
+  /** Nome traduzido da moeda, lido pelo leitor de tela. */
   label: string;
-
+  /** Se a opção está marcada. */
   selected: boolean;
-
+  /** Largura da opção, calculada pela grade. */
   width: number;
-
+  /** Estilo extra, como a margem entre as colunas. */
   style?: StyleProp<ViewStyle>;
-
+  /** Chamado com a moeda ao tocar. */
   onSelect: (code: CurrencyCodeValue) => void;
-};
+}
+
 /**
- * [EN] Renders one selectable currency option in the onboarding grid.
- * [PT-BR] Renderiza uma opção de moeda selecionável na grade do onboarding.
+ * Opção da grade de moedas, com o símbolo e o código.
+ *
+ * Marcada, fica com fundo verde escuro (verde-menta no tema escuro).
  *
  * @example
  * ```tsx
- * <CurrencyOption code="EUR" label={t('currencies.EUR')} selected={currency === 'EUR'} onSelect={setCurrency} />
+ * <CurrencyOption code="EUR" label={t('currencies.EUR')} selected={currency === 'EUR'} width={64} onSelect={setCurrency} />
  * ```
  */
-
 export function CurrencyOption({
   code,
   label,

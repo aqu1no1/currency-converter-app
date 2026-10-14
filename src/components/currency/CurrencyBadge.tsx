@@ -5,14 +5,17 @@ import type { CurrencyCodeValue } from '@enums/currency-code.enum';
 import { getCurrencySymbol, getCurrencySymbolSize } from '@utils/currency.util';
 import { useTheme } from '@theme/ThemeProvider';
 
-type CurrencyBadgeProps = {
+interface CurrencyBadgeProps {
+  /** Moeda cujo símbolo aparece no selo. */
   code: CurrencyCodeValue;
-
+  /** `accent` usa fundo verde-menta, para destacar a moeda ativa sobre o card escuro. */
   tone?: 'default' | 'accent';
-};
+}
+
 /**
- * [EN] Shows a currency symbol inside a compact 40-by-40 badge.
- * [PT-BR] Mostra o símbolo da moeda em um selo compacto de 40 por 40.
+ * Selo de 40 por 40 com o símbolo da moeda (US$, €, R$, AR$...).
+ *
+ * O tamanho da fonte diminui conforme o símbolo fica mais longo, para caber no selo.
  *
  * @example
  * ```tsx
@@ -20,7 +23,6 @@ type CurrencyBadgeProps = {
  * <CurrencyBadge code="BRL" tone="accent" />
  * ```
  */
-
 export function CurrencyBadge({ code, tone = 'default' }: CurrencyBadgeProps) {
   const { colors, dark } = useTheme();
   const symbol = getCurrencySymbol(code);

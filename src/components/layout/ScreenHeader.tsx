@@ -5,23 +5,29 @@ import type { IconName } from '@constants/icons';
 import { FONTS, SIZES, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-type ScreenHeaderProps = {
+interface ScreenHeaderProps {
+  /** Título da tela. */
   title: string;
-
+  /** Linha menor acima do título, como a data da cotação. */
   context?: string;
-
+  /** Botão circular opcional à direita, com ícone, rótulo e ação. */
   action?: { icon: IconName; accessibilityLabel: string; onPress: () => void };
-};
+}
+
 /**
- * [EN] Displays a screen title, optional context, and optional action.
- * [PT-BR] Exibe o título da tela, contexto e ação opcionais.
+ * Cabeçalho das telas com título, contexto opcional e um botão de ação.
+ *
+ * O conteúdo fica alinhado embaixo, como nos designs das abas.
  *
  * @example
  * ```tsx
- * <ScreenHeader title={t('settings.title')} context={t('common.appName')} />
+ * <ScreenHeader
+ *   title={t('tabs.home')}
+ *   context={t('home.quoteDate', { date })}
+ *   action={{ icon: 'settings', accessibilityLabel: t('tabs.settings'), onPress: openSettings }}
+ * />
  * ```
  */
-
 export function ScreenHeader({ title, context, action }: ScreenHeaderProps) {
   const { colors } = useTheme();
 

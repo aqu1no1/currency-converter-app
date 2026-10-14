@@ -6,21 +6,23 @@ import { Icon } from '@components/icons/Icon';
 import { FONTS, SIZES, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-type ErrorStateProps = {
+interface ErrorStateProps {
+  /** Erro ou mensagem exibida. */
   error: Error | string;
-
+  /** Ação do botão "Tentar de novo"; sem ela, o botão não aparece. */
   onRetry?: () => void;
-};
+}
+
 /**
- * [EN] Shows an error message with an optional retry action.
- * [PT-BR] Exibe uma mensagem de erro com ação opcional para tentar novamente.
+ * Estado de erro com ícone, mensagem e a opção de tentar de novo.
+ *
+ * Usado quando uma tela não tem dados para mostrar porque a chamada à API falhou.
  *
  * @example
  * ```tsx
- * <ErrorState error={error} onRetry={refetch} />
+ * <ErrorState error={latest.error} onRetry={() => void latest.refetch()} />
  * ```
  */
-
 export function ErrorState({ error, onRetry }: ErrorStateProps) {
   const { colors } = useTheme();
   const { t } = useTranslation();
