@@ -6,6 +6,8 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-14
+
 ### Added
 
 - Ícone, ícone adaptável do Android e splash com a identidade do Converter.
@@ -20,7 +22,6 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 - Navegação por cinco abas, preferências persistidas de moeda principal e favoritas, e tela Início com cotação USD/BRL, gráfico de 30 dias, favoritas e status de sincronização.
 - Onboarding em três etapas com conversões de exemplo offline, introdução ao histórico e seleção persistida de moeda principal e idioma.
 - Ícones de interface do MaterialCommunityIcons com nomes do projeto (`<Icon name="history" />`).
-
 - Tela Converter: digite um valor e veja na hora quanto ele vale nas outras 9 moedas, com a taxa de cada par. Tocar numa moeda converte a partir dela. Teclado próprio com vírgula, `00`, apagar, limpar, `+100` e `+1 mil`, e vibração leve. A conversão é feita no aparelho com precisão decimal, sem chamar a API a cada tecla.
 
 ### Changed
