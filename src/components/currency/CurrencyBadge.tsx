@@ -7,6 +7,8 @@ import { useTheme } from '@theme/ThemeProvider';
 
 type CurrencyBadgeProps = {
   code: CurrencyCodeValue;
+
+  tone?: 'default' | 'accent';
 };
 /**
  * [EN] Shows a currency symbol inside a compact 40-by-40 badge.
@@ -15,25 +17,23 @@ type CurrencyBadgeProps = {
  * @example
  * ```tsx
  * <CurrencyBadge code="USD" />
+ * <CurrencyBadge code="BRL" tone="accent" />
  * ```
  */
 
-export function CurrencyBadge({ code }: CurrencyBadgeProps) {
+export function CurrencyBadge({ code, tone = 'default' }: CurrencyBadgeProps) {
   const { colors, dark } = useTheme();
   const symbol = getCurrencySymbol(code);
+  const accent = tone === 'accent';
+  const symbolColor = accent ? colors.textOnAccent : dark ? colors.accent : colors.primary;
 
   return (
     <View
       accessible
       accessibilityLabel={`${code} ${symbol}`}
-      style={[styles.badge, { backgroundColor: colors.accentSoft }]}
+      style={[styles.badge, { backgroundColor: accent ? colors.accent : colors.accentSoft }]}
     >
-      <Text
-        style={[
-          styles.symbol,
-          { color: dark ? colors.accent : colors.primary, fontSize: getCurrencySymbolSize(code) },
-        ]}
-      >
+      <Text style={[styles.symbol, { color: symbolColor, fontSize: getCurrencySymbolSize(code) }]}>
         {symbol}
       </Text>
     </View>

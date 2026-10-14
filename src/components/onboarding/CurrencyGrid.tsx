@@ -2,6 +2,7 @@ import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
+import { DISPLAY_CURRENCY_ORDER } from '@constants/currencies.constants';
 import { SIZES } from '@constants/theme';
 import type { CurrencyCodeValue } from '@enums/currency-code.enum';
 import { CurrencyOption } from '@components/onboarding/CurrencyOption';
@@ -12,18 +13,7 @@ type CurrencyGridProps = {
   accessibilityLabel: string;
 };
 
-const CURRENCY_CODES: readonly CurrencyCodeValue[] = [
-  'USD',
-  'EUR',
-  'BRL',
-  'GBP',
-  'JPY',
-  'CAD',
-  'AUD',
-  'CHF',
-  'CNY',
-  'ARS',
-];
+const CURRENCY_CODES = DISPLAY_CURRENCY_ORDER;
 const CURRENCY_COLUMNS = 5;
 const CURRENCY_GAP = 8;
 /**

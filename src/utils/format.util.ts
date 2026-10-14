@@ -75,3 +75,23 @@ export function formatDate(
     timeZone: 'UTC',
   }).format(value instanceof Date ? value : new Date(value));
 }
+
+export function getDecimalSeparator(language = currentLanguage()) {
+  return new Intl.NumberFormat(language, { minimumFractionDigits: 1 }).format(1.5).charAt(1);
+}
+
+export function formatAmountInput(amount: string, language = currentLanguage()) {
+  const [integer = '0', fraction] = amount.split('.');
+  const grouped = new Intl.NumberFormat(language, { maximumFractionDigits: 0 })
+    .format(Number(integer))
+    .replace(/[\u00a0\u202f]/g, ' ');
+  return fraction === undefined ? grouped : `${grouped}${getDecimalSeparator(language)}${fraction}`;
+}
+
+export function formatConversionRate(value: number, language = currentLanguage()) {
+  const digits = value >= 100 ? 2 : value < 0.01 ? 6 : 4;
+  return new Intl.NumberFormat(language, {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(value);
+}
