@@ -1,7 +1,7 @@
 import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { RefreshControl, StyleSheet } from 'react-native';
+import { RefreshControl, StyleSheet, View } from 'react-native';
 
 import { HomeHeader } from '@components/home/HomeHeader';
 import { HomeSyncStatus } from '@components/home/HomeSyncStatus';
@@ -9,24 +9,24 @@ import { ErrorState } from '@components/feedback/ErrorState';
 import { LoadingState } from '@components/feedback/LoadingState';
 import { Screen } from '@components/layout/Screen';
 import { ScreenHeader } from '@components/layout/ScreenHeader';
-import { ListRow } from '@components/list/ListRow';
-import { RADIUS, SIZES } from '@constants/theme';
+import { SIZES, TAB_SCREEN_EDGES } from '@constants/theme';
 import { usePreferences } from '@contexts/PreferencesContext';
 import { useHistory } from '@hooks/useHistory';
 import { useLatestRates } from '@hooks/useLatestRates';
 import { useSyncStatus } from '@hooks/useSyncStatus';
-import { formatMoney, formatRateMoney } from '@utils/format.util';
 import { utcDateAtOffset } from '@utils/date.util';
+import { formatDate } from '@utils/format.util';
 import { useTheme } from '@theme/ThemeProvider';
-
 /**
- * Home tab with the current USD/BRL rate, favorites, and sync status.
+ * [EN] Displays the featured rate, favorite currencies, and sync status.
+ * [PT-BR] Exibe a cotação em destaque, as moedas favoritas e o status da sincronização.
  *
  * @example
  * ```tsx
  * <HomeScreen />
  * ```
  */
+
 export default function HomeScreen() {
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -48,10 +48,24 @@ export default function HomeScreen() {
     ]);
   };
 
+  const header = (
+    <ScreenHeader
+      title={t('tabs.home')}
+      context={
+        latestUsd.data ? t('home.quoteDate', { date: formatDate(latestUsd.data.date) }) : undefined
+      }
+      action={{
+        icon: 'settings',
+        accessibilityLabel: t('tabs.settings'),
+        onPress: () => navigate('/settings'),
+      }}
+    />
+  );
+
   if (latestUsd.isLoading) {
     return (
-      <Screen>
-        <ScreenHeader title={t('tabs.home')} />
+      <Screen edges={TAB_SCREEN_EDGES}>
+        {header}
         <LoadingState />
       </Screen>
     );
@@ -59,8 +73,8 @@ export default function HomeScreen() {
 
   if (latestUsd.isError || !latestUsd.data) {
     return (
-      <Screen>
-        <ScreenHeader title={t('tabs.home')} />
+      <Screen edges={TAB_SCREEN_EDGES}>
+        {header}
         <ErrorState
           error={latestUsd.error ?? t('home.retryRates')}
           onRetry={() => void refresh()}
@@ -72,8 +86,8 @@ export default function HomeScreen() {
   const rate = latestUsd.data.rates.BRL;
   if (rate === undefined) {
     return (
-      <Screen>
-        <ScreenHeader title={t('tabs.home')} />
+      <Screen edges={TAB_SCREEN_EDGES}>
+        {header}
         <ErrorState error={t('errors.invalidResponse')} onRetry={() => void refresh()} />
       </Screen>
     );
@@ -83,50 +97,31 @@ export default function HomeScreen() {
   const favorites = favoriteCurrencies.filter((code) => code !== primaryCurrency);
 
   return (
-    <Screen contentStyle={styles.screen}>
+    <Screen edges={TAB_SCREEN_EDGES} contentStyle={styles.screen}>
+      <View style={styles.header}>{header}</View>
       <FlashList
-        data={favorites}
-        keyExtractor={(code) => code}
+        data={[]}
+        keyExtractor={(_, index) => String(index)}
         extraData={favoriteRates.data}
-        renderItem={({ item: code, index }) => {
-          const baseToFavorite = favoriteRates.data?.rates[code];
-          const value =
-            code === primaryCurrency
-              ? formatMoney(1, primaryCurrency)
-              : baseToFavorite
-                ? formatRateMoney(1 / baseToFavorite, primaryCurrency)
-                : '—';
-
-          return (
-            <ListRow
-              title={code}
-              subtitle={t(`currencies.${code}`)}
-              value={value}
-              onPress={() =>
-                navigate({ pathname: '/history', params: { from: code, to: primaryCurrency } })
-              }
-              style={[
-                styles.favoriteRow,
-                { backgroundColor: colors.surfacePrimary, borderColor: colors.border },
-                index === 0 && styles.firstFavorite,
-                index === favorites.length - 1 && styles.lastFavorite,
-              ]}
-            />
-          );
-        }}
+        renderItem={() => null}
         ListHeaderComponent={
           <HomeHeader
             quoteDate={latestUsd.data.date}
             rate={rate}
             sparkline={sparkline}
-            primaryCurrencyLabel={t(`currencies.${primaryCurrency}` as const)}
+            primaryCurrencyLabel={t(`currencies.plural.${primaryCurrency}` as const)}
             favoriteCount={favorites.length}
-            onOpenSettings={() => navigate('/settings')}
+            favorites={favorites}
+            favoriteRates={favoriteRates.data?.rates ?? {}}
+            primaryCurrency={primaryCurrency}
             onOpenConverter={() => navigate('/converter')}
             onOpenHistory={() =>
               navigate({ pathname: '/history', params: { from: 'USD', to: 'BRL' } })
             }
             onOpenRates={() => navigate('/rates')}
+            onOpenFavorite={(code) =>
+              navigate({ pathname: '/history', params: { from: code, to: primaryCurrency } })
+            }
           />
         }
         ListFooterComponent={
@@ -143,6 +138,7 @@ export default function HomeScreen() {
             tintColor={colors.highlight}
           />
         }
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
       />
     </Screen>
@@ -151,16 +147,6 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, paddingHorizontal: 0 },
+  header: { paddingHorizontal: SIZES.screenPadding },
   listContent: { paddingHorizontal: SIZES.screenPadding, paddingBottom: SIZES.sectionGap },
-  favoriteRow: { borderLeftWidth: 1, borderRightWidth: 1 },
-  firstFavorite: {
-    borderTopWidth: 1,
-    borderTopLeftRadius: RADIUS.list,
-    borderTopRightRadius: RADIUS.list,
-  },
-  lastFavorite: {
-    borderBottomWidth: 1,
-    borderBottomLeftRadius: RADIUS.list,
-    borderBottomRightRadius: RADIUS.list,
-  },
 });

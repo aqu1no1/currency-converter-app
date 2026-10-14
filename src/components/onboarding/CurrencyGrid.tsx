@@ -3,7 +3,6 @@ import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { SIZES } from '@constants/theme';
-import { SUPPORTED_CURRENCIES } from '@constants/currencies.constants';
 import type { CurrencyCodeValue } from '@enums/currency-code.enum';
 import { CurrencyOption } from '@components/onboarding/CurrencyOption';
 
@@ -13,17 +12,30 @@ type CurrencyGridProps = {
   accessibilityLabel: string;
 };
 
-const CURRENCY_CODES = SUPPORTED_CURRENCIES as readonly CurrencyCodeValue[];
+const CURRENCY_CODES: readonly CurrencyCodeValue[] = [
+  'USD',
+  'EUR',
+  'BRL',
+  'GBP',
+  'JPY',
+  'CAD',
+  'AUD',
+  'CHF',
+  'CNY',
+  'ARS',
+];
 const CURRENCY_COLUMNS = 5;
-
+const CURRENCY_GAP = 8;
 /**
- * Two-row, five-column currency selector backed by FlashList.
+ * [EN] Renders the supported currencies as a two-row, five-column selector.
+ * [PT-BR] Renderiza as moedas disponíveis em um seletor de duas linhas e cinco colunas.
  *
  * @example
  * ```tsx
  * <CurrencyGrid selectedCurrency={primaryCurrency} onSelectCurrency={setPrimaryCurrency} accessibilityLabel={t('settings.primaryCurrency')} />
  * ```
  */
+
 export function CurrencyGrid({
   selectedCurrency,
   onSelectCurrency,
@@ -32,14 +44,14 @@ export function CurrencyGrid({
   const { t } = useTranslation();
   const { width: screenWidth } = useWindowDimensions();
   const listWidth = screenWidth - SIZES.screenPadding * 2;
-  const optionWidth = (listWidth - SIZES.itemGap * (CURRENCY_COLUMNS - 1)) / CURRENCY_COLUMNS;
+  const optionWidth = (listWidth - CURRENCY_GAP * (CURRENCY_COLUMNS - 1)) / CURRENCY_COLUMNS;
   const renderOption = ({ item: code, index }: ListRenderItemInfo<CurrencyCodeValue>) => (
     <CurrencyOption
       code={code}
       label={t(`currencies.${code}` as const)}
       selected={selectedCurrency === code}
       width={optionWidth}
-      style={{ marginRight: index === CURRENCY_COLUMNS - 1 ? 0 : SIZES.itemGap }}
+      style={{ marginRight: index === CURRENCY_COLUMNS - 1 ? 0 : CURRENCY_GAP }}
       onSelect={onSelectCurrency}
     />
   );

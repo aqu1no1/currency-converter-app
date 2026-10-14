@@ -4,22 +4,22 @@ import { FONTS, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
 type OnboardingTextProps = {
-  /** Linha de contexto em caixa alta. */
   eyebrow: string;
-  /** Título principal da etapa. */
+
   title: string;
-  /** Descrição da etapa. */
+
   body: string;
 };
-
 /**
- * Text block shared by all onboarding steps.
+ * [EN] Renders the eyebrow, title, and description for an onboarding step.
+ * [PT-BR] Renderiza o contexto, título e descrição de uma etapa do onboarding.
  *
  * @example
  * ```tsx
  * <OnboardingText eyebrow={t('onboarding.converterEyebrow')} title={title} body={body} />
  * ```
  */
+
 export function OnboardingText({ eyebrow, title, body }: OnboardingTextProps) {
   const { colors } = useTheme();
 
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
   eyebrow: {
     fontFamily: FONTS.bodySemiBold,
     fontSize: TYPE.secondary,
+    lineHeight: TYPE.secondary * 1.35,
     letterSpacing: 0.8,
     textTransform: 'uppercase',
   },

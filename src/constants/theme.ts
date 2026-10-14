@@ -5,6 +5,7 @@ export interface Colors {
   background: string;
   surfacePrimary: string;
   surfaceAlternate: string;
+  surfaceTrack: string;
   mintSoft: string;
   textPrimary: string;
   textHeading: string;
@@ -31,6 +32,7 @@ export interface Colors {
   textOnBrandMuted: string;
   borderOnBrand: string;
   chipOnBrand: string;
+  pillOnBrand: string;
   coinBorderOnBrand: string;
   coinTextOnBrand: string;
   textOnAccent: string;
@@ -46,6 +48,7 @@ const brand = {
   textOnBrandMuted: '#CFE3D6',
   borderOnBrand: 'rgba(255,255,255,0.32)',
   chipOnBrand: 'rgba(159,225,203,0.14)',
+  pillOnBrand: 'rgba(159,225,203,0.16)',
   coinBorderOnBrand: 'rgba(159,225,203,0.25)',
   coinTextOnBrand: 'rgba(159,225,203,0.45)',
   textOnAccent: '#0F3D2E',
@@ -57,6 +60,7 @@ export const lightColors: Colors = {
   background: '#F3F7F4',
   surfacePrimary: '#FFFFFF',
   surfaceAlternate: '#F4F8F5',
+  surfaceTrack: '#E6EEE8',
   mintSoft: '#E1F2E7',
   textPrimary: '#14211B',
   textHeading: '#0F3D2E',
@@ -84,6 +88,7 @@ export const darkColors: Colors = {
   background: '#0B1411',
   surfacePrimary: '#14201B',
   surfaceAlternate: '#1A2822',
+  surfaceTrack: '#1A2822',
   mintSoft: '#173A2D',
   textPrimary: '#E6EFEA',
   textHeading: '#E3F1E9',
@@ -146,3 +151,5 @@ export const FONTS = {
   bodyMedium: 'InstrumentSans_500Medium',
   bodySemiBold: 'InstrumentSans_600SemiBold',
 } as const;
+
+export const TAB_SCREEN_EDGES = ['top', 'left', 'right'] as const;

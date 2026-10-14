@@ -2,15 +2,16 @@ import { Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { AppTabBar } from '@components/layout/AppTabBar';
-
 /**
- * Declares the five main app tabs and their localized labels.
+ * [EN] Declares the five main app tabs and their localized labels.
+ * [PT-BR] Declara as cinco abas principais e seus rótulos traduzidos.
  *
  * @example
  * ```tsx
  * <TabsLayout />
  * ```
  */
+
 export default function TabsLayout() {
   const { t } = useTranslation();
 

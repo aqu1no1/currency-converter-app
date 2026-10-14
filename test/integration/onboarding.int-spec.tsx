@@ -183,7 +183,7 @@ describe('Onboarding flow', () => {
     expect(await AsyncStorage.getItem(STORAGE_KEYS.primaryCurrency)).toBe('EUR');
     expect(await AsyncStorage.getItem(STORAGE_KEYS.language)).toBe('en');
     expect(await AsyncStorage.getItem(STORAGE_KEYS.welcomeCompleted)).toBe('true');
-    expect(await screen.findByText('Your currencies in Euro')).toBeTruthy();
+    expect(await screen.findByText('Your currencies in euros')).toBeTruthy();
 
     fireEvent.press(screen.getByRole('button', { name: 'Settings' }));
     await waitFor(() => expect(router.getPathname()).toBe('/settings'));

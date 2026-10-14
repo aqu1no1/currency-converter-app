@@ -1,24 +1,24 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { FONTS, RADIUS, SIZES, TYPE } from '@constants/theme';
+import { FONTS, RADIUS, SIZES } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
 type OnboardingHeaderProps = {
-  /** Etapa atual do onboarding. */
   step: 1 | 2 | 3;
-  /** Conclui o onboarding ao tocar em Pular; omitido no último passo. */
+
   onSkip?: () => void;
 };
-
 /**
- * Shared three-step progress header; the final step intentionally has no Skip action.
+ * [EN] Shows onboarding progress and an optional skip action.
+ * [PT-BR] Exibe o progresso do onboarding e uma ação opcional para pular.
  *
  * @example
  * ```tsx
  * <OnboardingHeader step={1} onSkip={finishOnboarding} />
  * ```
  */
+
 export function OnboardingHeader({ step, onSkip }: OnboardingHeaderProps) {
   const { colors, dark } = useTheme();
   const { t } = useTranslation();
@@ -85,5 +85,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
   },
-  skipLabel: { fontFamily: FONTS.bodySemiBold, fontSize: TYPE.secondary },
+  skipLabel: { fontFamily: FONTS.bodySemiBold, fontSize: 15 },
 });

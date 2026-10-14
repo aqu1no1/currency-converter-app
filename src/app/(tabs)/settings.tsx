@@ -5,7 +5,7 @@ import { Segmented, type SegmentedOption } from '@components/buttons/Segmented';
 import { CurrencyGrid } from '@components/onboarding/CurrencyGrid';
 import { ScreenHeader } from '@components/layout/ScreenHeader';
 import { Screen } from '@components/layout/Screen';
-import { SIZES, FONTS, TYPE } from '@constants/theme';
+import { SIZES, FONTS, TAB_SCREEN_EDGES, TYPE } from '@constants/theme';
 import { usePreferences } from '@contexts/PreferencesContext';
 import { resolveLanguage, setLanguage, type Language } from '@lib/i18n';
 import { useTheme } from '@theme/ThemeProvider';
@@ -15,15 +15,16 @@ const LANGUAGE_OPTIONS: readonly SegmentedOption<Language>[] = [
   { label: 'English', value: 'en' },
   { label: 'Español', value: 'es' },
 ];
-
 /**
- * Settings for primary currency and app language.
+ * [EN] Lets the user manage app and currency preferences.
+ * [PT-BR] Permite gerenciar as preferências do app e das moedas.
  *
  * @example
  * ```tsx
  * <SettingsScreen />
  * ```
  */
+
 export default function SettingsScreen() {
   const { t, i18n } = useTranslation();
   const { colors } = useTheme();
@@ -31,7 +32,7 @@ export default function SettingsScreen() {
   const language = resolveLanguage(i18n.resolvedLanguage ?? i18n.language);
 
   return (
-    <Screen contentStyle={styles.screen}>
+    <Screen edges={TAB_SCREEN_EDGES} contentStyle={styles.screen}>
       <View style={styles.content}>
         <ScreenHeader title={t('settings.title')} />
         <Text style={[styles.sectionTitle, { color: colors.textHeading }]}>

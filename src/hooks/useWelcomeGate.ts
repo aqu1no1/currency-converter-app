@@ -3,15 +3,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { STORAGE_KEYS } from '@constants/storage';
 import { persistWelcomeCompletion } from '@utils/welcome.util';
-
 /**
- * Lê e persiste se as boas-vindas já foram concluídas ou ignoradas.
- *
- * @example
- * ```tsx
- * const { isReady, shouldShowWelcome, markWelcomeCompleted } = useWelcomeGate();
- * ```
+ * Loads, exposes, and persists whether the welcome screen has been completed.
+ * Carrega, expõe e persiste se a tela de boas-vindas já foi concluída.
  */
+
 export function useWelcomeGate() {
   const [shouldShowWelcome, setShouldShowWelcome] = useState(true);
   const [completedOnLoad, setCompletedOnLoad] = useState(false);

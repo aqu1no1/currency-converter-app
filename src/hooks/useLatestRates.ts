@@ -7,6 +7,10 @@ import { ExchangeRateService } from '@services/exchange-rate.service';
 export function latestRatesQueryKey(base: string) {
   return ['exchange-rates', 'latest', base] as const;
 }
+/**
+ * Loads the latest exchange rates for a selected base currency.
+ * Carrega as cotações mais recentes para a moeda-base selecionada.
+ */
 
 export function useLatestRates(base: string) {
   const api = useApi();

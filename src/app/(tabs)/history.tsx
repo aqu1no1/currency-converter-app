@@ -3,23 +3,24 @@ import { StyleSheet, Text } from 'react-native';
 
 import { Screen } from '@components/layout/Screen';
 import { ScreenHeader } from '@components/layout/ScreenHeader';
-import { FONTS, SIZES, TYPE } from '@constants/theme';
+import { FONTS, SIZES, TAB_SCREEN_EDGES, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
-
 /**
- * Placeholder route for the history tab until the full history screen is implemented.
+ * [EN] Displays exchange-rate history for the selected currency pair.
+ * [PT-BR] Exibe o histórico de cotações do par de moedas selecionado.
  *
  * @example
  * ```tsx
  * <HistoryScreen />
  * ```
  */
+
 export default function HistoryScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
 
   return (
-    <Screen>
+    <Screen edges={TAB_SCREEN_EDGES}>
       <ScreenHeader title={t('history.title')} />
       <Text style={[styles.placeholder, { color: colors.textSecondary }]}>
         {t('common.comingSoon')}

@@ -1,29 +1,30 @@
 import { useTranslation } from 'react-i18next';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { ListRow } from '@components/list/ListRow';
+import { Icon } from '@components/icons/Icon';
 import { RADIUS, SIZES } from '@constants/theme';
 import type { SyncRunStatusDto } from '@dtos/sync-status.dto';
 import { formatTime } from '@utils/format.util';
 import { useTheme } from '@theme/ThemeProvider';
 
 type HomeSyncStatusProps = {
-  /** Dados da execução mais recente, quando disponíveis. */
   lastRun: SyncRunStatusDto | null;
-  /** Indica falha ao carregar o status. */
+
   hasError: boolean;
-  /** Abre os ajustes de sincronização. */
+
   onPress: () => void;
 };
-
 /**
- * Home footer row showing the last synchronization result.
+ * [EN] Shows the latest synchronization result as a tappable row.
+ * [PT-BR] Exibe o resultado da sincronização mais recente em uma linha acionável.
  *
  * @example
  * ```tsx
  * <HomeSyncStatus lastRun={status.lastRun} hasError={isError} onPress={openSettings} />
  * ```
  */
+
 export function HomeSyncStatus({ lastRun, hasError, onPress }: HomeSyncStatusProps) {
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -40,7 +41,15 @@ export function HomeSyncStatus({ lastRun, hasError, onPress }: HomeSyncStatusPro
   return (
     <ListRow
       title={message}
-      icon={failed || hasError ? 'error' : 'check'}
+      leading={
+        <View
+          style={[
+            styles.statusDot,
+            { backgroundColor: failed || hasError ? colors.statusFailure : colors.highlight },
+          ]}
+        />
+      }
+      trailing={<Icon name="chevronRight" size={18} color={colors.textWeak} />}
       onPress={onPress}
       style={[styles.row, { backgroundColor: colors.surfacePrimary, borderColor: colors.border }]}
     />
@@ -48,5 +57,11 @@ export function HomeSyncStatus({ lastRun, hasError, onPress }: HomeSyncStatusPro
 }
 
 const styles = StyleSheet.create({
-  row: { marginTop: SIZES.sectionGap, borderWidth: 1, borderRadius: RADIUS.list },
+  row: {
+    marginTop: SIZES.sectionGap,
+    minHeight: SIZES.listRow,
+    borderWidth: 1,
+    borderRadius: RADIUS.list,
+  },
+  statusDot: { width: 10, height: 10, borderRadius: RADIUS.pill },
 });

@@ -26,9 +26,7 @@ type PreferencesContextValue = {
 
 const PreferencesContext = createContext<PreferencesContextValue | null>(null);
 
-/** Propriedades do provider de preferências. */
 type PreferencesProviderProps = {
-  /** Árvore que recebe as preferências carregadas. */
   children: ReactNode;
 };
 
@@ -49,7 +47,8 @@ function parseFavoriteCurrencies(value: string | null): CurrencyCodeValue[] | nu
 }
 
 /**
- * Persists the user's primary and favorite currencies for Home and Settings.
+ * [EN] Loads and persists the primary and favorite currency preferences.
+ * [PT-BR] Carrega e persiste as preferências de moeda principal e favoritas.
  *
  * @example
  * ```tsx
@@ -112,7 +111,10 @@ export function PreferencesProvider({ children }: PreferencesProviderProps) {
   return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>;
 }
 
-/** Reads the user's persisted primary and favorite currencies. */
+/**
+ * [EN] Reads the current currency preferences and exposes their update actions.
+ * [PT-BR] Lê as preferências de moeda atuais e disponibiliza as ações para atualizá-las.
+ */
 export function usePreferences() {
   const preferences = useContext(PreferencesContext);
   if (!preferences) throw new Error('usePreferences precisa estar dentro do PreferencesProvider');

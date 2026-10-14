@@ -1,7 +1,6 @@
-import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
 import { DarkCard } from '@components/cards/DarkCard';
 import { HistoryChart, type HistoryPoint } from '@components/charts/HistoryChart';
@@ -23,7 +22,7 @@ import { useTheme } from '@theme/ThemeProvider';
 const FALLBACK_RATES = [
   5.02, 5.12, 5.08, 5.25, 5.18, 5.31, 5.22, 5.37, 5.28, 5.11, 5.24, 5.08, 5.193,
 ];
-const SUMMARY_CARD_HEIGHT = 76;
+const CHART_POINTS = 52;
 
 type SummaryStat = { label: string; value: string };
 
@@ -44,31 +43,30 @@ function getHistoryRange() {
 }
 
 function sampleHistory(history: { date: string; rate: number }[]): HistoryPoint[] {
-  if (history.length <= 13) {
+  if (history.length <= CHART_POINTS) {
     return history.map(({ date, rate }) => ({ value: rate, label: formatDate(date), date }));
   }
 
-  const interval = Math.max(1, Math.floor(history.length / 12));
+  const interval = Math.max(1, Math.floor(history.length / (CHART_POINTS - 1)));
   return history
     .filter((_, index) => index % interval === 0 || index === history.length - 1)
     .map(({ date, rate }) => ({ value: rate, label: formatDate(date), date }));
 }
-
 /**
- * Second onboarding step: introduce the user to exchange-rate history.
+ * [EN] Introduces exchange-rate history with a chart and summary statistics.
+ * [PT-BR] Apresenta o histórico de cotações com gráfico e estatísticas.
  *
  * @example
  * ```tsx
  * <OnboardingHistoryStep />
  * ```
  */
+
 export default function OnboardingHistoryStep() {
   const { colors } = useTheme();
   const { t, i18n } = useTranslation();
   const { navigate } = useRouter();
   const { width: screenWidth } = useWindowDimensions();
-  const statsWidth = screenWidth - SIZES.screenPadding * 2 - SIZES.cardPadding * 2;
-  const statWidth = (statsWidth - SIZES.itemGap * 2) / 3;
   const completeOnboarding = useCompleteOnboarding();
   const reduceMotion = useReduceMotion();
   const { start, end } = getHistoryRange();
@@ -86,13 +84,17 @@ export default function OnboardingHistoryStep() {
   const stats: SummaryStat[] = [
     { label: t('onboarding.minimum'), value: formatRate(Math.min(...allRates)) },
     { label: t('onboarding.maximum'), value: formatRate(Math.max(...allRates)) },
-    { label: t('onboarding.since2000'), value: '2000' },
+    { label: t('onboarding.since'), value: '2000' },
   ];
 
   return (
     <Screen contentStyle={styles.screen}>
       <OnboardingHeader step={2} onSkip={() => void completeOnboarding()} />
-      <View style={styles.content}>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
         <DarkCard style={styles.card}>
           <View style={styles.heroHeading}>
             <Text style={[styles.cardCaption, { color: colors.textOnBrandMuted }]}>
@@ -100,7 +102,7 @@ export default function OnboardingHistoryStep() {
             </Text>
             <Pill
               label={t('onboarding.variation', { direction, value: `${variation}%` })}
-              tone={change >= 0 ? 'success' : 'warning'}
+              tone="onBrandSolid"
             />
           </View>
           <Text style={[styles.rate, { color: colors.white }]}>{formatRate(latest)}</Text>
@@ -112,36 +114,33 @@ export default function OnboardingHistoryStep() {
             animated={reduceMotion === false}
             showAxes={false}
             fitData
+            curved={false}
+            thickness={2.5}
+            fillOpacity={0.16}
+            highlightLast
             width={screenWidth - SIZES.screenPadding * 2 - SIZES.cardPadding * 2}
             accessibilityLabel={t('onboarding.step2Title')}
           />
-          <FlashList
-            horizontal
-            data={stats}
-            keyExtractor={(item) => item.label}
-            renderItem={({ item }) => (
+          <View style={styles.stats}>
+            {stats.map((item) => (
               <View
-                style={[
-                  styles.stat,
-                  { width: statWidth, backgroundColor: colors.surfaceBrandOverlay },
-                ]}
+                key={item.label}
+                style={[styles.stat, { backgroundColor: colors.surfaceBrandOverlay }]}
               >
-                <Text style={[styles.statValue, { color: colors.white }]}>{item.value}</Text>
                 <Text style={[styles.statLabel, { color: colors.textOnBrandMuted }]}>
                   {item.label}
                 </Text>
+                <Text style={[styles.statValue, { color: colors.white }]}>{item.value}</Text>
               </View>
-            )}
-            style={{ height: SUMMARY_CARD_HEIGHT, width: statsWidth }}
-            contentContainerStyle={styles.statsContent}
-          />
+            ))}
+          </View>
         </DarkCard>
         <OnboardingText
           eyebrow={t('tabs.history')}
           title={t('onboarding.step2Title')}
           body={t('onboarding.step2Body')}
         />
-      </View>
+      </ScrollView>
       <OnboardingFooter
         backLabel={t('common.back')}
         onBack={() => navigate(APP_ROUTES.onboarding)}
@@ -154,7 +153,8 @@ export default function OnboardingHistoryStep() {
 
 const styles = StyleSheet.create({
   screen: { paddingTop: 8, paddingBottom: SIZES.itemGap },
-  content: { flex: 1, justifyContent: 'center', gap: SIZES.sectionGap },
+  scroll: { flex: 1 },
+  content: { paddingTop: 8, gap: SIZES.sectionGap },
   card: { gap: SIZES.itemGap },
   heroHeading: {
     flexDirection: 'row',
@@ -169,15 +169,14 @@ const styles = StyleSheet.create({
     lineHeight: TYPE.display * 1.05,
     fontVariant: ['tabular-nums'],
   },
-  statsList: { height: SUMMARY_CARD_HEIGHT, width: '100%' },
-  statsContent: { gap: SIZES.itemGap },
+  stats: { flexDirection: 'row', gap: 8 },
   stat: {
-    minHeight: SUMMARY_CARD_HEIGHT,
+    flex: 1,
     borderRadius: RADIUS.option,
-    padding: 8,
-    justifyContent: 'center',
-    gap: 4,
+    paddingVertical: 8,
+    paddingHorizontal: SIZES.itemGap,
+    gap: 2,
   },
-  statValue: { fontFamily: FONTS.display, fontSize: TYPE.value, fontVariant: ['tabular-nums'] },
-  statLabel: { fontFamily: FONTS.body, fontSize: TYPE.caption },
+  statValue: { fontFamily: FONTS.display, fontSize: TYPE.body, fontVariant: ['tabular-nums'] },
+  statLabel: { fontFamily: FONTS.body, fontSize: TYPE.caption, lineHeight: TYPE.caption * 1.35 },
 });

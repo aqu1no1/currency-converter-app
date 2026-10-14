@@ -10,37 +10,31 @@ export type ThemeScheme = 'system' | 'light' | 'dark';
 
 const SCHEMES: readonly ThemeScheme[] = ['system', 'light', 'dark'];
 
-/** Valor exposto pelo `useTheme()`. */
 type ThemeContextValue = {
-  /** `true` quando o tema ativo é o escuro. */
   dark: boolean;
-  /** Paleta do tema ativo, com tokens semânticos (`textPrimary`, `surfacePrimary`...). */
+
   colors: Colors;
-  /** Escolha do usuário: `system` segue o celular. @default 'system' */
+
   scheme: ThemeScheme;
-  /** `true` quando a preferência persistida já foi carregada. */
+
   ready: boolean;
-  /** Troca o tema e salva a escolha no AsyncStorage. */
+
   setScheme: (scheme: ThemeScheme) => void;
 };
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-/** Props do componente ThemeProvider. */
 type ThemeProviderProps = {
-  /** Árvore que passa a enxergar o tema. */
   children: ReactNode;
 };
 
 /**
- * Provider do tema claro e escuro. Começa seguindo o celular e, se houver uma
- * escolha salva, passa a usar ela. Fica no topo do `_layout.tsx`.
+ * [EN] Provides the active theme palette and persists the user preference.
+ * [PT-BR] Disponibiliza a paleta ativa e persiste a preferência do usuário.
  *
  * @example
  * ```tsx
- * <ThemeProvider>
- *   <Stack />
- * </ThemeProvider>
+ * <ThemeProvider><Stack /></ThemeProvider>
  * ```
  */
 export function ThemeProvider({ children }: ThemeProviderProps) {
@@ -90,6 +84,10 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   );
 }
 
+/**
+ * [EN] Returns the active color palette and theme controls.
+ * [PT-BR] Retorna a paleta de cores ativa e os controles do tema.
+ */
 export function useTheme() {
   const context = useContext(ThemeContext);
 

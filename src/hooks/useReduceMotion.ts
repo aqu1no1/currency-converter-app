@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
 import { AccessibilityInfo } from 'react-native';
+/**
+ * Reports whether the user prefers reduced motion.
+ * Informa se o usuário prefere movimento reduzido.
+ */
 
 export function useReduceMotion() {
   const [reduceMotion, setReduceMotion] = useState<boolean | null>(null);

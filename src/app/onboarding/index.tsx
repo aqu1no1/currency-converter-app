@@ -1,7 +1,6 @@
-import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { DarkCard } from '@components/cards/DarkCard';
 import { OnboardingFooter } from '@components/onboarding/OnboardingFooter';
@@ -31,17 +30,16 @@ const FALLBACK_RATES: Record<TargetCurrency, number> = {
   GBP: 0.1441,
   ARS: 279.78,
 };
-const RATE_ROW_HEIGHT = 56;
-const RATE_ROW_GAP = 8;
-
 /**
- * First onboarding step: convert one amount into the other currencies.
+ * [EN] Shows how one amount converts into several currencies.
+ * [PT-BR] Mostra como um valor é convertido para várias moedas.
  *
  * @example
  * ```tsx
  * <OnboardingFirstStep />
  * ```
  */
+
 export default function OnboardingFirstStep() {
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -58,7 +56,11 @@ export default function OnboardingFirstStep() {
     <Screen contentStyle={styles.screen}>
       <OnboardingHeader step={1} onSkip={() => void completeOnboarding()} />
 
-      <View style={styles.content}>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
         <DarkCard style={styles.card}>
           <Text style={[styles.cardCaption, { color: colors.textOnBrandMuted }]}>
             {t('onboarding.youType')}
@@ -67,19 +69,15 @@ export default function OnboardingFirstStep() {
           <Text style={[styles.cardCaption, { color: colors.textOnBrandMuted }]}>
             {t('onboarding.seeEveryCurrency')}
           </Text>
-          <FlashList
-            data={rows}
-            keyExtractor={(item) => item.code}
-            renderItem={({ item }) => (
-              <OnboardingRateRow code={item.code} value={formatMoney(item.amount, item.code)} />
-            )}
-            contentContainerStyle={styles.rateRows}
-            style={{
-              height:
-                TARGET_CURRENCIES.length * RATE_ROW_HEIGHT +
-                (TARGET_CURRENCIES.length - 1) * RATE_ROW_GAP,
-            }}
-          />
+          <View style={styles.rateRows}>
+            {rows.map((item) => (
+              <OnboardingRateRow
+                key={item.code}
+                code={item.code}
+                value={formatMoney(item.amount, item.code)}
+              />
+            ))}
+          </View>
         </DarkCard>
 
         <OnboardingText
@@ -87,7 +85,7 @@ export default function OnboardingFirstStep() {
           title={t('onboarding.step1Title')}
           body={t('onboarding.step1Body')}
         />
-      </View>
+      </ScrollView>
 
       <OnboardingFooter
         primaryLabel={t('common.continue')}
@@ -99,7 +97,8 @@ export default function OnboardingFirstStep() {
 
 const styles = StyleSheet.create({
   screen: { paddingTop: 8, paddingBottom: SIZES.itemGap },
-  content: { flex: 1, justifyContent: 'center', gap: SIZES.sectionGap },
+  scroll: { flex: 1 },
+  content: { paddingTop: 8, gap: SIZES.sectionGap },
   card: { gap: SIZES.itemGap },
   cardCaption: {
     fontFamily: FONTS.body,
@@ -112,5 +111,5 @@ const styles = StyleSheet.create({
     lineHeight: TYPE.display * 1.05,
     fontVariant: ['tabular-nums'],
   },
-  rateRows: { gap: RATE_ROW_GAP },
+  rateRows: { gap: 8 },
 });

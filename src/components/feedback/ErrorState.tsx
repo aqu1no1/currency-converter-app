@@ -6,22 +6,21 @@ import { Icon } from '@components/icons/Icon';
 import { FONTS, SIZES, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-/** Propriedades do estado de erro. */
 type ErrorStateProps = {
-  /** Erro ou mensagem traduzida pela tela chamadora. */
   error: Error | string;
-  /** Ação opcional para tentar novamente. */
+
   onRetry?: () => void;
 };
-
 /**
- * Apresenta a mensagem do erro e uma ação localizada de retry opcional.
+ * [EN] Shows an error message with an optional retry action.
+ * [PT-BR] Exibe uma mensagem de erro com ação opcional para tentar novamente.
  *
  * @example
  * ```tsx
  * <ErrorState error={error} onRetry={refetch} />
  * ```
  */
+
 export function ErrorState({ error, onRetry }: ErrorStateProps) {
   const { colors } = useTheme();
   const { t } = useTranslation();

@@ -27,6 +27,15 @@ function rise(delay: number) {
     .withInitialValues({ opacity: 0, transform: [{ translateY: 14 }] })
     .reduceMotion(ReduceMotion.System);
 }
+/**
+ * [EN] Presents the app welcome screen and its primary actions.
+ * [PT-BR] Apresenta a tela de boas-vindas e as principais ações do app.
+ *
+ * @example
+ * ```tsx
+ * <Welcome {...exampleProps} />
+ * ```
+ */
 
 export default function Welcome() {
   const { colors } = useTheme();

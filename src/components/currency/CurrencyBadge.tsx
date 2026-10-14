@@ -1,46 +1,41 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { FONTS, RADIUS, SIZES, TYPE } from '@constants/theme';
+import { FONTS, RADIUS, SIZES } from '@constants/theme';
 import type { CurrencyCodeValue } from '@enums/currency-code.enum';
+import { getCurrencySymbol, getCurrencySymbolSize } from '@utils/currency.util';
 import { useTheme } from '@theme/ThemeProvider';
 
-const SYMBOLS: Record<CurrencyCodeValue, string> = {
-  USD: '$',
-  BRL: 'R$',
-  EUR: '€',
-  GBP: '£',
-  JPY: '¥',
-  CAD: '$',
-  AUD: '$',
-  CHF: 'Fr',
-  CNY: '元',
-  ARS: '$',
-};
-
-/** Propriedades do selo visual de moeda. */
 type CurrencyBadgeProps = {
-  /** Código ISO da moeda. */
   code: CurrencyCodeValue;
 };
-
 /**
- * Mostra o símbolo de uma moeda em um bloco de 40×40.
+ * [EN] Shows a currency symbol inside a compact 40-by-40 badge.
+ * [PT-BR] Mostra o símbolo da moeda em um selo compacto de 40 por 40.
  *
  * @example
  * ```tsx
  * <CurrencyBadge code="USD" />
  * ```
  */
+
 export function CurrencyBadge({ code }: CurrencyBadgeProps) {
-  const { colors } = useTheme();
+  const { colors, dark } = useTheme();
+  const symbol = getCurrencySymbol(code);
 
   return (
     <View
       accessible
-      accessibilityLabel={`${code} ${SYMBOLS[code]}`}
+      accessibilityLabel={`${code} ${symbol}`}
       style={[styles.badge, { backgroundColor: colors.accentSoft }]}
     >
-      <Text style={[styles.symbol, { color: colors.primary }]}>{SYMBOLS[code]}</Text>
+      <Text
+        style={[
+          styles.symbol,
+          { color: dark ? colors.accent : colors.primary, fontSize: getCurrencySymbolSize(code) },
+        ]}
+      >
+        {symbol}
+      </Text>
     </View>
   );
 }
@@ -53,5 +48,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  symbol: { fontFamily: FONTS.display, fontSize: TYPE.body },
+  symbol: { fontFamily: FONTS.display },
 });

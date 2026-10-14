@@ -4,27 +4,26 @@ import { useWindowDimensions, View } from 'react-native';
 import { SIZES } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-/** Propriedades do gráfico compacto sem eixos. */
 type SparklineProps = {
-  /** Valores em ordem cronológica. */
   values: readonly number[];
-  /** Altura em pixels. @default 60 */
+
   height?: number;
-  /** Largura explícita quando o gráfico está dentro de um card. */
+
   width?: number;
-  /** Descrição acessível do gráfico. */
+
   accessibilityLabel: string;
 };
-
 /**
- * Série temporal curta com linha menta e área preenchida.
+ * [EN] Draws a compact trend chart without axes.
+ * [PT-BR] Desenha um gráfico compacto de tendência sem eixos.
  *
  * @example
  * ```tsx
  * <Sparkline values={lastMonthRates} accessibilityLabel={chartDescription} />
  * ```
  */
-export function Sparkline({ values, height = 60, width, accessibilityLabel }: SparklineProps) {
+
+export function Sparkline({ values, height = 64, width, accessibilityLabel }: SparklineProps) {
   const { width: screenWidth } = useWindowDimensions();
   const { colors } = useTheme();
 
@@ -44,20 +43,15 @@ export function Sparkline({ values, height = 60, width, accessibilityLabel }: Sp
         maxValue={range * 1.12}
         mostNegativeValue={0}
         noOfSections={1}
-        areaChart
-        curved
         color={colors.accent}
-        thickness={2}
-        startFillColor={colors.accent}
-        endFillColor={colors.accent}
-        startOpacity={0.24}
-        endOpacity={0}
+        thickness={2.5}
         hideAxesAndRules
         hideDataPoints
         yAxisLabelWidth={0}
         disableScroll
-        initialSpacing={4}
-        endSpacing={4}
+        adjustToWidth
+        initialSpacing={0}
+        endSpacing={0}
         yAxisThickness={0}
         xAxisThickness={0}
       />

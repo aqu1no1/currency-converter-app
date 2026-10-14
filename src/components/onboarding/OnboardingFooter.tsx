@@ -4,24 +4,24 @@ import { Button } from '@components/buttons/Button';
 import { SIZES } from '@constants/theme';
 
 type OnboardingFooterProps = {
-  /** Rótulo traduzido da ação principal. */
   primaryLabel: string;
-  /** Avança ou conclui o onboarding. */
+
   onPrimary: () => void;
-  /** Rótulo traduzido da ação secundária. */
+
   backLabel?: string;
-  /** Volta para a etapa anterior; omitido na primeira etapa. */
+
   onBack?: () => void;
 };
-
 /**
- * Bottom actions shared by onboarding steps.
+ * [EN] Renders the shared back and primary actions for onboarding steps.
+ * [PT-BR] Renderiza as ações compartilhadas de voltar e avançar do onboarding.
  *
  * @example
  * ```tsx
  * <OnboardingFooter primaryLabel={t('common.continue')} onPrimary={goNext} />
  * ```
  */
+
 export function OnboardingFooter({
   primaryLabel,
   onPrimary,
@@ -29,9 +29,9 @@ export function OnboardingFooter({
   onBack,
 }: OnboardingFooterProps) {
   return (
-    <View style={[styles.footer, { paddingBottom: SIZES.sectionGap }]}>
+    <View style={styles.footer}>
       {onBack && backLabel ? (
-        <Button variant="outline" onPress={onBack} style={styles.backButton}>
+        <Button variant="secondary" onPress={onBack}>
           {backLabel}
         </Button>
       ) : null}
@@ -48,7 +48,11 @@ export function OnboardingFooter({
 }
 
 const styles = StyleSheet.create({
-  footer: { flexDirection: 'row', gap: SIZES.itemGap, paddingTop: SIZES.itemGap },
-  backButton: { minWidth: 112 },
+  footer: {
+    flexDirection: 'row',
+    gap: SIZES.itemGap,
+    paddingTop: SIZES.cardPadding,
+    paddingBottom: SIZES.sectionGap,
+  },
   primaryButton: { flex: 1 },
 });

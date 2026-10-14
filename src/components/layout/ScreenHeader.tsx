@@ -5,24 +5,23 @@ import type { IconName } from '@constants/icons';
 import { FONTS, SIZES, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-/** Propriedades do cabeçalho de tela. */
 type ScreenHeaderProps = {
-  /** Título principal do cabeçalho. */
   title: string;
-  /** Linha contextual opcional acima do título. */
+
   context?: string;
-  /** Ação opcional alinhada à direita. */
+
   action?: { icon: IconName; accessibilityLabel: string; onPress: () => void };
 };
-
 /**
- * Cabeçalho com contexto, título e ação acessível opcional.
+ * [EN] Displays a screen title, optional context, and optional action.
+ * [PT-BR] Exibe o título da tela, contexto e ação opcionais.
  *
  * @example
  * ```tsx
  * <ScreenHeader title={t('settings.title')} context={t('common.appName')} />
  * ```
  */
+
 export function ScreenHeader({ title, context, action }: ScreenHeaderProps) {
   const { colors } = useTheme();
 
@@ -48,8 +47,18 @@ export function ScreenHeader({ title, context, action }: ScreenHeaderProps) {
 }
 
 const styles = StyleSheet.create({
-  container: { minHeight: 56, flexDirection: 'row', alignItems: 'center', gap: SIZES.itemGap },
-  copy: { flex: 1, gap: 2 },
-  context: { fontFamily: FONTS.bodyMedium, fontSize: TYPE.secondary },
+  container: {
+    minHeight: 56,
+    paddingBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: SIZES.itemGap,
+  },
+  copy: { flex: 1, gap: 4 },
+  context: {
+    fontFamily: FONTS.bodyMedium,
+    fontSize: TYPE.secondary,
+    lineHeight: TYPE.secondary * 1.35,
+  },
   title: { fontFamily: FONTS.display, fontSize: TYPE.title, lineHeight: TYPE.title * 1.1 },
 });

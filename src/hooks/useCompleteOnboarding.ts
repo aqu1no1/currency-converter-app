@@ -3,16 +3,11 @@ import { useRouter } from 'expo-router';
 
 import { APP_ROUTES } from '@constants/routes.constants';
 import { persistWelcomeCompletion } from '@utils/welcome.util';
-
 /**
- * Marks the onboarding complete and replaces the current route with Home.
- *
- * @example
- * ```tsx
- * const completeOnboarding = useCompleteOnboarding();
- * <Button onPress={() => void completeOnboarding()}>...</Button>
- * ```
+ * Persists onboarding completion and replaces the current route with Home.
+ * Persiste a conclusão do onboarding e substitui a rota atual pela tela Início.
  */
+
 export function useCompleteOnboarding() {
   const { replace } = useRouter();
 

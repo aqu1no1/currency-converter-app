@@ -27,30 +27,26 @@ const RING_FAR = 20.2;
 const RINGS_DURATION = 3.6 * TIME_IN_MS.SECOND;
 const CURRENCY_DURATION = 1.8 * TIME_IN_MS.SECOND;
 const CURRENCY_FADE = 0.25 * TIME_IN_MS.SECOND;
+const GLYPH_MIN_SCALE = 0.4;
 
-/** Props do componente Logo. */
 type LogoProps = {
-  /** `mark` mostra só o símbolo; `full` mostra o símbolo e a palavra "Converter". @default 'mark' */
   variant?: 'mark' | 'full';
-  /** Cor do fundo onde o logo fica, que define a cor de dois anéis e da palavra. @default 'onLight' */
+
   tone?: 'onDark' | 'onLight';
-  /** Altura em pixels. A largura segue a proporção da variante. @default 48 */
+
   size?: number;
 };
-
 /**
- * Logo do Converter desenhado com `react-native-svg`: quatro anéis em volta de um
- * diamante com a moeda. Os anéis se cruzam a cada 3,6 s e a moeda troca a cada
- * 1,8 s entre as 10 moedas. Com "reduzir movimento" ligado no sistema, mostra o
- * logo estático, com os anéis entrelaçados e o "$".
+ * [EN] Displays the app symbol or the full Converter wordmark.
+ * [PT-BR] Exibe o símbolo do app ou a marca completa Converter.
  *
  * @example
  * ```tsx
  * <Logo variant="mark" tone="onDark" size={160} />
- *
  * <Logo variant="full" tone="onLight" size={32} />
  * ```
  */
+
 export function Logo({ variant = 'mark', tone = 'onLight', size = 48 }: LogoProps) {
   const { colors } = useTheme();
   const reduceMotion = useReduceMotion();
@@ -67,6 +63,10 @@ export function Logo({ variant = 'mark', tone = 'onLight', size = 48 }: LogoProp
 
   const nearToFar = rings.interpolate({ inputRange: [0, 1], outputRange: [RING_NEAR, RING_FAR] });
   const farToNear = rings.interpolate({ inputRange: [0, 1], outputRange: [RING_FAR, RING_NEAR] });
+  const glyphScale = glyphOpacity.interpolate({
+    inputRange: [0, 1],
+    outputRange: [GLYPH_MIN_SCALE, 1],
+  });
 
   useEffect(() => {
     if (!animate) {
@@ -132,10 +132,10 @@ export function Logo({ variant = 'mark', tone = 'onLight', size = 48 }: LogoProp
           </Defs>
 
           <G mask={`url(#${maskId})`} fill="none" strokeWidth={2}>
-            <AnimatedCircle cx={nearToFar} cy={15} r={RING_RADIUS} stroke={contrast} />
-            <AnimatedCircle cx={farToNear} cy={15} r={RING_RADIUS} stroke={colors.accent} />
-            <AnimatedCircle cx={15} cy={nearToFar} r={RING_RADIUS} stroke={colors.accent} />
-            <AnimatedCircle cx={15} cy={farToNear} r={RING_RADIUS} stroke={contrast} />
+            <AnimatedCircle cx={15} cy={nearToFar} r={RING_RADIUS} stroke={contrast} />
+            <AnimatedCircle cx={15} cy={farToNear} r={RING_RADIUS} stroke={colors.accent} />
+            <AnimatedCircle cx={nearToFar} cy={15} r={RING_RADIUS} stroke={colors.accent} />
+            <AnimatedCircle cx={farToNear} cy={15} r={RING_RADIUS} stroke={contrast} />
           </G>
         </>
       ) : (
@@ -157,6 +157,8 @@ export function Logo({ variant = 'mark', tone = 'onLight', size = 48 }: LogoProp
       {animate && glyph ? (
         <AnimatedG
           opacity={glyphOpacity}
+          scale={glyphScale}
+          origin="15, 15"
           fill={colors.primary}
           testID={`logo-currency-${glyph.code}`}
         >

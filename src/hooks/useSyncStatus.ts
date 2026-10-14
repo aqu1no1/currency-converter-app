@@ -5,6 +5,10 @@ import { useApi } from '@contexts/ApiProvider';
 import { SyncService } from '@services/sync.service';
 
 export const syncStatusQueryKey = ['sync', 'status'] as const;
+/**
+ * Loads the latest synchronization status.
+ * Carrega o status da sincronização mais recente.
+ */
 
 export function useSyncStatus() {
   const api = useApi();

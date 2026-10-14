@@ -16,11 +16,19 @@ import { type Colors, FONTS, RADIUS, SIZES, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
 function getVariantColors(
-  variant: 'filled' | 'outline',
+  variant: 'filled' | 'outline' | 'secondary',
   tone: 'default' | 'brand',
   colors: Colors,
   dark: boolean,
 ) {
+  if (variant === 'secondary') {
+    return {
+      backgroundColor: colors.surfacePrimary,
+      borderColor: colors.border,
+      textColor: colors.textHeading,
+    };
+  }
+
   if (variant === 'outline') {
     return {
       backgroundColor: 'transparent',
@@ -44,46 +52,41 @@ function getVariantColors(
   };
 }
 
-/** Props do componente Button. */
 export type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
-  /** Função de callback acionada ao pressionar o botão. */
   onPress?: (event: GestureResponderEvent) => void;
-  /** `filled` é ação principal; `outline` é secundária. @default 'filled' */
-  variant?: 'filled' | 'outline';
-  /** `brand` usa contraste sobre fundo de marca; `default` usa as cores do tema. @default 'default' */
+
+  variant?: 'filled' | 'outline' | 'secondary';
+
   tone?: 'default' | 'brand';
-  /** Nome do ícone do projeto (`@constants/icons`) exibido ao lado do texto. @default undefined */
+
   icon?: IconName;
-  /** Lado em que o ícone aparece em relação ao texto. @default 'left' */
+
   iconPosition?: 'left' | 'right';
-  /** Se `true`, troca o conteúdo por um indicador de carregamento e bloqueia o toque. @default false */
+
   loading?: boolean;
-  /** Se `true`, bloqueia o toque e deixa o botão translúcido. @default false */
+
   disabled?: boolean;
-  /** Conteúdo do botão. Quando string, vira um `Text` com o estilo padrão. */
+
   children: ReactNode;
-  /** Estilo extra aplicado ao container. */
+
   style?: StyleProp<ViewStyle>;
 };
-
 /**
- * Botão do app com altura de 52, cantos de 16 e leve redução ao ser pressionado.
- * Tem as variantes `filled` e `outline`, tom de marca opcional, ícone opcional à esquerda ou à direita
- * e os estados de carregamento e desabilitado.
+ * [EN] Renders a themed action button with optional icon and loading state.
+ * [PT-BR] Renderiza um botão temático com ícone opcional e estado de carregamento.
  *
  * @example
  * ```tsx
  * <Button onPress={() => navigate('/onboarding')} icon="arrowRight" iconPosition="right">
- *   {t('welcome.start')}
+ * {t('welcome.start')}
  * </Button>
- *
  * <Button variant="outline" icon="converter" onPress={() => navigate('/converter')}>
- *   {t('welcome.convertNow')}
+ * {t('welcome.convertNow')}
  * </Button>
- *
  * <Button loading>{t('common.save')}</Button>
  * ```
  */
+
 export function Button({
   onPress,
   variant = 'filled',
@@ -100,7 +103,7 @@ export function Button({
   const { backgroundColor, borderColor, textColor } = getVariantColors(variant, tone, colors, dark);
   const blocked = disabled || loading;
 
-  const iconElement = icon ? <Icon name={icon} size={20} color={textColor} /> : null;
+  const iconElement = icon ? <Icon name={icon} size={18} color={textColor} /> : null;
 
   return (
     <Pressable

@@ -2,32 +2,32 @@ import { Pressable, StyleSheet, Text, type StyleProp, type ViewStyle } from 'rea
 
 import { FONTS, RADIUS, TYPE } from '@constants/theme';
 import type { CurrencyCodeValue } from '@enums/currency-code.enum';
-import { getCurrencySymbol } from '@utils/currency.util';
+import { getCurrencySymbol, getCurrencySymbolSize } from '@utils/currency.util';
 import { useTheme } from '@theme/ThemeProvider';
 
 type CurrencyOptionProps = {
-  /** Código ISO da moeda. */
   code: CurrencyCodeValue;
-  /** Nome da moeda traduzido. */
+
   label: string;
-  /** Define se a opção aparece selecionada. */
+
   selected: boolean;
-  /** Largura da célula para a grade de cinco colunas. */
+
   width: number;
-  /** Espaçamento opcional depois da célula. */
+
   style?: StyleProp<ViewStyle>;
-  /** Atualiza a moeda principal selecionada. */
+
   onSelect: (code: CurrencyCodeValue) => void;
 };
-
 /**
- * Selectable currency tile used by the preference step.
+ * [EN] Renders one selectable currency option in the onboarding grid.
+ * [PT-BR] Renderiza uma opção de moeda selecionável na grade do onboarding.
  *
  * @example
  * ```tsx
  * <CurrencyOption code="EUR" label={t('currencies.EUR')} selected={currency === 'EUR'} onSelect={setCurrency} />
  * ```
  */
+
 export function CurrencyOption({
   code,
   label,
@@ -56,10 +56,18 @@ export function CurrencyOption({
         },
       ]}
     >
-      <Text style={[styles.symbol, { color: selected ? selectedForeground : colors.primary }]}>
+      <Text
+        style={[
+          styles.symbol,
+          {
+            color: selected ? selectedForeground : colors.textHeading,
+            fontSize: getCurrencySymbolSize(code),
+          },
+        ]}
+      >
         {getCurrencySymbol(code)}
       </Text>
-      <Text style={[styles.code, { color: selected ? selectedForeground : colors.textSecondary }]}>
+      <Text style={[styles.code, { color: selected ? selectedForeground : colors.textHeading }]}>
         {code}
       </Text>
     </Pressable>
@@ -75,6 +83,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 2,
   },
-  symbol: { fontFamily: FONTS.display, fontSize: TYPE.body },
+  symbol: { fontFamily: FONTS.display },
   code: { fontFamily: FONTS.bodySemiBold, fontSize: TYPE.caption },
 });

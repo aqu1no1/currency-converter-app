@@ -19,77 +19,81 @@ const TAB_ICONS: Record<TabName, IconName> = {
   history: 'history',
   settings: 'settings',
 };
-
 /**
- * Floating, accessible tab bar using only app Icon names and theme tokens.
+ * [EN] Renders the accessible floating navigation bar for app tabs.
+ * [PT-BR] Renderiza a barra flutuante e acessível de navegação entre abas.
  *
  * @example
  * ```tsx
  * <Tabs tabBar={(props) => <AppTabBar {...props} />} />
  * ```
  */
+
 export function AppTabBar({ state, descriptors, navigation }: AppTabBarProps) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
   return (
     <View
-      accessibilityRole="tablist"
-      style={[
-        styles.container,
-        { backgroundColor: colors.primary, marginBottom: Math.max(insets.bottom, 8) },
-      ]}
+      style={{
+        backgroundColor: colors.background,
+        paddingBottom: Math.max(insets.bottom, 14),
+      }}
     >
-      {state.routes.map((route, index) => {
-        const name = route.name as TabName;
-        const focused = state.index === index;
-        const options = descriptors[route.key]?.options;
-        const label = options?.title ?? route.name;
-        const icon = name === 'home' && focused ? 'homeActive' : TAB_ICONS[name];
+      <View
+        accessibilityRole="tablist"
+        style={[styles.container, { backgroundColor: colors.primary }]}
+      >
+        {state.routes.map((route, index) => {
+          const name = route.name as TabName;
+          const focused = state.index === index;
+          const options = descriptors[route.key]?.options;
+          const label = options?.title ?? route.name;
 
-        return (
-          <Pressable
-            key={route.key}
-            accessibilityRole="tab"
-            accessibilityLabel={options?.tabBarAccessibilityLabel ?? label}
-            accessibilityState={{ selected: focused }}
-            onPress={() => {
-              const event = navigation.emit({
-                type: 'tabPress',
-                target: route.key,
-                canPreventDefault: true,
-              });
+          return (
+            <Pressable
+              key={route.key}
+              accessibilityRole="tab"
+              accessibilityLabel={options?.tabBarAccessibilityLabel ?? label}
+              accessibilityState={{ selected: focused }}
+              onPress={() => {
+                const event = navigation.emit({
+                  type: 'tabPress',
+                  target: route.key,
+                  canPreventDefault: true,
+                });
 
-              if (!focused && !event.defaultPrevented) {
-                void Haptics.selectionAsync().catch(() => undefined);
-                navigation.navigate(route.name, route.params);
-              }
-            }}
-            onLongPress={() => navigation.emit({ type: 'tabLongPress', target: route.key })}
-            style={({ pressed }) => [
-              styles.tab,
-              focused && { backgroundColor: colors.accent },
-              pressed && styles.pressed,
-            ]}
-          >
-            <Icon
-              name={icon}
-              size={21}
-              color={focused ? colors.textOnAccent : colors.textOnBrandMuted}
-            />
-            <Text
-              numberOfLines={1}
-              style={[
-                styles.label,
-                { color: focused ? colors.textOnAccent : colors.textOnBrandMuted },
-                focused && styles.activeLabel,
+                if (!focused && !event.defaultPrevented) {
+                  void Haptics.selectionAsync().catch(() => undefined);
+                  navigation.navigate(route.name, route.params);
+                }
+              }}
+              onLongPress={() => navigation.emit({ type: 'tabLongPress', target: route.key })}
+              style={({ pressed }) => [
+                styles.tab,
+                focused && { backgroundColor: colors.accent },
+                pressed && styles.pressed,
               ]}
             >
-              {label}
-            </Text>
-          </Pressable>
-        );
-      })}
+              <Icon
+                name={TAB_ICONS[name]}
+                size={21}
+                color={focused ? colors.textOnAccent : colors.textOnBrandMuted}
+              />
+              <Text
+                numberOfLines={1}
+                style={[
+                  styles.label,
+                  { color: focused ? colors.textOnAccent : colors.textOnBrandMuted },
+                  focused && styles.activeLabel,
+                ]}
+              >
+                {label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
     </View>
   );
 }

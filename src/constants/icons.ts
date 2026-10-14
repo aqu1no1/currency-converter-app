@@ -5,10 +5,9 @@ type MaterialCommunityIconName = ComponentProps<typeof MaterialCommunityIcons>['
 
 export const ICONS = {
   home: 'home-outline',
-  homeActive: 'home',
   converter: 'swap-horizontal',
   rates: 'format-list-bulleted',
-  history: 'chart-line',
+  history: 'trending-up',
   settings: 'tune-variant',
   swap: 'swap-vertical',
   arrowRight: 'arrow-right',

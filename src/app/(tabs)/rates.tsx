@@ -3,23 +3,24 @@ import { StyleSheet, Text } from 'react-native';
 
 import { Screen } from '@components/layout/Screen';
 import { ScreenHeader } from '@components/layout/ScreenHeader';
-import { FONTS, SIZES, TYPE } from '@constants/theme';
+import { FONTS, SIZES, TAB_SCREEN_EDGES, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
-
 /**
- * Placeholder route for the rates tab until the rates screen is implemented.
+ * [EN] Lists the latest rates for supported currencies.
+ * [PT-BR] Lista as cotações mais recentes das moedas disponíveis.
  *
  * @example
  * ```tsx
  * <RatesScreen />
  * ```
  */
+
 export default function RatesScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
 
   return (
-    <Screen>
+    <Screen edges={TAB_SCREEN_EDGES}>
       <ScreenHeader title={t('rates.title')} />
       <Text style={[styles.placeholder, { color: colors.textSecondary }]}>
         {t('common.comingSoon')}
