@@ -38,7 +38,7 @@ void SplashScreen.preventAutoHideAsync();
  * ```
  */
 
-export default function RootLayout() {
+const RootLayout = () => {
   const [fontsLoaded, fontError] = useFonts({
     BricolageGrotesque_500Medium,
     BricolageGrotesque_600SemiBold,
@@ -78,7 +78,9 @@ export default function RootLayout() {
       </ThemeProvider>
     </SafeAreaProvider>
   );
-}
+};
+
+export default RootLayout;
 /**
  * [EN] Selects the initial route after app and locale resources are ready.
  * [PT-BR] Seleciona a rota inicial após carregar os recursos do app e do idioma.
@@ -89,7 +91,13 @@ export default function RootLayout() {
  * ```
  */
 
-function RootNavigator({ fontsReady, localeReady }: { fontsReady: boolean; localeReady: boolean }) {
+const RootNavigator = ({
+  fontsReady,
+  localeReady,
+}: {
+  fontsReady: boolean;
+  localeReady: boolean;
+}) => {
   const { ready: themeReady, dark, colors } = useTheme();
   const { ready: preferencesReady } = usePreferences();
   const ready = fontsReady && localeReady && themeReady && preferencesReady;
@@ -113,4 +121,4 @@ function RootNavigator({ fontsReady, localeReady }: { fontsReady: boolean; local
       <Stack screenOptions={{ headerShown: false }} />
     </NavigationThemeProvider>
   );
-}
+};

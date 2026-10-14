@@ -44,7 +44,7 @@ type ConversionRow = {
  * ```
  */
 
-export default function Converter() {
+const Converter = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const { primaryCurrency } = usePreferences();
@@ -60,7 +60,9 @@ export default function Converter() {
       })
     : [];
 
-  function renderList() {
+  const RowSeparator = () => <View style={styles.separator} />;
+
+  const renderList = () => {
     if (latest.isError) {
       return <ErrorState error={latest.error} onRetry={() => void latest.refetch()} />;
     }
@@ -103,7 +105,7 @@ export default function Converter() {
         }}
       />
     );
-  }
+  };
 
   return (
     <Screen edges={TAB_SCREEN_EDGES}>
@@ -126,11 +128,9 @@ export default function Converter() {
       <Keypad onPress={pressKey} />
     </Screen>
   );
-}
+};
 
-function RowSeparator() {
-  return <View style={styles.separator} />;
-}
+export default Converter;
 
 const styles = StyleSheet.create({
   list: { flex: 1, paddingTop: SIZES.itemGap },

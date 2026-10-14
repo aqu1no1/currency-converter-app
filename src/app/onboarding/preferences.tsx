@@ -30,7 +30,7 @@ const LANGUAGE_OPTIONS: readonly SegmentedOption<Language>[] = [
  * ```
  */
 
-export default function OnboardingPreferencesStep() {
+const OnboardingPreferencesStep = () => {
   const { colors } = useTheme();
   const { t, i18n } = useTranslation();
   const { navigate } = useRouter();
@@ -90,7 +90,9 @@ export default function OnboardingPreferencesStep() {
       />
     </Screen>
   );
-}
+};
+
+export default OnboardingPreferencesStep;
 
 const styles = StyleSheet.create({
   screen: { paddingTop: 8, paddingBottom: SIZES.itemGap },

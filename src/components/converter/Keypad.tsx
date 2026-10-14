@@ -47,10 +47,10 @@ export function Keypad({ onPress }: KeypadProps) {
     },
   };
 
-  function press(key: KeypadKey) {
+  const press = (key: KeypadKey) => {
     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => undefined);
     onPress(key);
-  }
+  };
 
   return (
     <View style={styles.keypad}>
