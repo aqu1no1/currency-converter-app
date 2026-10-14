@@ -27,7 +27,7 @@ import { useTheme } from '@theme/ThemeProvider';
  * ```
  */
 
-export default function HomeScreen() {
+const HomeScreen = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const { navigate } = useRouter();
@@ -143,7 +143,9 @@ export default function HomeScreen() {
       />
     </Screen>
   );
-}
+};
+
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   screen: { flex: 1, paddingHorizontal: 0 },

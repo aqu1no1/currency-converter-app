@@ -25,7 +25,7 @@ const LANGUAGE_OPTIONS: readonly SegmentedOption<Language>[] = [
  * ```
  */
 
-export default function SettingsScreen() {
+const SettingsScreen = () => {
   const { t, i18n } = useTranslation();
   const { colors } = useTheme();
   const { primaryCurrency, setPrimaryCurrency } = usePreferences();
@@ -57,7 +57,9 @@ export default function SettingsScreen() {
       </View>
     </Screen>
   );
-}
+};
+
+export default SettingsScreen;
 
 const styles = StyleSheet.create({
   screen: { paddingHorizontal: 0 },

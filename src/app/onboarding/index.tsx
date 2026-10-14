@@ -40,7 +40,7 @@ const FALLBACK_RATES: Record<TargetCurrency, number> = {
  * ```
  */
 
-export default function OnboardingFirstStep() {
+const OnboardingFirstStep = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const { navigate } = useRouter();
@@ -93,7 +93,9 @@ export default function OnboardingFirstStep() {
       />
     </Screen>
   );
-}
+};
+
+export default OnboardingFirstStep;
 
 const styles = StyleSheet.create({
   screen: { paddingTop: 8, paddingBottom: SIZES.itemGap },

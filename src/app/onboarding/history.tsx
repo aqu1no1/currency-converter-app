@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
 import { DarkCard } from '@components/cards/DarkCard';
@@ -23,35 +24,10 @@ const FALLBACK_RATES = [
   5.02, 5.12, 5.08, 5.25, 5.18, 5.31, 5.22, 5.37, 5.28, 5.11, 5.24, 5.08, 5.193,
 ];
 const CHART_POINTS = 52;
+const FALLBACK_STEP_DAYS = TIME_IN_MS.MONTH / TIME_IN_MS.DAY;
 
 type SummaryStat = { label: string; value: string };
 
-function getFallbackHistory(): HistoryPoint[] {
-  return FALLBACK_RATES.map((value, index) => {
-    const date = new Date(Date.now() - (FALLBACK_RATES.length - index - 1) * 30 * TIME_IN_MS.DAY);
-    const isoDate = date.toISOString().slice(0, 10);
-    return { value, label: formatDate(isoDate), date: isoDate };
-  });
-}
-
-function getHistoryRange() {
-  const referenceDate = new Date();
-  return {
-    end: utcDateAtOffset(0, referenceDate),
-    start: utcDateAtOffset(-TIME_IN_MS.YEAR / TIME_IN_MS.DAY, referenceDate),
-  };
-}
-
-function sampleHistory(history: { date: string; rate: number }[]): HistoryPoint[] {
-  if (history.length <= CHART_POINTS) {
-    return history.map(({ date, rate }) => ({ value: rate, label: formatDate(date), date }));
-  }
-
-  const interval = Math.max(1, Math.floor(history.length / (CHART_POINTS - 1)));
-  return history
-    .filter((_, index) => index % interval === 0 || index === history.length - 1)
-    .map(({ date, rate }) => ({ value: rate, label: formatDate(date), date }));
-}
 /**
  * [EN] Introduces exchange-rate history with a chart and summary statistics.
  * [PT-BR] Apresenta o histórico de cotações com gráfico e estatísticas.
@@ -62,7 +38,31 @@ function sampleHistory(history: { date: string; rate: number }[]): HistoryPoint[
  * ```
  */
 
-export default function OnboardingHistoryStep() {
+const OnboardingHistoryStep = () => {
+  const getFallbackHistory = (): HistoryPoint[] => {
+    return FALLBACK_RATES.map((value, index) => {
+      const isoDate = utcDateAtOffset(-(FALLBACK_RATES.length - index - 1) * FALLBACK_STEP_DAYS);
+      return { value, label: formatDate(isoDate), date: isoDate };
+    });
+  };
+
+  const getHistoryRange = () => ({
+    end: utcDateAtOffset(0),
+    start: utcDateAtOffset(-TIME_IN_MS.YEAR / TIME_IN_MS.DAY),
+  });
+
+  const sampleHistory = (history: { date: string; rate: number }[]): HistoryPoint[] => {
+    if (history.length <= CHART_POINTS) {
+      return history.map(({ date, rate }) => ({ value: rate, label: formatDate(date), date }));
+    }
+
+    const interval = Math.max(1, Math.floor(history.length / (CHART_POINTS - 1)));
+    return history
+      .filter((_, index) => index % interval === 0 || index === history.length - 1)
+      .map(({ date, rate }) => ({ value: rate, label: formatDate(date), date }));
+  };
+
+  const [fallbackHistory] = useState(getFallbackHistory);
   const { colors } = useTheme();
   const { t, i18n } = useTranslation();
   const { navigate } = useRouter();
@@ -72,7 +72,7 @@ export default function OnboardingHistoryStep() {
   const { start, end } = getHistoryRange();
   const { data } = useHistory({ from: 'USD', to: 'BRL', start, end });
   const allRates = data?.history.length ? data.history.map(({ rate }) => rate) : FALLBACK_RATES;
-  const points = data?.history.length ? sampleHistory(data.history) : getFallbackHistory();
+  const points = data?.history.length ? sampleHistory(data.history) : fallbackHistory;
   const first = allRates[0] ?? FALLBACK_RATES[0]!;
   const latest = allRates.at(-1) ?? FALLBACK_RATES.at(-1)!;
   const change = first === 0 ? 0 : (latest / first - 1) * 100;
@@ -149,7 +149,9 @@ export default function OnboardingHistoryStep() {
       />
     </Screen>
   );
-}
+};
+
+export default OnboardingHistoryStep;
 
 const styles = StyleSheet.create({
   screen: { paddingTop: 8, paddingBottom: SIZES.itemGap },

@@ -20,6 +20,8 @@ type ListRowProps = {
 
   onPress?: () => void;
 
+  accessibilityLabel?: string;
+
   style?: StyleProp<ViewStyle>;
 };
 /**
@@ -40,6 +42,7 @@ export function ListRow({
   leading,
   trailing,
   onPress,
+  accessibilityLabel,
   style,
 }: ListRowProps) {
   const { colors } = useTheme();
@@ -67,7 +70,12 @@ export function ListRow({
 
   const rowStyle = [styles.row, style];
   return onPress ? (
-    <Pressable accessibilityRole="button" onPress={onPress} style={rowStyle}>
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      onPress={onPress}
+      style={rowStyle}
+    >
       {content}
     </Pressable>
   ) : (

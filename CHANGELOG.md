@@ -21,6 +21,8 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 - Onboarding em três etapas com conversões de exemplo offline, introdução ao histórico e seleção persistida de moeda principal e idioma.
 - Ícones de interface do MaterialCommunityIcons com nomes do projeto (`<Icon name="history" />`).
 
+- Tela Converter: digite um valor e veja na hora quanto ele vale nas outras 9 moedas, com a taxa de cada par. Tocar numa moeda converte a partir dela. Teclado próprio com vírgula, `00`, apagar, limpar, `+100` e `+1 mil`, e vibração leve. A conversão é feita no aparelho com precisão decimal, sem chamar a API a cada tecla.
+
 ### Changed
 
 - Boas-vindas, onboarding e Início seguem o design: espaçamentos, tipografia, símbolos das moedas (US$, AR$, C$, A$), seletor de idioma, gráfico de 12 meses com destaque no último valor e lista de favoritas com o título no plural ("Suas moedas em reais").

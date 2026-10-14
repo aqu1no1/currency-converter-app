@@ -15,7 +15,7 @@ import { useTheme } from '@theme/ThemeProvider';
  * ```
  */
 
-export default function RatesScreen() {
+const RatesScreen = () => {
   const { t } = useTranslation();
   const { colors } = useTheme();
 
@@ -27,7 +27,9 @@ export default function RatesScreen() {
       </Text>
     </Screen>
   );
-}
+};
+
+export default RatesScreen;
 
 const styles = StyleSheet.create({
   placeholder: { marginTop: SIZES.sectionGap, fontFamily: FONTS.body, fontSize: TYPE.body },

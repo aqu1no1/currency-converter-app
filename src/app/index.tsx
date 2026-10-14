@@ -20,13 +20,6 @@ const CONTENT_TOP = 56;
 const ACTIONS_BOTTOM = 40;
 const LOGO_SIZE = 200;
 
-function rise(delay: number) {
-  return FadeInUp.duration(500)
-    .delay(delay)
-    .easing(Easing.bezier(0.2, 0.7, 0.2, 1))
-    .withInitialValues({ opacity: 0, transform: [{ translateY: 14 }] })
-    .reduceMotion(ReduceMotion.System);
-}
 /**
  * [EN] Presents the app welcome screen and its primary actions.
  * [PT-BR] Apresenta a tela de boas-vindas e as principais ações do app.
@@ -37,7 +30,15 @@ function rise(delay: number) {
  * ```
  */
 
-export default function Welcome() {
+const Welcome = () => {
+  const rise = (delay: number) => {
+    return FadeInUp.duration(500)
+      .delay(delay)
+      .easing(Easing.bezier(0.2, 0.7, 0.2, 1))
+      .withInitialValues({ opacity: 0, transform: [{ translateY: 14 }] })
+      .reduceMotion(ReduceMotion.System);
+  };
+
   const { colors } = useTheme();
   const { t } = useTranslation();
   const { navigate, replace } = useRouter();
@@ -52,10 +53,10 @@ export default function Welcome() {
     if (isReady && completedOnLoad) replace(APP_ROUTES.home);
   }, [completedOnLoad, isReady, replace]);
 
-  async function openConverter() {
+  const openConverter = async () => {
     await markWelcomeCompleted();
     replace(APP_ROUTES.converter);
-  }
+  };
 
   if (!isReady || completedOnLoad || !shouldShowWelcome) return null;
 
@@ -109,7 +110,9 @@ export default function Welcome() {
       </Animated.View>
     </View>
   );
-}
+};
+
+export default Welcome;
 
 const styles = StyleSheet.create({
   screen: {

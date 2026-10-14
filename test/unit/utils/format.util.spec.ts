@@ -1,9 +1,12 @@
 import {
+  formatAmountInput,
+  formatConversionRate,
   formatDate,
   formatMoney,
   formatRateMoney,
   formatShortDate,
   formatTime,
+  getDecimalSeparator,
 } from '@utils/format.util';
 
 describe('format util', () => {
@@ -33,5 +36,18 @@ describe('format util', () => {
 
   it('formats short dates in the device time zone', () => {
     expect(formatShortDate('2026-09-30T01:30:00Z', 'pt-BR')).toBe('29/09');
+  });
+
+  it('formats the typed amount with locale grouping and separator', () => {
+    expect(formatAmountInput('1234567.5', 'pt-BR')).toBe('1.234.567,5');
+    expect(formatAmountInput('1234.', 'pt-BR')).toBe('1.234,');
+    expect(formatAmountInput('1234.05', 'en')).toBe('1,234.05');
+    expect(getDecimalSeparator('es')).toBe(',');
+  });
+
+  it('formats conversion rates with 2, 4 or 6 decimals', () => {
+    expect(formatConversionRate(293.275, 'pt-BR')).toBe('293,28');
+    expect(formatConversionRate(0.169741, 'pt-BR')).toBe('0,1697');
+    expect(formatConversionRate(0.003409, 'pt-BR')).toBe('0,003409');
   });
 });

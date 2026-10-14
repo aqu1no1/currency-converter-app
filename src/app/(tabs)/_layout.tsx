@@ -12,7 +12,7 @@ import { AppTabBar } from '@components/layout/AppTabBar';
  * ```
  */
 
-export default function TabsLayout() {
+const TabsLayout = () => {
   const { t } = useTranslation();
 
   return (
@@ -24,4 +24,6 @@ export default function TabsLayout() {
       <Tabs.Screen name="settings" options={{ title: t('tabs.settings') }} />
     </Tabs>
   );
-}
+};
+
+export default TabsLayout;
