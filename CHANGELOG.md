@@ -31,6 +31,7 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 - Cotações de exemplo do primeiro passo do onboarding não apareciam.
 - Mínima, máxima e "Desde" do segundo passo apareciam coladas e cortadas, e o texto encostava nos botões em telas menores.
 - Símbolos das moedas invisíveis no tema escuro e área clara em volta da barra de abas.
+- Horário da sincronização no Início aparecia em UTC e sempre como "hoje"; agora usa o fuso do celular e mostra "hoje", "ontem" ou a data.
 
 ## [0.1.0] - 2026-10-07
 

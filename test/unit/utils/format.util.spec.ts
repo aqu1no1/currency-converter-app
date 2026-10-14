@@ -1,4 +1,10 @@
-import { formatDate, formatMoney, formatRateMoney } from '@utils/format.util';
+import {
+  formatDate,
+  formatMoney,
+  formatRateMoney,
+  formatShortDate,
+  formatTime,
+} from '@utils/format.util';
 
 describe('format util', () => {
   it('formats money in Brazilian Portuguese', () => {
@@ -19,5 +25,13 @@ describe('format util', () => {
 
     expect(formatDate(timestamp, 'pt-BR')).toBe('01/01/2026');
     expect(formatDate(timestamp, 'en')).toBe('01/01/2026');
+  });
+
+  it('formats sync times in the device time zone', () => {
+    expect(formatTime('2026-09-29T09:00:02Z', 'pt-BR')).toBe('06:00');
+  });
+
+  it('formats short dates in the device time zone', () => {
+    expect(formatShortDate('2026-09-30T01:30:00Z', 'pt-BR')).toBe('29/09');
   });
 });

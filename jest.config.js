@@ -1,3 +1,5 @@
+process.env.TZ = 'America/Sao_Paulo';
+
 const aliases = [
   'app',
   'components',
