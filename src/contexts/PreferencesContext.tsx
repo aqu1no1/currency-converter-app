@@ -46,15 +46,6 @@ function parseFavoriteCurrencies(value: string | null): CurrencyCodeValue[] | nu
   }
 }
 
-/**
- * [EN] Loads and persists the primary and favorite currency preferences.
- * [PT-BR] Carrega e persiste as preferências de moeda principal e favoritas.
- *
- * @example
- * ```tsx
- * <PreferencesProvider><Stack /></PreferencesProvider>
- * ```
- */
 export function PreferencesProvider({ children }: PreferencesProviderProps) {
   const [primaryCurrency, setPrimaryCurrencyState] = useState(DEFAULT_PRIMARY_CURRENCY);
   const [favoriteCurrencies, setFavoriteCurrenciesState] = useState(DEFAULT_FAVORITE_CURRENCIES);
@@ -111,10 +102,6 @@ export function PreferencesProvider({ children }: PreferencesProviderProps) {
   return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>;
 }
 
-/**
- * [EN] Reads the current currency preferences and exposes their update actions.
- * [PT-BR] Lê as preferências de moeda atuais e disponibiliza as ações para atualizá-las.
- */
 export function usePreferences() {
   const preferences = useContext(PreferencesContext);
   if (!preferences) throw new Error('usePreferences precisa estar dentro do PreferencesProvider');

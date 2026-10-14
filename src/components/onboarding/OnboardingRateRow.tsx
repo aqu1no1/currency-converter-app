@@ -20,25 +20,31 @@ import { useTheme } from '@theme/ThemeProvider';
 const PULSE_MIN_OPACITY = 0.55;
 const PULSE_DURATION = 1.2 * TIME_IN_MS.SECOND;
 
-type OnboardingRateRowProps = {
+interface OnboardingRateRowProps {
+  /** Moeda da linha. */
   code: CurrencyCodeValue;
-
+  /** Valor convertido já formatado. */
   value: string;
-};
+}
+
 /**
- * [EN] Shows one converted amount in the first onboarding step.
- * [PT-BR] Exibe um valor convertido na primeira etapa do onboarding.
+ * Linha do card do primeiro passo do onboarding com uma moeda e o valor convertido.
+ *
+ * O valor pulsa a opacidade, desligado com "reduzir movimento".
  *
  * @example
  * ```tsx
  * <OnboardingRateRow code="EUR" value={formatMoney(amount, 'EUR')} />
  * ```
  */
-
 export function OnboardingRateRow({ code, value }: OnboardingRateRowProps) {
   const { colors } = useTheme();
+
   const reduceMotion = useReduceMotion();
+
   const opacity = useSharedValue(1);
+
+  const pulse = useAnimatedStyle(() => ({ opacity: opacity.get() }));
 
   useEffect(() => {
     if (reduceMotion !== false) {
@@ -62,8 +68,6 @@ export function OnboardingRateRow({ code, value }: OnboardingRateRowProps) {
 
     return () => cancelAnimation(opacity);
   }, [opacity, reduceMotion]);
-
-  const pulse = useAnimatedStyle(() => ({ opacity: opacity.get() }));
 
   return (
     <View style={[styles.row, { backgroundColor: colors.surfaceBrandOverlay }]}>

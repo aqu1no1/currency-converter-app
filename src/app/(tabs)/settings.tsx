@@ -7,6 +7,7 @@ import { ScreenHeader } from '@components/layout/ScreenHeader';
 import { Screen } from '@components/layout/Screen';
 import { SIZES, FONTS, TAB_SCREEN_EDGES, TYPE } from '@constants/theme';
 import { usePreferences } from '@contexts/PreferencesContext';
+import type { CurrencyCodeValue } from '@enums/currency-code.enum';
 import { resolveLanguage, setLanguage, type Language } from '@lib/i18n';
 import { useTheme } from '@theme/ThemeProvider';
 
@@ -15,21 +16,16 @@ const LANGUAGE_OPTIONS: readonly SegmentedOption<Language>[] = [
   { label: 'English', value: 'en' },
   { label: 'Español', value: 'es' },
 ];
-/**
- * [EN] Lets the user manage app and currency preferences.
- * [PT-BR] Permite gerenciar as preferências do app e das moedas.
- *
- * @example
- * ```tsx
- * <SettingsScreen />
- * ```
- */
 
-const SettingsScreen = () => {
-  const { t, i18n } = useTranslation();
+export default function SettingsScreen() {
   const { colors } = useTheme();
+  const { t, i18n } = useTranslation();
   const { primaryCurrency, setPrimaryCurrency } = usePreferences();
+
   const language = resolveLanguage(i18n.resolvedLanguage ?? i18n.language);
+
+  const selectCurrency = (next: CurrencyCodeValue) => void setPrimaryCurrency(next);
+  const changeLanguage = (next: Language) => void setLanguage(next);
 
   return (
     <Screen edges={TAB_SCREEN_EDGES} contentStyle={styles.screen}>
@@ -40,7 +36,7 @@ const SettingsScreen = () => {
         </Text>
         <CurrencyGrid
           selectedCurrency={primaryCurrency}
-          onSelectCurrency={(next) => void setPrimaryCurrency(next)}
+          onSelectCurrency={selectCurrency}
           accessibilityLabel={t('settings.primaryCurrency')}
         />
         <View style={styles.languageSection}>
@@ -50,16 +46,14 @@ const SettingsScreen = () => {
           <Segmented
             options={LANGUAGE_OPTIONS}
             value={language}
-            onChange={(nextLanguage) => void setLanguage(nextLanguage)}
+            onChange={changeLanguage}
             accessibilityLabel={t('settings.language')}
           />
         </View>
       </View>
     </Screen>
   );
-};
-
-export default SettingsScreen;
+}
 
 const styles = StyleSheet.create({
   screen: { paddingHorizontal: 0 },

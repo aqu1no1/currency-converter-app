@@ -28,15 +28,6 @@ type ThemeProviderProps = {
   children: ReactNode;
 };
 
-/**
- * [EN] Provides the active theme palette and persists the user preference.
- * [PT-BR] Disponibiliza a paleta ativa e persiste a preferência do usuário.
- *
- * @example
- * ```tsx
- * <ThemeProvider><Stack /></ThemeProvider>
- * ```
- */
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const systemScheme = useColorScheme();
   const [scheme, setSchemeState] = useState<ThemeScheme>('system');
@@ -84,10 +75,6 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   );
 }
 
-/**
- * [EN] Returns the active color palette and theme controls.
- * [PT-BR] Retorna a paleta de cores ativa e os controles do tema.
- */
 export function useTheme() {
   const context = useContext(ThemeContext);
 

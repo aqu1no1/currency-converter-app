@@ -4,19 +4,25 @@ import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { RADIUS } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-type ListBoxProps = PropsWithChildren<{
+interface ListBoxProps extends PropsWithChildren {
+  /** Estilo extra da caixa. */
   style?: StyleProp<ViewStyle>;
-}>;
+}
+
 /**
- * [EN] Groups list rows inside a bordered surface.
- * [PT-BR] Agrupa linhas de lista em uma superfície com borda.
+ * Caixa com borda que agrupa linhas de lista.
+ *
+ * Coloca uma divisória entre as linhas, sem divisória antes da primeira nem depois
+ * da última.
  *
  * @example
  * ```tsx
- * <ListBox><ListRow title={currencyName} value={formattedRate} /></ListBox>
+ * <ListBox>
+ *   <ListRow title="EUR" subtitle={t('currencies.EUR')} value="R$ 5,88" />
+ *   <ListRow title="GBP" subtitle={t('currencies.GBP')} value="R$ 6,89" />
+ * </ListBox>
  * ```
  */
-
 export function ListBox({ children, style }: ListBoxProps) {
   const { colors } = useTheme();
 

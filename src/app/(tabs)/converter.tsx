@@ -34,24 +34,16 @@ type ConversionRow = {
   rate: number;
   value: Decimal;
 };
-/**
- * [EN] Converts the typed amount into every other currency at once.
- * [PT-BR] Converte o valor digitado para todas as outras moedas ao mesmo tempo.
- *
- * @example
- * ```tsx
- * <Converter />
- * ```
- */
 
-const Converter = () => {
+export default function Converter() {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const { primaryCurrency } = usePreferences();
+
   const { base, amount, pressKey, convertFrom } = useConverter(primaryCurrency);
   const latest = useLatestRates(base);
-  const rates = latest.data?.base === base ? latest.data.rates : undefined;
 
+  const rates = latest.data?.base === base ? latest.data.rates : undefined;
   const rows: ConversionRow[] = rates
     ? DISPLAY_CURRENCY_ORDER.flatMap((code) => {
         const rate = rates[code];
@@ -128,9 +120,7 @@ const Converter = () => {
       <Keypad onPress={pressKey} />
     </Screen>
   );
-};
-
-export default Converter;
+}
 
 const styles = StyleSheet.create({
   list: { flex: 1, paddingTop: SIZES.itemGap },

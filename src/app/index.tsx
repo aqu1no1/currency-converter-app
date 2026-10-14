@@ -7,7 +7,7 @@ import Animated, { Easing, FadeInUp, ReduceMotion } from 'react-native-reanimate
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Logo } from '@components/brand/Logo';
-import { Button } from '@components/ui/Button';
+import { Button } from '@components/buttons/Button';
 import { FloatingCoins } from '@components/welcome/FloatingCoins';
 import { SUPPORTED_CURRENCIES } from '@constants/currencies.constants';
 import { APP_ROUTES } from '@constants/routes.constants';
@@ -17,46 +17,39 @@ import { useWelcomeGate } from '@hooks/useWelcomeGate';
 import { useTheme } from '@theme/ThemeProvider';
 
 const CONTENT_TOP = 56;
+
 const ACTIONS_BOTTOM = 40;
+
 const LOGO_SIZE = 200;
 
-/**
- * [EN] Presents the app welcome screen and its primary actions.
- * [PT-BR] Apresenta a tela de boas-vindas e as principais ações do app.
- *
- * @example
- * ```tsx
- * <Welcome {...exampleProps} />
- * ```
- */
-
-const Welcome = () => {
-  const rise = (delay: number) => {
-    return FadeInUp.duration(500)
-      .delay(delay)
-      .easing(Easing.bezier(0.2, 0.7, 0.2, 1))
-      .withInitialValues({ opacity: 0, transform: [{ translateY: 14 }] })
-      .reduceMotion(ReduceMotion.System);
-  };
-
+export default function Welcome() {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const { navigate, replace } = useRouter();
   const insets = useSafeAreaInsets();
   const { data: currencies } = useCurrencies();
+
   const { isReady, shouldShowWelcome, completedOnLoad, markWelcomeCompleted } = useWelcomeGate();
+
   const currencyCodes = currencies?.length
     ? currencies.map(({ code }) => code)
     : SUPPORTED_CURRENCIES;
 
-  useEffect(() => {
-    if (isReady && completedOnLoad) replace(APP_ROUTES.home);
-  }, [completedOnLoad, isReady, replace]);
+  const rise = (delay: number) =>
+    FadeInUp.duration(500)
+      .delay(delay)
+      .easing(Easing.bezier(0.2, 0.7, 0.2, 1))
+      .withInitialValues({ opacity: 0, transform: [{ translateY: 14 }] })
+      .reduceMotion(ReduceMotion.System);
 
   const openConverter = async () => {
     await markWelcomeCompleted();
     replace(APP_ROUTES.converter);
   };
+
+  useEffect(() => {
+    if (isReady && completedOnLoad) replace(APP_ROUTES.home);
+  }, [completedOnLoad, isReady, replace]);
 
   if (!isReady || completedOnLoad || !shouldShowWelcome) return null;
 
@@ -110,9 +103,7 @@ const Welcome = () => {
       </Animated.View>
     </View>
   );
-};
-
-export default Welcome;
+}
 
 const styles = StyleSheet.create({
   screen: {

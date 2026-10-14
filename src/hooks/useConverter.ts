@@ -8,11 +8,19 @@ import {
   type KeypadKey,
   toInputAmount,
 } from '@utils/converter.util';
-/**
- * Keeps the active currency and the typed amount of the converter.
- * Guarda a moeda ativa e o valor digitado no conversor.
- */
 
+/**
+ * Estado do conversor: moeda ativa e valor digitado.
+ *
+ * `pressKey` aplica uma tecla do teclado ao valor (limites em
+ * `applyKeypadKey`). `convertFrom` troca a moeda ativa e já preenche o
+ * valor convertido, arredondado nas casas decimais da nova moeda.
+ *
+ * @example
+ * ```tsx
+ * const { base, amount, pressKey, convertFrom } = useConverter(primaryCurrency);
+ * ```
+ */
 export function useConverter(initialBase: CurrencyCodeValue) {
   const [base, setBase] = useState(initialBase);
   const [amount, setAmount] = useState(INITIAL_AMOUNT);

@@ -52,41 +52,44 @@ function getVariantColors(
   };
 }
 
-export type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
+export interface ButtonProps extends Omit<PressableProps, 'children' | 'style'> {
+  /** Ação do toque. */
   onPress?: (event: GestureResponderEvent) => void;
-
+  /** `filled` (padrão) é o botão principal; `outline` só tem borda; `secondary` tem fundo branco e borda clara. */
   variant?: 'filled' | 'outline' | 'secondary';
-
+  /** `brand` adapta as cores para fundo verde escuro (cards e telas de marca). */
   tone?: 'default' | 'brand';
-
+  /** Ícone exibido junto do texto. */
   icon?: IconName;
-
+  /** Lado do ícone em relação ao texto. */
   iconPosition?: 'left' | 'right';
-
+  /** Troca o conteúdo por um indicador de carregamento e bloqueia o toque. */
   loading?: boolean;
-
+  /** Bloqueia o toque e deixa o botão translúcido. */
   disabled?: boolean;
-
+  /** Texto do botão (ou conteúdo personalizado). */
   children: ReactNode;
-
+  /** Estilo extra do contêiner, por exemplo `flex: 1` para dividir a largura. */
   style?: StyleProp<ViewStyle>;
-};
+}
+
 /**
- * [EN] Renders a themed action button with optional icon and loading state.
- * [PT-BR] Renderiza um botão temático com ícone opcional e estado de carregamento.
+ * Botão de ação do app, com altura de 52 e cantos de 16.
+ *
+ * Cobre os botões principais, os de borda (como "Converter agora" nas Boas-vindas)
+ * e o secundário branco (como "Voltar" no onboarding). Aceita ícone à esquerda ou
+ * à direita e um estado de carregamento.
  *
  * @example
  * ```tsx
- * <Button onPress={() => navigate('/onboarding')} icon="arrowRight" iconPosition="right">
- * {t('welcome.start')}
+ * <Button icon="arrowRight" iconPosition="right" onPress={goNext}>
+ *   {t('common.continue')}
  * </Button>
- * <Button variant="outline" icon="converter" onPress={() => navigate('/converter')}>
- * {t('welcome.convertNow')}
+ * <Button variant="secondary" onPress={goBack}>
+ *   {t('common.back')}
  * </Button>
- * <Button loading>{t('common.save')}</Button>
  * ```
  */
-
 export function Button({
   onPress,
   variant = 'filled',

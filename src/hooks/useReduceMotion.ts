@@ -1,10 +1,18 @@
 import { useEffect, useState } from 'react';
 import { AccessibilityInfo } from 'react-native';
-/**
- * Reports whether the user prefers reduced motion.
- * Informa se o usuário prefere movimento reduzido.
- */
 
+/**
+ * Informa se o "reduzir movimento" do sistema está ligado.
+ *
+ * Retorna `null` enquanto a preferência ainda não foi lida, e acompanha mudanças
+ * feitas com o app aberto. As animações só devem rodar quando o valor for `false`.
+ *
+ * @example
+ * ```tsx
+ * const reduceMotion = useReduceMotion();
+ * const animate = reduceMotion === false;
+ * ```
+ */
 export function useReduceMotion() {
   const [reduceMotion, setReduceMotion] = useState<boolean | null>(null);
 

@@ -1,16 +1,13 @@
 import { Stack } from 'expo-router';
-/**
- * [EN] Defines the onboarding navigation stack.
- * [PT-BR] Define a navegação entre as etapas do onboarding.
- *
- * @example
- * ```tsx
- * <OnboardingLayout />
- * ```
- */
 
-const OnboardingLayout = () => {
-  return <Stack screenOptions={{ headerShown: false }} />;
-};
+export default function OnboardingLayout() {
+  return (
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
 
-export default OnboardingLayout;
+      <Stack.Screen name="history" options={{ headerShown: false }} />
+
+      <Stack.Screen name="preferences" options={{ headerShown: false }} />
+    </Stack>
+  );
+}

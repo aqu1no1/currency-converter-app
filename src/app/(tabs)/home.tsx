@@ -17,17 +17,8 @@ import { useSyncStatus } from '@hooks/useSyncStatus';
 import { utcDateAtOffset } from '@utils/date.util';
 import { formatDate } from '@utils/format.util';
 import { useTheme } from '@theme/ThemeProvider';
-/**
- * [EN] Displays the featured rate, favorite currencies, and sync status.
- * [PT-BR] Exibe a cotação em destaque, as moedas favoritas e o status da sincronização.
- *
- * @example
- * ```tsx
- * <HomeScreen />
- * ```
- */
 
-const HomeScreen = () => {
+export default function HomeScreen() {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const { navigate } = useRouter();
@@ -35,9 +26,12 @@ const HomeScreen = () => {
   const latestUsd = useLatestRates('USD');
   const favoriteRates = useLatestRates(primaryCurrency);
   const sync = useSyncStatus();
-  const end = utcDateAtOffset(0);
-  const start = utcDateAtOffset(-30);
-  const history = useHistory({ from: 'USD', to: 'BRL', start, end });
+  const history = useHistory({
+    from: 'USD',
+    to: 'BRL',
+    start: utcDateAtOffset(-30),
+    end: utcDateAtOffset(0),
+  });
 
   const refresh = async () => {
     await Promise.all([
@@ -143,9 +137,7 @@ const HomeScreen = () => {
       />
     </Screen>
   );
-};
-
-export default HomeScreen;
+}
 
 const styles = StyleSheet.create({
   screen: { flex: 1, paddingHorizontal: 0 },

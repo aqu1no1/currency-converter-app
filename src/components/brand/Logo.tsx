@@ -29,34 +29,37 @@ const CURRENCY_DURATION = 1.8 * TIME_IN_MS.SECOND;
 const CURRENCY_FADE = 0.25 * TIME_IN_MS.SECOND;
 const GLYPH_MIN_SCALE = 0.4;
 
-type LogoProps = {
+interface LogoProps {
+  /** `mark` mostra só o símbolo; `full` inclui o nome "Converter" ao lado. */
   variant?: 'mark' | 'full';
-
+  /** Fundo onde o logo aparece: `onDark` usa anéis brancos, `onLight` usa verde escuro. */
   tone?: 'onDark' | 'onLight';
-
+  /** Altura em pontos. A largura acompanha a proporção da variante. */
   size?: number;
-};
+}
+
 /**
- * [EN] Displays the app symbol or the full Converter wordmark.
- * [PT-BR] Exibe o símbolo do app ou a marca completa Converter.
+ * Logo do Converter: quatro anéis em volta de um diamante com o símbolo de uma moeda.
+ *
+ * Os anéis se cruzam em loop e a moeda do diamante troca a cada 1,8 s entre as
+ * 10 moedas do app. Com "reduzir movimento" ligado, mostra o logo estático com o "$".
  *
  * @example
  * ```tsx
- * <Logo variant="mark" tone="onDark" size={160} />
+ * <Logo variant="mark" tone="onDark" size={200} />
  * <Logo variant="full" tone="onLight" size={32} />
  * ```
  */
-
 export function Logo({ variant = 'mark', tone = 'onLight', size = 48 }: LogoProps) {
   const { colors } = useTheme();
-  const reduceMotion = useReduceMotion();
-  const animate = reduceMotion === false;
 
+  const reduceMotion = useReduceMotion();
   const maskId = `logo-mask-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
   const [rings] = useState(() => new Animated.Value(0));
   const [glyphOpacity] = useState(() => new Animated.Value(1));
   const [glyphIndex, setGlyphIndex] = useState(0);
 
+  const animate = reduceMotion === false;
   const contrast = tone === 'onDark' ? colors.white : colors.primary;
   const ringColor = { contrast, accent: colors.accent } as const;
   const glyph = LOGO_CURRENCY_GLYPHS[glyphIndex];

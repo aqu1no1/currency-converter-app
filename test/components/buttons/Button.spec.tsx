@@ -4,7 +4,7 @@ import type { ReactTestRendererJSON } from 'react-test-renderer';
 
 import { fireEvent, screen } from '@testing-library/react-native';
 
-import { Button } from '@components/ui/Button';
+import { Button } from '@components/buttons/Button';
 import { lightColors } from '@constants/theme';
 import { renderWithProviders } from '@test/utils/render-with-providers';
 

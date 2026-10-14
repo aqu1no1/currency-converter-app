@@ -5,19 +5,10 @@ import { Screen } from '@components/layout/Screen';
 import { ScreenHeader } from '@components/layout/ScreenHeader';
 import { FONTS, SIZES, TAB_SCREEN_EDGES, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
-/**
- * [EN] Lists the latest rates for supported currencies.
- * [PT-BR] Lista as cotações mais recentes das moedas disponíveis.
- *
- * @example
- * ```tsx
- * <RatesScreen />
- * ```
- */
 
-const RatesScreen = () => {
-  const { t } = useTranslation();
+export default function RatesScreen() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Screen edges={TAB_SCREEN_EDGES}>
@@ -27,9 +18,7 @@ const RatesScreen = () => {
       </Text>
     </Screen>
   );
-};
-
-export default RatesScreen;
+}
 
 const styles = StyleSheet.create({
   placeholder: { marginTop: SIZES.sectionGap, fontFamily: FONTS.body, fontSize: TYPE.body },

@@ -6,34 +6,43 @@ import type { IconName } from '@constants/icons';
 import { FONTS, SIZES, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-type ListRowProps = {
+interface ListRowProps {
+  /** Conteúdo à esquerda, como um `CurrencyBadge`. */
   leading?: ReactNode;
-
+  /** Texto principal; fica em negrito quando há subtítulo. */
   title: string;
-
+  /** Texto secundário abaixo do título. */
   subtitle?: string;
-
+  /** Valor à direita, em destaque. */
   value?: string;
+  /** Conteúdo à direita do valor, como uma seta. */
   trailing?: ReactNode;
-
+  /** Ícone à esquerda do texto. */
   icon?: IconName;
-
+  /** Torna a linha tocável. */
   onPress?: () => void;
-
+  /** Rótulo lido pelo leitor de tela quando a linha é tocável. */
   accessibilityLabel?: string;
-
+  /** Estilo extra da linha. */
   style?: StyleProp<ViewStyle>;
-};
+}
+
 /**
- * [EN] Displays a list item with optional leading content, subtitle, and value.
- * [PT-BR] Exibe um item de lista com conteúdo inicial, subtítulo e valor opcionais.
+ * Linha de lista com altura mínima de 64, conteúdo à esquerda, textos e valor.
+ *
+ * Usada nas favoritas do Início, na lista do Converter e no status da sincronização.
  *
  * @example
  * ```tsx
- * <ListRow title="Dólar americano" subtitle="USD" value="R$ 5,20" onPress={openCurrency} />
+ * <ListRow
+ *   leading={<CurrencyBadge code="EUR" />}
+ *   title="EUR"
+ *   subtitle={t('currencies.EUR')}
+ *   value="R$ 5,88"
+ *   onPress={() => openHistory('EUR')}
+ * />
  * ```
  */
-
 export function ListRow({
   title,
   subtitle,

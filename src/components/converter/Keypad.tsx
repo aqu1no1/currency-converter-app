@@ -19,19 +19,23 @@ const KEY_GAP = 8;
 const LARGE_TEXT = 20;
 const SMALL_TEXT = 15;
 
-type KeypadProps = {
+interface KeypadProps {
+  /** Chamado com a tecla pressionada (dígito, `00`, vírgula, apagar, limpar, `+100` ou `+1 mil`). */
   onPress: (key: KeypadKey) => void;
-};
+}
+
 /**
- * [EN] Renders the converter number pad with shortcuts to clear and add amounts.
- * [PT-BR] Renderiza o teclado numérico do conversor com atalhos para limpar e somar valores.
+ * Teclado numérico do conversor.
+ *
+ * Mostra 4 colunas com números, o separador decimal do idioma ativo, `00`
+ * e as teclas de ação (apagar, limpar, `+100` e `+1 mil`), com vibração
+ * leve a cada toque. As regras de limite ficam em `applyKeypadKey`.
  *
  * @example
  * ```tsx
  * <Keypad onPress={pressKey} />
  * ```
  */
-
 export function Keypad({ onPress }: KeypadProps) {
   const { colors } = useTheme();
   const { t } = useTranslation();

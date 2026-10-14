@@ -3,25 +3,30 @@ import { StyleSheet, View } from 'react-native';
 import { Button } from '@components/buttons/Button';
 import { SIZES } from '@constants/theme';
 
-type OnboardingFooterProps = {
+interface OnboardingFooterProps {
+  /** Texto do botão principal. */
   primaryLabel: string;
-
+  /** Ação do botão principal. */
   onPrimary: () => void;
-
+  /** Texto do botão "Voltar"; sem ele, o botão não aparece. */
   backLabel?: string;
-
+  /** Ação do botão "Voltar". */
   onBack?: () => void;
-};
+}
+
 /**
- * [EN] Renders the shared back and primary actions for onboarding steps.
- * [PT-BR] Renderiza as ações compartilhadas de voltar e avançar do onboarding.
+ * Rodapé dos passos do onboarding, com "Voltar" opcional e o botão principal com seta.
  *
  * @example
  * ```tsx
- * <OnboardingFooter primaryLabel={t('common.continue')} onPrimary={goNext} />
+ * <OnboardingFooter
+ *   backLabel={t('common.back')}
+ *   onBack={goBack}
+ *   primaryLabel={t('common.continue')}
+ *   onPrimary={goNext}
+ * />
  * ```
  */
-
 export function OnboardingFooter({
   primaryLabel,
   onPrimary,

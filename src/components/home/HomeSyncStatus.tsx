@@ -15,23 +15,26 @@ const SYNCED_MESSAGE_KEYS = {
   other: 'home.syncedOnAt',
 } as const satisfies Record<RelativeDay, string>;
 
-type HomeSyncStatusProps = {
+interface HomeSyncStatusProps {
+  /** Última execução da sincronização da API, ou `null` se ainda não houver. */
   lastRun: SyncRunStatusDto | null;
-
+  /** Se a consulta do status da sincronização falhou. */
   hasError: boolean;
-
+  /** Ação do toque, normalmente abrir Ajustes. */
   onPress: () => void;
-};
+}
+
 /**
- * [EN] Shows the latest synchronization result as a tappable row.
- * [PT-BR] Exibe o resultado da sincronização mais recente em uma linha acionável.
+ * Linha do Início com o status da última sincronização das cotações.
+ *
+ * Mostra "Sincronizado hoje/ontem/em dd/mm às HH:MM" no fuso do aparelho, ou um
+ * aviso quando a sincronização falhou ou não pôde ser consultada.
  *
  * @example
  * ```tsx
- * <HomeSyncStatus lastRun={status.lastRun} hasError={isError} onPress={openSettings} />
+ * <HomeSyncStatus lastRun={sync.data?.lastRun ?? null} hasError={sync.isError} onPress={openSettings} />
  * ```
  */
-
 export function HomeSyncStatus({ lastRun, hasError, onPress }: HomeSyncStatusProps) {
   const { colors } = useTheme();
   const { t } = useTranslation();

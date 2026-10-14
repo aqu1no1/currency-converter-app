@@ -4,21 +4,23 @@ import { useTranslation } from 'react-i18next';
 import { FONTS, RADIUS, SIZES } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-type OnboardingHeaderProps = {
+interface OnboardingHeaderProps {
+  /** Passo atual do onboarding. */
   step: 1 | 2 | 3;
-
+  /** Ação do "Pular"; não aparece no último passo. */
   onSkip?: () => void;
-};
+}
+
 /**
- * [EN] Shows onboarding progress and an optional skip action.
- * [PT-BR] Exibe o progresso do onboarding e uma ação opcional para pular.
+ * Cabeçalho do onboarding com o indicador de passo e o link "Pular".
+ *
+ * O marcador do passo atual é mais largo, e o indicador é lido como "Passo X de 3".
  *
  * @example
  * ```tsx
- * <OnboardingHeader step={1} onSkip={finishOnboarding} />
+ * <OnboardingHeader step={1} onSkip={() => void completeOnboarding()} />
  * ```
  */
-
 export function OnboardingHeader({ step, onSkip }: OnboardingHeaderProps) {
   const { colors, dark } = useTheme();
   const { t } = useTranslation();

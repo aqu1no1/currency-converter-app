@@ -5,11 +5,15 @@ import { useApi } from '@contexts/ApiProvider';
 import { CurrencyService } from '@services/currency.service';
 
 export const currenciesQueryKey = ['currencies'] as const;
-/**
- * Loads the currencies supported by the conversion service.
- * Carrega as moedas aceitas pelo serviço de conversão.
- */
 
+/**
+ * Busca as moedas aceitas pela API (`GET /currencies`).
+ *
+ * @example
+ * ```tsx
+ * const { data: currencies } = useCurrencies();
+ * ```
+ */
 export function useCurrencies() {
   const api = useApi();
   const currencyService = useMemo(() => new CurrencyService(api), [api]);

@@ -3,23 +3,27 @@ import { StyleSheet, Text, View } from 'react-native';
 import { FONTS, TYPE } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-type OnboardingTextProps = {
+interface OnboardingTextProps {
+  /** Linha de contexto em maiúsculas acima do título. */
   eyebrow: string;
-
+  /** Título do passo. */
   title: string;
-
+  /** Texto de apoio abaixo do título. */
   body: string;
-};
+}
+
 /**
- * [EN] Renders the eyebrow, title, and description for an onboarding step.
- * [PT-BR] Renderiza o contexto, título e descrição de uma etapa do onboarding.
+ * Bloco de texto dos passos do onboarding: contexto, título e descrição.
  *
  * @example
  * ```tsx
- * <OnboardingText eyebrow={t('onboarding.converterEyebrow')} title={title} body={body} />
+ * <OnboardingText
+ *   eyebrow={t('onboarding.converterEyebrow')}
+ *   title={t('onboarding.step1Title')}
+ *   body={t('onboarding.step1Body')}
+ * />
  * ```
  */
-
 export function OnboardingText({ eyebrow, title, body }: OnboardingTextProps) {
   const { colors } = useTheme();
 

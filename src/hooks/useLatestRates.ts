@@ -7,11 +7,19 @@ import { ExchangeRateService } from '@services/exchange-rate.service';
 export function latestRatesQueryKey(base: string) {
   return ['exchange-rates', 'latest', base] as const;
 }
-/**
- * Loads the latest exchange rates for a selected base currency.
- * Carrega as cotações mais recentes para a moeda-base selecionada.
- */
 
+/**
+ * Busca as cotações mais recentes a partir de uma moeda-base (`GET /exchange-rates/latest/:base`).
+ *
+ * Trocar a base cancela a chamada anterior. O Converter usa uma chamada por moeda
+ * ativa e faz as contas no aparelho.
+ *
+ * @example
+ * ```tsx
+ * const latest = useLatestRates('BRL');
+ * const euroRate = latest.data?.rates.EUR;
+ * ```
+ */
 export function useLatestRates(base: string) {
   const api = useApi();
   const exchangeRateService = useMemo(() => new ExchangeRateService(api), [api]);

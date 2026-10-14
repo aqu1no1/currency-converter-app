@@ -13,37 +13,58 @@ import type { CurrencyCodeValue } from '@enums/currency-code.enum';
 import { formatDate, formatMoney, formatRateMoney } from '@utils/format.util';
 import { useTheme } from '@theme/ThemeProvider';
 
-type HomeHeaderProps = {
+interface HomeHeaderProps {
+  /** Data da cotação, no formato `AAAA-MM-DD`. */
   quoteDate: string;
-
+  /** Cotação atual de 1 USD em BRL. */
   rate: number;
-
+  /** Cotações dos últimos 30 dias para o gráfico. */
   sparkline: number[];
-
+  /** Nome da moeda principal no plural, para o título ("Suas moedas em reais"). */
   primaryCurrencyLabel: string;
-
+  /** Quantidade de favoritas; com zero, mostra o aviso de lista vazia. */
   favoriteCount: number;
+  /** Moedas favoritas exibidas na lista. */
   favorites: CurrencyCodeValue[];
+  /** Cotações com base na moeda principal, usadas para o valor de cada favorita. */
   favoriteRates: Partial<Record<CurrencyCodeValue, number>>;
+  /** Moeda principal, em que os valores das favoritas são exibidos. */
   primaryCurrency: CurrencyCodeValue;
-
+  /** Abre o Converter. */
   onOpenConverter: () => void;
-
+  /** Abre o Histórico de USD → BRL. */
   onOpenHistory: () => void;
-
+  /** Abre a aba Cotações ("Ver todas"). */
   onOpenRates: () => void;
+  /** Abre o Histórico da moeda tocada. */
   onOpenFavorite: (currency: CurrencyCodeValue) => void;
-};
+}
+
 /**
- * [EN] Renders the home heading, featured rate, and grouped favorite currencies.
- * [PT-BR] Renderiza o cabeçalho, a cotação em destaque e as moedas favoritas agrupadas.
+ * Conteúdo do topo do Início: o par em destaque e as moedas favoritas.
+ *
+ * O card escuro mostra 1 USD em BRL, o gráfico de 30 dias e os atalhos para
+ * Converter e Histórico. Abaixo, as favoritas aparecem com o valor de 1 unidade
+ * na moeda principal.
  *
  * @example
  * ```tsx
- * <HomeHeader {...exampleProps} />
+ * <HomeHeader
+ *   quoteDate={latestUsd.data.date}
+ *   rate={rate}
+ *   sparkline={sparkline}
+ *   primaryCurrencyLabel={t(`currencies.plural.${primaryCurrency}`)}
+ *   favoriteCount={favorites.length}
+ *   favorites={favorites}
+ *   favoriteRates={favoriteRates.data?.rates ?? {}}
+ *   primaryCurrency={primaryCurrency}
+ *   onOpenConverter={() => navigate('/converter')}
+ *   onOpenHistory={() => navigate('/history')}
+ *   onOpenRates={() => navigate('/rates')}
+ *   onOpenFavorite={(code) => navigate({ pathname: '/history', params: { from: code } })}
+ * />
  * ```
  */
-
 export function HomeHeader({
   quoteDate,
   rate,

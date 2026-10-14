@@ -4,19 +4,24 @@ import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { RADIUS, SIZES } from '@constants/theme';
 import { useTheme } from '@theme/ThemeProvider';
 
-type DarkCardProps = PropsWithChildren<{
+interface DarkCardProps extends PropsWithChildren {
+  /** Estilo extra do card, como `gap` entre os filhos. */
   style?: StyleProp<ViewStyle>;
-}>;
+}
+
 /**
- * [EN] Renders a branded dark card with shared padding and rounded corners.
- * [PT-BR] Renderiza um cartão escuro de marca com padding e cantos arredondados.
+ * Card verde escuro da marca, com padding de 16 e cantos de 24.
+ *
+ * Base dos destaques das telas: o par do Início, o exemplo do onboarding e o
+ * valor digitado no Converter.
  *
  * @example
  * ```tsx
- * <DarkCard><Text style={{ color: colors.white }}>{formattedRate}</Text></DarkCard>
+ * <DarkCard style={{ gap: SIZES.itemGap }}>
+ *   <Text style={{ color: colors.white }}>{formattedRate}</Text>
+ * </DarkCard>
  * ```
  */
-
 export function DarkCard({ children, style }: DarkCardProps) {
   const { colors } = useTheme();
 

@@ -19,16 +19,18 @@ const TAB_ICONS: Record<TabName, IconName> = {
   history: 'history',
   settings: 'settings',
 };
+
 /**
- * [EN] Renders the accessible floating navigation bar for app tabs.
- * [PT-BR] Renderiza a barra flutuante e acessível de navegação entre abas.
+ * Barra de abas flutuante do app, com as 5 abas principais.
+ *
+ * Fica sobre o fundo da tela, com a aba ativa em verde-menta, e vibra de leve
+ * ao trocar de aba. Respeita a área segura inferior do aparelho.
  *
  * @example
  * ```tsx
  * <Tabs tabBar={(props) => <AppTabBar {...props} />} />
  * ```
  */
-
 export function AppTabBar({ state, descriptors, navigation }: AppTabBarProps) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
