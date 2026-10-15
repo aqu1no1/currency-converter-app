@@ -25,6 +25,7 @@ export const ICONS = {
   info: 'information-outline',
   favorite: 'star-outline',
   favoriteActive: 'star',
+  emptyHistory: 'calendar-search',
 } as const satisfies Record<string, MaterialCommunityIconName>;
 
 export type IconName = keyof typeof ICONS;

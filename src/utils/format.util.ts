@@ -95,3 +95,10 @@ export function formatConversionRate(value: number, language = currentLanguage()
     maximumFractionDigits: digits,
   }).format(value);
 }
+
+export function formatPercent(value: number, language = currentLanguage()) {
+  return new Intl.NumberFormat(language, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
+}

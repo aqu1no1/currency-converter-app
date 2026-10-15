@@ -9,6 +9,7 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 ### Added
 
 - Tela Cotações: quanto vale 1 unidade da moeda base em cada uma das outras, com a taxa direta e a inversa. A base é escolhida numa faixa com as 10 moedas, com rolagem lateral, e começa na moeda principal. Tocar numa moeda abre o histórico do par, e dá para puxar a lista para atualizar.
+- Tela Histórico: como um par de moedas variou em 7 dias, 30 dias ou 1 ano, com a cotação mais recente, a variação no período (▲/▼ além da cor), o gráfico e o resumo com início, mais recente, mínima e máxima, cada um com a data. O par vem do Início ou das Cotações (USD → BRL por padrão), pode ser invertido, e "De" e "Para" abrem uma lista das 10 moedas num modal. Períodos sem cotação mostram um aviso.
 
 ## [0.2.0] - 2026-10-14
 

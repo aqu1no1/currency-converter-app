@@ -3,6 +3,7 @@ import {
   formatConversionRate,
   formatDate,
   formatMoney,
+  formatPercent,
   formatRateMoney,
   formatShortDate,
   formatTime,
@@ -10,6 +11,11 @@ import {
 } from '@utils/format.util';
 
 describe('format util', () => {
+  it('formats percentages with two decimals in the active language', () => {
+    expect(formatPercent(0.5576, 'pt-BR')).toBe('0,56');
+    expect(formatPercent(12.3, 'en')).toBe('12.30');
+  });
+
   it('formats money in Brazilian Portuguese', () => {
     expect(formatMoney(1234.5, 'BRL', 'pt-BR')).toBe('R$ 1.234,50');
   });

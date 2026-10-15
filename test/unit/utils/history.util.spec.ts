@@ -1,4 +1,9 @@
-import { buildFallbackHistory, sampleHistory } from '@utils/history.util';
+import {
+  buildFallbackHistory,
+  historyRange,
+  sampleHistory,
+  summarizeHistory,
+} from '@utils/history.util';
 
 describe('buildFallbackHistory', () => {
   it('spaces the rates one month apart ending today', () => {
@@ -30,5 +35,39 @@ describe('sampleHistory', () => {
     expect(sampled).toHaveLength(64);
     expect(sampled[0]?.value).toBe(daily[0]?.rate);
     expect(sampled.at(-1)?.value).toBe(daily.at(-1)?.rate);
+  });
+});
+
+describe('historyRange', () => {
+  const reference = new Date('2026-09-28T23:30:00-03:00');
+
+  it.each([
+    ['week', '2026-09-22'],
+    ['month', '2026-08-30'],
+    ['year', '2025-09-29'],
+  ] as const)('starts the %s period the right number of days before', (period, start) => {
+    expect(historyRange(period, reference)).toEqual({ start, end: '2026-09-29' });
+  });
+});
+
+describe('summarizeHistory', () => {
+  it('returns the first, last, lowest and highest rates with their dates', () => {
+    const summary = summarizeHistory([
+      { date: '2026-09-01', rate: 5.4 },
+      { date: '2026-09-10', rate: 5.3 },
+      { date: '2026-09-15', rate: 5.3 },
+      { date: '2026-09-20', rate: 5.5 },
+      { date: '2026-09-28', rate: 5.35 },
+    ]);
+
+    expect(summary?.first).toEqual({ date: '2026-09-01', rate: 5.4 });
+    expect(summary?.last).toEqual({ date: '2026-09-28', rate: 5.35 });
+    expect(summary?.min).toEqual({ date: '2026-09-10', rate: 5.3 });
+    expect(summary?.max).toEqual({ date: '2026-09-20', rate: 5.5 });
+    expect(summary?.change).toBeCloseTo(-0.926, 3);
+  });
+
+  it('returns undefined for an empty period', () => {
+    expect(summarizeHistory([])).toBeUndefined();
   });
 });
