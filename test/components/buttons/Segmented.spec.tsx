@@ -33,4 +33,18 @@ describe('Segmented', () => {
 
     expect(onChange).toHaveBeenCalledWith('all');
   });
+
+  it('keeps the selection with the onBrand tone', async () => {
+    await renderWithProviders(
+      <Segmented
+        tone="onBrand"
+        options={options}
+        value="all"
+        onChange={jest.fn()}
+        accessibilityLabel="Período"
+      />,
+    );
+
+    expect(screen.getByRole('radio', { name: 'Tudo' })).toBeSelected();
+  });
 });
