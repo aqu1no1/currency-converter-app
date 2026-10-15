@@ -23,6 +23,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "doctor": "expo-doctor",
+    "build:dev:beta": "eas build --profile development-beta --platform android",
+    "build:preview:beta": "eas build --profile preview-beta --platform android",
+    "build:android": "eas build --profile production --platform android",
     "pr": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test:cov && pnpm run doctor"
   },
   "dependencies": {
@@ -39,7 +42,9 @@
     "axios": "^1.20.0",
     "decimal.js": "^10.6.0",
     "expo": "~57.0.30",
+    "expo-build-properties": "~57.0.22",
     "expo-constants": "~57.0.22",
+    "expo-dev-client": "~57.0.20",
     "expo-font": "~57.0.4",
     "expo-haptics": "~57.0.3",
     "expo-linear-gradient": "~57.0.2",

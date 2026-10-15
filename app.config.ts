@@ -31,7 +31,8 @@ const { name, scheme, bundleIdentifier } = VARIANTS[variant];
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name,
-  slug: 'currency-converter-app',
+  slug: 'converter',
+  owner: 'mauriciozzzzzzz',
   version,
   orientation: 'portrait',
   icon: './src/assets/images/icon.png',
@@ -65,11 +66,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         backgroundColor: '#0F3D2E',
       },
     ],
+    ['expo-dev-client', { launchMode: 'most-recent' }],
+    ['expo-build-properties', { android: { usesCleartextTraffic: variant === 'beta' } }],
     'expo-localization',
   ],
-  extra: {
-    variant,
-  },
+  extra: { variant, eas: { projectId: '29cd6bc0-ed4f-41a0-8330-617b8bdd9d70' } },
   experiments: {
     typedRoutes: true,
     reactCompiler: true,
