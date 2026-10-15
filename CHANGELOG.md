@@ -6,6 +6,8 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-15
+
 ### Added
 
 - Tela Cotações: quanto vale 1 unidade da moeda base em cada uma das outras, com a taxa direta e a inversa. A base é escolhida numa faixa com as 10 moedas, com rolagem lateral, e começa na moeda principal. Tocar numa moeda abre o histórico do par, e dá para puxar a lista para atualizar.
