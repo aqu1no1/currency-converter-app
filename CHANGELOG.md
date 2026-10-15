@@ -6,6 +6,10 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 
 ## [Unreleased]
 
+### Added
+
+- Builds Android com EAS: development build, que substitui o Expo Go com o ícone, a splash e o nome "Converter Beta", e APK de preview para instalar e usar sem o computador. A URL da API vem das variáveis do EAS, e a variante beta aceita API em HTTP.
+
 ## [0.3.0] - 2026-10-15
 
 ### Added
