@@ -15,6 +15,7 @@ Como o App Converter é montado: stack, pastas, convenções, padrão visual, qu
 | Gerenciador de pacotes | **pnpm**                                                          |
 | HTTP                   | axios, encapsulado no `ApiService`                                |
 | Dados da API           | TanStack Query (cache, loading, erro, refetch, cancelamento)      |
+| Cache offline          | TanStack Query persistido no AsyncStorage + NetInfo (conexão)     |
 | Validação              | Zod (DTOs), igual à API                                           |
 | Dinheiro               | decimal.js, igual à API                                           |
 | Listas                 | FlashList                                                         |
@@ -204,7 +205,7 @@ Fluxo: **tela → hook (`useQuery`) → service (criado com `useApi()`) → `Api
   - Interceptor de response: transforma qualquer falha num `ApiError` (`status`, `message` pronta para a tela, `code`, `isNetwork`). O `message` do NestJS chega como texto ou lista (validação); a lista vira um texto por linha. Sem resposta (rede ou timeout): `status 0` e `isNetwork = true`, com a mensagem traduzida de `errors`. Cancelamentos passam direto, sem virar `ApiError`.
   - Timeout de `10 * TIME_IN_MS.SECOND`.
 - `interfaces/http-client.interface.ts`: interface `HttpClient` que o `ApiService` implementa. Os services dependem dela, e não do `ApiService`, então os testes passam o `createFakeApiService()` no lugar.
-- `services/<recurso>.service.ts`: uma classe por recurso (`CurrencyService.list`, `ExchangeRateService.convert/latest/history`, `SyncService.status`), que recebe o `HttpClient` no construtor e define o `baseUrl`. Cada método valida a resposta com o schema Zod do DTO (`utils/parse-response.util.ts`: resposta fora do formato vira `ApiError` com `code: 'INVALID_RESPONSE'`) e aceita um `signal` para cancelamento.
+- `services/<recurso>.service.ts`: uma classe por recurso (`CurrencyService.list`, `ExchangeRateService.convert/latest/history`, `SyncService.status/list`), que recebe o `HttpClient` no construtor e define o `baseUrl`. Cada método valida a resposta com o schema Zod do DTO (`utils/parse-response.util.ts`: resposta fora do formato vira `ApiError` com `code: 'INVALID_RESPONSE'`) e aceita um `signal` para cancelamento.
 - `contexts/ApiProvider.tsx`: `ApiProvider` (no `_layout.tsx`, por padrão com o `ApiService.getInstance()`) e o hook `useApi()`, que entrega o `HttpClient`. Os services **não** têm instância global: cada hook cria o seu a partir do `useApi()`:
 
   ```ts
@@ -212,8 +213,10 @@ Fluxo: **tela → hook (`useQuery`) → service (criado com `useApi()`) → `Api
   const exchangeRateService = useMemo(() => new ExchangeRateService(api), [api]);
   ```
 
-- **Hooks**: um por consulta (`useCurrencies`, `useLatestRates`, `useHistory`, `useSyncStatus`), com `queryKey` descritiva e o `signal` do React Query repassado ao service.
-- `lib/query-client.ts`: `staleTime` de `5 * TIME_IN_MS.MINUTE`; retry só em erro de rede ou 5xx, no máximo 2 vezes. O retry fica só aqui, não no axios.
+- **Hooks**: um por consulta (`useCurrencies`, `useLatestRates`, `useHistory`, `useSyncStatus`, `useSyncRuns`), com `queryKey` descritiva e o `signal` do React Query repassado ao service.
+- `lib/query-client.ts`: `staleTime` de `5 * TIME_IN_MS.MINUTE`; retry só em erro de rede ou 5xx, no máximo 2 vezes, e nunca sem internet. O retry fica só aqui, não no axios. O cache é salvo no AsyncStorage (`queryPersister`, guardado por até 1 semana) pelo `PersistQueryClientProvider` do `_layout.tsx`, para as telas abrirem com as últimas cotações mesmo offline.
+- `lib/online-manager.ts`: liga o NetInfo ao `onlineManager` do TanStack Query. Sem internet as consultas ficam pausadas e voltam sozinhas quando a conexão volta; `useOnline()` diz às telas se estão offline.
+- **Erros nas telas**: `utils/api-error.util.ts` transforma o erro num tipo (`offline`, `timeout`, `server`, `notReady` para 503, `notFound`, `unknown`). A regra: com dados salvos, a tela continua e mostra só o `StaleDataBanner` (aviso laranja); sem dados, mostra o `ErrorState` do tipo certo, com o link "Ver status da sincronização" quando o servidor falhou. Erros de renderização caem no `ErrorBoundary` do expo-router (`AppErrorBoundary`) e rotas inexistentes no `app/+not-found.tsx`, as duas em tela cheia (`FullScreenError`).
 - **URL da API**: `EXPO_PUBLIC_API_URL` no único `.env`, com o IP da máquina na rede (o celular não acessa `localhost`). O mesmo arquivo vale para beta e production; um build que precise de outra URL pode defini-la no ambiente, que tem precedência sobre o arquivo. Tudo que começa com `EXPO_PUBLIC_` fica visível no app: nada secreto ali.
 
 - **Moedas**: `enums/currency-code.enum.ts` (`CurrencyCode`, as 10 da coluna `code` da tabela `currencies`) e `utils/currency.util.ts` (símbolos US$, R$, €, £, ¥, C$, A$, Fr, 元, AR$).

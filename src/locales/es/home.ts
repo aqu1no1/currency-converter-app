@@ -9,7 +9,9 @@ export const home = {
   syncedYesterdayAt: 'Sincronizado ayer a las {{time}}',
   syncedOnAt: 'Sincronizado el {{date}} a las {{time}}',
   syncFailed: 'La última actualización falló',
+  syncFailedDate: 'Mostrando cotizaciones del {{date}}',
+  syncFailedLabel:
+    'La última actualización falló. Mostrando cotizaciones del {{date}}. Ver estado de la sincronización',
   syncUnavailable: 'No se pudo consultar la sincronización',
-  retryRates: 'No se pudieron cargar las cotizaciones',
   rateTrend: 'Cotización del dólar estadounidense al real brasileño durante los últimos 30 días',
 };

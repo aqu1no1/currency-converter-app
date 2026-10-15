@@ -10,6 +10,10 @@ jest.mock('@react-native-async-storage/async-storage', () => {
   return storage.default ?? storage;
 });
 
+jest.mock('@react-native-community/netinfo', () =>
+  require('@react-native-community/netinfo/jest/netinfo-mock'),
+);
+
 jest.mock('react-native-worklets', () => require('react-native-worklets/lib/module/mock'));
 
 jest.mock('@shopify/flash-list', () => {

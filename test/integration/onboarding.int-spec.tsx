@@ -188,7 +188,7 @@ describe('Onboarding flow', () => {
     fireEvent.press(screen.getByRole('button', { name: 'Settings' }));
     await waitFor(() => expect(router.getPathname()).toBe('/settings'));
     expect(screen.getByText('Main currency')).toBeTruthy();
-    expect(screen.getByRole('radio', { name: 'Euro (EUR)' })).toBeSelected();
+    expect(screen.getByRole('button', { name: 'Main currency: Euro. Change' })).toBeTruthy();
     expect(screen.getByText('English')).toBeTruthy();
   });
 

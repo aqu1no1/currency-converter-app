@@ -1,6 +1,7 @@
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 
 import Converter from '@app/(tabs)/converter';
+import { ApiError } from '@interfaces/api-error.interface';
 import { createFakeApiService } from '@test/utils/fake-api.service';
 import { renderWithProviders } from '@test/utils/render-with-providers';
 
@@ -101,12 +102,23 @@ describe('Converter screen', () => {
     expect(screen.getByText('R$ 100,35')).toBeTruthy();
   });
 
-  it('shows a retry action when the rates cannot be loaded', async () => {
+  it('shows the unavailable state with retry when the rates cannot be loaded', async () => {
     const api = createFakeApiService();
-    api.get.mockRejectedValue(new Error('offline'));
+    api.get.mockRejectedValue(new ApiError({ status: 500, message: 'down' }));
     await renderWithProviders(<Converter />, { api });
 
-    expect(await screen.findByText('offline')).toBeTruthy();
+    expect(await screen.findByText('Não foi possível carregar as cotações')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Tentar de novo' })).toBeTruthy();
+  });
+
+  it('shows the rates on the way state before the first sync (503)', async () => {
+    const api = createFakeApiService();
+    api.get.mockRejectedValue(new ApiError({ status: 503, message: 'not ready' }));
+    await renderWithProviders(<Converter />, { api });
+
+    expect(await screen.findByText('As cotações estão a caminho')).toBeTruthy();
+    expect(screen.getByText('Primeiro acesso')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Atualizar' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Ver status da sincronização' })).toBeNull();
   });
 });

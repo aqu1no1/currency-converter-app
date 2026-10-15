@@ -47,4 +47,22 @@ describe('Segmented', () => {
 
     expect(screen.getByRole('radio', { name: 'Tudo' })).toBeSelected();
   });
+
+  it('shows icons and marks the option as checked with the solid tone', async () => {
+    await renderWithProviders(
+      <Segmented
+        tone="solid"
+        options={[
+          { label: 'Claro', value: 'light', icon: 'themeLight' },
+          { label: 'Escuro', value: 'dark', icon: 'themeDark' },
+        ]}
+        value="dark"
+        onChange={jest.fn()}
+        accessibilityLabel="Tema"
+      />,
+    );
+
+    expect(screen.getByRole('radio', { name: 'Escuro' })).toBeChecked();
+    expect(screen.getByRole('radio', { name: 'Claro' })).not.toBeChecked();
+  });
 });

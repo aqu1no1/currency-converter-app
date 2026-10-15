@@ -1,5 +1,6 @@
 import { FlashList } from '@shopify/flash-list';
 import type Decimal from 'decimal.js';
+import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
@@ -8,6 +9,7 @@ import { Keypad } from '@components/converter/Keypad';
 import { CurrencyBadge } from '@components/currency/CurrencyBadge';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { LoadingState } from '@components/feedback/LoadingState';
+import { StaleDataBanner } from '@components/feedback/StaleDataBanner';
 import { Screen } from '@components/layout/Screen';
 import { ScreenHeader } from '@components/layout/ScreenHeader';
 import { ListRow } from '@components/list/ListRow';
@@ -17,6 +19,8 @@ import { usePreferences } from '@contexts/PreferencesContext';
 import type { CurrencyCodeValue } from '@enums/currency-code.enum';
 import { useConverter } from '@hooks/useConverter';
 import { useLatestRates } from '@hooks/useLatestRates';
+import { useOnline } from '@hooks/useOnline';
+import { getMissingDataKind } from '@utils/api-error.util';
 import { convertAmount } from '@utils/converter.util';
 import { getCurrencySymbol } from '@utils/currency.util';
 import {
@@ -38,12 +42,15 @@ type ConversionRow = {
 export default function Converter() {
   const { colors } = useTheme();
   const { t } = useTranslation();
+  const { navigate } = useRouter();
   const { primaryCurrency } = usePreferences();
 
   const { base, amount, pressKey, convertFrom } = useConverter(primaryCurrency);
   const latest = useLatestRates(base);
+  const online = useOnline();
 
   const rates = latest.data?.base === base ? latest.data.rates : undefined;
+  const errorKind = rates ? undefined : getMissingDataKind(online, latest);
   const rows: ConversionRow[] = rates
     ? DISPLAY_CURRENCY_ORDER.flatMap((code) => {
         const rate = rates[code];
@@ -52,12 +59,11 @@ export default function Converter() {
       })
     : [];
 
+  const refetch = () => void latest.refetch();
+
   const RowSeparator = () => <View style={styles.separator} />;
 
   const renderList = () => {
-    if (latest.isError) {
-      return <ErrorState error={latest.error} onRetry={() => void latest.refetch()} />;
-    }
     if (!rates) return <LoadingState />;
 
     return (
@@ -106,18 +112,31 @@ export default function Converter() {
         context={
           rates && latest.data
             ? t('converter.quoteDate', { date: formatDate(latest.data.date) })
-            : undefined
+            : errorKind && t(`errors.states.${errorKind}.context`)
         }
       />
-      <ConverterAmountCard
-        code={base}
-        name={t(`currencies.${base}` as const)}
-        amount={`${getCurrencySymbol(base)} ${formatAmountInput(amount)}`}
-        hint={t('converter.hint')}
-        accessibilityLabel={t('converter.amountLabel')}
-      />
-      <View style={styles.list}>{renderList()}</View>
-      <Keypad onPress={pressKey} />
+      {rates && latest.data ? (
+        <StaleDataBanner date={latest.data.date} failed={latest.isError} onRetry={refetch} />
+      ) : null}
+      {errorKind ? (
+        <ErrorState
+          kind={errorKind}
+          onRetry={refetch}
+          onOpenSyncStatus={() => navigate('/settings')}
+        />
+      ) : (
+        <>
+          <ConverterAmountCard
+            code={base}
+            name={t(`currencies.${base}` as const)}
+            amount={`${getCurrencySymbol(base)} ${formatAmountInput(amount)}`}
+            hint={t('converter.hint')}
+            accessibilityLabel={t('converter.amountLabel')}
+          />
+          <View style={styles.list}>{renderList()}</View>
+          <Keypad onPress={pressKey} />
+        </>
+      )}
     </Screen>
   );
 }

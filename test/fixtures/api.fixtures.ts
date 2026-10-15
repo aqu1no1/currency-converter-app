@@ -50,3 +50,39 @@ export const syncStatusFixture = {
   },
   latestRateDate: '2026-09-28',
 };
+
+export const syncRunsFixture = {
+  data: [
+    {
+      id: '0199a1b2-0000-7000-8000-0000000000a1',
+      type: 'DAILY',
+      status: 'SUCCESS',
+      startedAt: '2026-09-28T09:00:00.000Z',
+      finishedAt: '2026-09-28T09:00:02.000Z',
+      rowsInserted: 45,
+      errorMessage: null,
+    },
+    {
+      id: '0199a1b2-0000-7000-8000-0000000000a2',
+      type: 'DAILY',
+      status: 'FAILED',
+      startedAt: '2026-09-27T09:00:00.000Z',
+      finishedAt: '2026-09-27T09:00:10.000Z',
+      rowsInserted: 0,
+      errorMessage: 'timeout no provedor',
+    },
+    {
+      id: '0199a1b2-0000-7000-8000-0000000000a3',
+      type: 'BACKFILL',
+      status: 'SUCCESS',
+      startedAt: '2026-09-25T21:14:00.000Z',
+      finishedAt: '2026-09-25T21:16:30.000Z',
+      rowsInserted: 88400,
+      errorMessage: null,
+    },
+  ],
+  total: 3,
+  page: 1,
+  perPage: 4,
+  totalPages: 1,
+};

@@ -2,12 +2,14 @@ import { convertSchema } from '@dtos/convert.dto';
 import { currenciesSchema } from '@dtos/currency.dto';
 import { historySchema } from '@dtos/history.dto';
 import { latestRatesSchema } from '@dtos/latest-rates.dto';
+import { syncRunsPageSchema } from '@dtos/sync-runs.dto';
 import { syncStatusSchema } from '@dtos/sync-status.dto';
 import {
   convertFixture,
   currenciesFixture,
   historyFixture,
   latestRatesFixture,
+  syncRunsFixture,
   syncStatusFixture,
 } from '@test/fixtures/api.fixtures';
 
@@ -18,6 +20,7 @@ describe('API DTOs', () => {
     ['latest rates', latestRatesSchema, latestRatesFixture],
     ['history', historySchema, historyFixture],
     ['sync status', syncStatusSchema, syncStatusFixture],
+    ['sync runs', syncRunsPageSchema, syncRunsFixture],
   ] as const)('accepts a real %s response', (_, schema, fixture) => {
     expect(schema.safeParse(fixture).success).toBe(true);
   });

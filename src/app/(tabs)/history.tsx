@@ -17,10 +17,13 @@ import { Screen } from '@components/layout/Screen';
 import { ScreenHeader } from '@components/layout/ScreenHeader';
 import { SelectModal, type SelectOption } from '@components/select/SelectModal';
 import { DISPLAY_CURRENCY_ORDER } from '@constants/currencies.constants';
+import { HISTORY_START_DATE } from '@constants/sync.constants';
 import { FONTS, SIZES, TAB_SCREEN_EDGES, TYPE } from '@constants/theme';
 import type { CurrencyCodeValue } from '@enums/currency-code.enum';
 import { useHistory } from '@hooks/useHistory';
+import { useOnline } from '@hooks/useOnline';
 import { useReduceMotion } from '@hooks/useReduceMotion';
+import { getMissingDataKind } from '@utils/api-error.util';
 import { isCurrencyCode } from '@utils/currency.util';
 import { formatConversionRate, formatDate, formatPercent } from '@utils/format.util';
 import {
@@ -31,7 +34,6 @@ import {
 } from '@utils/history.util';
 import { useTheme } from '@theme/ThemeProvider';
 
-const HISTORY_START_DATE = '2000-01-01';
 const CHART_POINTS = 52;
 const CHART_HEIGHT = 160;
 const PERIODS: readonly HistoryPeriod[] = ['week', 'month', 'year'];
@@ -41,7 +43,7 @@ type Picker = 'from' | 'to';
 export default function HistoryScreen() {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const { setParams } = useRouter();
+  const { setParams, navigate } = useRouter();
   const params = useLocalSearchParams<{ from?: string; to?: string }>();
   const { width: screenWidth } = useWindowDimensions();
 
@@ -53,6 +55,8 @@ export default function HistoryScreen() {
   const from: CurrencyCodeValue = params.from && isCurrencyCode(params.from) ? params.from : 'USD';
   const to: CurrencyCodeValue = params.to && isCurrencyCode(params.to) ? params.to : 'BRL';
   const history = useHistory({ from, to, ...historyRange(period) });
+  const online = useOnline();
+  const errorKind = history.data ? undefined : getMissingDataKind(online, history);
 
   const points = history.data ? sampleHistory(history.data.history, CHART_POINTS) : [];
   const summary = history.data ? summarizeHistory(history.data.history) : undefined;
@@ -163,8 +167,14 @@ export default function HistoryScreen() {
   };
 
   const renderContent = () => {
-    if (history.isError) {
-      return <ErrorState error={history.error} onRetry={() => void history.refetch()} />;
+    if (errorKind) {
+      return (
+        <ErrorState
+          kind={errorKind}
+          onRetry={() => void history.refetch()}
+          onOpenSyncStatus={() => navigate('/settings')}
+        />
+      );
     }
     if (!history.data) return <LoadingState />;
 

@@ -36,6 +36,8 @@ interface LogoProps {
   tone?: 'onDark' | 'onLight';
   /** Altura em pontos. A largura acompanha a proporção da variante. */
   size?: number;
+  /** `false` mostra sempre o logo estático com o "$", como nas telas de erro. */
+  animated?: boolean;
 }
 
 /**
@@ -48,9 +50,15 @@ interface LogoProps {
  * ```tsx
  * <Logo variant="mark" tone="onDark" size={200} />
  * <Logo variant="full" tone="onLight" size={32} />
+ * <Logo size={72} animated={false} />
  * ```
  */
-export function Logo({ variant = 'mark', tone = 'onLight', size = 48 }: LogoProps) {
+export function Logo({
+  variant = 'mark',
+  tone = 'onLight',
+  size = 48,
+  animated = true,
+}: LogoProps) {
   const { colors } = useTheme();
 
   const reduceMotion = useReduceMotion();
@@ -59,7 +67,7 @@ export function Logo({ variant = 'mark', tone = 'onLight', size = 48 }: LogoProp
   const [glyphOpacity] = useState(() => new Animated.Value(1));
   const [glyphIndex, setGlyphIndex] = useState(0);
 
-  const animate = reduceMotion === false;
+  const animate = animated && reduceMotion === false;
   const contrast = tone === 'onDark' ? colors.white : colors.primary;
   const ringColor = { contrast, accent: colors.accent } as const;
   const glyph = LOGO_CURRENCY_GLYPHS[glyphIndex];

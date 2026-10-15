@@ -102,3 +102,15 @@ export function formatPercent(value: number, language = currentLanguage()) {
     maximumFractionDigits: 2,
   }).format(value);
 }
+
+export function formatLocalDate(value: Date | string | number, language = currentLanguage()) {
+  return new Intl.DateTimeFormat(language, {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(value instanceof Date ? value : new Date(value));
+}
+
+export function formatInteger(value: number, language = currentLanguage()) {
+  return new Intl.NumberFormat(language, { maximumFractionDigits: 0 }).format(value);
+}

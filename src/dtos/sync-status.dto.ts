@@ -2,9 +2,13 @@ import { z } from 'zod';
 
 import { dateOnlySchema, dateTimeSchema } from './common.dto';
 
+export const syncTypeSchema = z.enum(['DAILY', 'BACKFILL']);
+
+export const syncRunStateSchema = z.enum(['RUNNING', 'SUCCESS', 'FAILED']);
+
 export const syncRunStatusSchema = z.object({
-  type: z.enum(['DAILY', 'BACKFILL']),
-  status: z.enum(['RUNNING', 'SUCCESS', 'FAILED']),
+  type: syncTypeSchema,
+  status: syncRunStateSchema,
   startedAt: dateTimeSchema,
   finishedAt: dateTimeSchema.nullable(),
   rowsInserted: z.number().int().nonnegative(),
@@ -19,3 +23,5 @@ export const syncStatusSchema = z.object({
 export type SyncRunStatusDto = z.infer<typeof syncRunStatusSchema>;
 
 export type SyncStatusDto = z.infer<typeof syncStatusSchema>;
+
+export type SyncRunState = z.infer<typeof syncRunStateSchema>;

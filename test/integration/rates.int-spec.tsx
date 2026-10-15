@@ -9,6 +9,7 @@ import Rates from '@app/(tabs)/rates';
 import { ApiProvider } from '@contexts/ApiProvider';
 import { PreferencesProvider } from '@contexts/PreferencesContext';
 import { ThemeProvider } from '@theme/ThemeProvider';
+import { ApiError } from '@interfaces/api-error.interface';
 import { createFakeApiService } from '@test/utils/fake-api.service';
 import { createTestQueryClient } from '@test/utils/query-client';
 
@@ -131,12 +132,12 @@ describe('Rates screen', () => {
     expect(router.getSearchParams()).toEqual({ from: 'BRL', to: 'USD' });
   });
 
-  it('shows a retry action when the rates cannot be loaded', async () => {
+  it('shows the unavailable state with retry when the rates cannot be loaded', async () => {
     const api = createFakeApiService();
-    api.get.mockRejectedValue(new Error('offline'));
+    api.get.mockRejectedValue(new ApiError({ status: 500, message: 'down' }));
     await renderRates(api);
 
-    expect(await screen.findByText('offline')).toBeTruthy();
+    expect(await screen.findByText('Não foi possível carregar as cotações')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Tentar de novo' })).toBeTruthy();
   });
 
