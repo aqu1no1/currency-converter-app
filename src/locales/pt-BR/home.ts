@@ -9,7 +9,9 @@ export const home = {
   syncedYesterdayAt: 'Sincronizado ontem às {{time}}',
   syncedOnAt: 'Sincronizado em {{date}} às {{time}}',
   syncFailed: 'A última atualização falhou',
+  syncFailedDate: 'Mostrando cotações de {{date}}',
+  syncFailedLabel:
+    'A última atualização falhou. Mostrando cotações de {{date}}. Ver status da sincronização',
   syncUnavailable: 'Não foi possível consultar a sincronização',
-  retryRates: 'Não foi possível carregar as cotações',
   rateTrend: 'Tendência da cotação do dólar em reais nos últimos 30 dias',
 };

@@ -9,6 +9,7 @@ import { ApiProvider } from '@contexts/ApiProvider';
 import { PreferencesProvider } from '@contexts/PreferencesContext';
 import type { HistoryParams } from '@dtos/history.dto';
 import { ThemeProvider } from '@theme/ThemeProvider';
+import { ApiError } from '@interfaces/api-error.interface';
 import { createFakeApiService } from '@test/utils/fake-api.service';
 import { createTestQueryClient } from '@test/utils/query-client';
 import { historyRange } from '@utils/history.util';
@@ -138,12 +139,12 @@ describe('History screen', () => {
     expect(screen.getByRole('radio', { name: '1 ano' })).toBeTruthy();
   });
 
-  it('shows a retry action when the history cannot be loaded', async () => {
+  it('shows the unavailable state with retry when the history cannot be loaded', async () => {
     const api = createFakeApiService();
-    api.get.mockRejectedValue(new Error('offline'));
+    api.get.mockRejectedValue(new ApiError({ status: 500, message: 'down' }));
     await renderHistory({ api });
 
-    expect(await screen.findByText('offline')).toBeTruthy();
+    expect(await screen.findByText('Não foi possível carregar as cotações')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Tentar de novo' })).toBeTruthy();
   });
 });

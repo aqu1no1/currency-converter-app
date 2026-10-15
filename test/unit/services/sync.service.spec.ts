@@ -1,5 +1,5 @@
 import { SyncService } from '@services/sync.service';
-import { syncStatusFixture } from '@test/fixtures/api.fixtures';
+import { syncRunsFixture, syncStatusFixture } from '@test/fixtures/api.fixtures';
 import { createFakeApiService } from '@test/utils/fake-api.service';
 
 describe('SyncService', () => {
@@ -21,5 +21,16 @@ describe('SyncService', () => {
       lastRun: null,
       latestRateDate: null,
     });
+  });
+
+  it('lists the latest runs from /sync with pagination', async () => {
+    const api = createFakeApiService();
+    api.get.mockResolvedValueOnce(syncRunsFixture);
+
+    const page = await new SyncService(api).list({ perPage: 4 });
+
+    expect(api.get).toHaveBeenCalledWith('/sync', { params: { perPage: 4 }, signal: undefined });
+    expect(page.data).toHaveLength(3);
+    expect(page.data[1]?.status).toBe('FAILED');
   });
 });

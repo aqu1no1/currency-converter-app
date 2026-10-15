@@ -9,6 +9,7 @@ import Home from '@app/(tabs)/home';
 import { ApiProvider } from '@contexts/ApiProvider';
 import { PreferencesProvider } from '@contexts/PreferencesContext';
 import { ThemeProvider } from '@theme/ThemeProvider';
+import { ApiError } from '@interfaces/api-error.interface';
 import { createFakeApiService } from '@test/utils/fake-api.service';
 import { createTestQueryClient } from '@test/utils/query-client';
 
@@ -97,13 +98,13 @@ describe('Home screen', () => {
     });
   });
 
-  it('shows a retry action when the rates API is unavailable', async () => {
+  it('shows the unavailable state with retry when the rates API fails', async () => {
     const api = createFakeApiService();
-    api.get.mockRejectedValue(new Error('offline'));
+    api.get.mockRejectedValue(new ApiError({ status: 500, message: 'down' }));
 
     await renderHome(api);
 
-    expect(await screen.findByText('offline')).toBeTruthy();
+    expect(await screen.findByText('Não foi possível carregar as cotações')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Tentar de novo' })).toBeTruthy();
   });
 
@@ -118,5 +119,32 @@ describe('Home screen', () => {
     });
 
     await waitFor(() => expect(api.get.mock.calls.length).toBeGreaterThan(initialCalls));
+  });
+
+  it('warns when the latest sync failed and keeps the rest of the screen', async () => {
+    const api = createApi();
+    const getRates = api.get.getMockImplementation();
+    api.get.mockImplementation(async (url, options) => {
+      if (url.endsWith('/sync/status')) {
+        return {
+          lastRun: {
+            type: 'DAILY',
+            status: 'FAILED',
+            startedAt: '2026-09-29T09:00:00.000Z',
+            finishedAt: '2026-09-29T09:00:02.000Z',
+            rowsInserted: 0,
+            error: 'Frankfurter unavailable',
+          },
+          latestRateDate: '2026-09-28',
+        };
+      }
+      return getRates?.(url, options);
+    });
+
+    await renderHome(api);
+
+    expect(await screen.findByText('A última atualização falhou')).toBeTruthy();
+    expect(screen.getByText('Mostrando cotações de 28/09/2026')).toBeTruthy();
+    expect(screen.getByText('1 dólar americano em reais')).toBeTruthy();
   });
 });

@@ -10,6 +10,11 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 
 - Tela Cotações: quanto vale 1 unidade da moeda base em cada uma das outras, com a taxa direta e a inversa. A base é escolhida numa faixa com as 10 moedas, com rolagem lateral, e começa na moeda principal. Tocar numa moeda abre o histórico do par, e dá para puxar a lista para atualizar.
 - Tela Histórico: como um par de moedas variou em 7 dias, 30 dias ou 1 ano, com a cotação mais recente, a variação no período (▲/▼ além da cor), o gráfico e o resumo com início, mais recente, mínima e máxima, cada um com a data. O par vem do Início ou das Cotações (USD → BRL por padrão), pode ser invertido, e "De" e "Para" abrem uma lista das 10 moedas num modal. Períodos sem cotação mostram um aviso.
+- Tela Ajustes: idioma e moeda principal escolhidos numa lista, com o valor atual na linha, e tema Claro, Escuro ou Automático num seletor com ícones. Mostra a última execução da sincronização (selo Sucesso/Falhou, quando rodou, linhas e duração ou o erro, "Cotações até" e "Histórico desde"), as 4 execuções mais recentes e a seção Sobre com a fonte dos dados e as moedas suportadas.
+- Estados de erro com ícone, título, texto e ação no idioma do app: sem conexão, servidor fora do ar ou demorando (com o link "Ver status da sincronização"), cotações a caminho antes da primeira sincronização (503) e erro inesperado. Usados no Início, Converter, Cotações e Histórico.
+- As últimas cotações ficam salvas no aparelho. Sem internet, as telas continuam com os dados salvos e mostram o aviso "Sem conexão. Mostrando as cotações salvas de…" com "Tentar"; quando a conexão volta, o app busca de novo sozinho e o aviso some. No primeiro uso sem internet aparece o estado "Sem conexão com a internet".
+- No Início, quando a última sincronização falhou, a linha de status vira um aviso laranja com a data das cotações em uso, que abre Ajustes.
+- Telas cheias, sem as abas, para "Algo deu errado" (erro ao mostrar uma tela, com "Tentar de novo" e "Voltar ao início") e "Tela não encontrada" (link para uma rota que não existe).
 
 ## [0.2.0] - 2026-10-14
 

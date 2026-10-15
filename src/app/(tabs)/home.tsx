@@ -7,13 +7,16 @@ import { HomeHeader } from '@components/home/HomeHeader';
 import { HomeSyncStatus } from '@components/home/HomeSyncStatus';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { LoadingState } from '@components/feedback/LoadingState';
+import { StaleDataBanner } from '@components/feedback/StaleDataBanner';
 import { Screen } from '@components/layout/Screen';
 import { ScreenHeader } from '@components/layout/ScreenHeader';
 import { SIZES, TAB_SCREEN_EDGES } from '@constants/theme';
 import { usePreferences } from '@contexts/PreferencesContext';
 import { useHistory } from '@hooks/useHistory';
 import { useLatestRates } from '@hooks/useLatestRates';
+import { useOnline } from '@hooks/useOnline';
 import { useSyncStatus } from '@hooks/useSyncStatus';
+import { getMissingDataKind } from '@utils/api-error.util';
 import { utcDateAtOffset } from '@utils/date.util';
 import { formatDate } from '@utils/format.util';
 import { useTheme } from '@theme/ThemeProvider';
@@ -26,6 +29,7 @@ export default function HomeScreen() {
   const latestUsd = useLatestRates('USD');
   const favoriteRates = useLatestRates(primaryCurrency);
   const sync = useSyncStatus();
+  const online = useOnline();
   const history = useHistory({
     from: 'USD',
     to: 'BRL',
@@ -42,47 +46,39 @@ export default function HomeScreen() {
     ]);
   };
 
+  const openSettings = () => navigate('/settings');
+
+  const errorKind = latestUsd.data ? undefined : getMissingDataKind(online, latestUsd);
+
   const header = (
     <ScreenHeader
       title={t('tabs.home')}
       context={
-        latestUsd.data ? t('home.quoteDate', { date: formatDate(latestUsd.data.date) }) : undefined
+        latestUsd.data
+          ? t('home.quoteDate', { date: formatDate(latestUsd.data.date) })
+          : errorKind && t(`errors.states.${errorKind}.context`)
       }
       action={{
         icon: 'settings',
         accessibilityLabel: t('tabs.settings'),
-        onPress: () => navigate('/settings'),
+        onPress: openSettings,
       }}
     />
   );
 
-  if (latestUsd.isLoading) {
-    return (
-      <Screen edges={TAB_SCREEN_EDGES}>
-        {header}
-        <LoadingState />
-      </Screen>
-    );
-  }
+  const rate = latestUsd.data?.rates.BRL;
 
-  if (latestUsd.isError || !latestUsd.data) {
-    return (
-      <Screen edges={TAB_SCREEN_EDGES}>
-        {header}
-        <ErrorState
-          error={latestUsd.error ?? t('home.retryRates')}
-          onRetry={() => void refresh()}
-        />
-      </Screen>
-    );
-  }
+  if (!latestUsd.data || rate === undefined) {
+    const kind = errorKind ?? (latestUsd.data ? 'unknown' : undefined);
 
-  const rate = latestUsd.data.rates.BRL;
-  if (rate === undefined) {
     return (
       <Screen edges={TAB_SCREEN_EDGES}>
         {header}
-        <ErrorState error={t('errors.invalidResponse')} onRetry={() => void refresh()} />
+        {kind ? (
+          <ErrorState kind={kind} onRetry={() => void refresh()} onOpenSyncStatus={openSettings} />
+        ) : (
+          <LoadingState />
+        )}
       </Screen>
     );
   }
@@ -92,7 +88,14 @@ export default function HomeScreen() {
 
   return (
     <Screen edges={TAB_SCREEN_EDGES} contentStyle={styles.screen}>
-      <View style={styles.header}>{header}</View>
+      <View style={styles.header}>
+        {header}
+        <StaleDataBanner
+          date={latestUsd.data.date}
+          failed={latestUsd.isError}
+          onRetry={() => void refresh()}
+        />
+      </View>
       <FlashList
         data={[]}
         keyExtractor={(_, index) => String(index)}
@@ -122,7 +125,8 @@ export default function HomeScreen() {
           <HomeSyncStatus
             lastRun={sync.data?.lastRun ?? null}
             hasError={sync.isError}
-            onPress={() => navigate('/settings')}
+            quoteDate={latestUsd.data.date}
+            onPress={openSettings}
           />
         }
         refreshControl={

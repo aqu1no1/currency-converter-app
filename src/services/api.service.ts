@@ -10,9 +10,9 @@ import { TIME_IN_MS } from '@constants/time.constants';
 import { ApiError } from '@interfaces/api-error.interface';
 import type { HttpClient, RequestOptions } from '@interfaces/http-client.interface';
 import { i18n } from '@lib/i18n';
+import { TIMEOUT_CODES } from '@utils/api-error.util';
 
 const REQUEST_TIMEOUT = 10 * TIME_IN_MS.SECOND;
-const TIMEOUT_CODES = new Set(['ECONNABORTED', 'ETIMEDOUT']);
 
 type NestErrorBody = {
   statusCode?: number;

@@ -8,6 +8,7 @@ import { CurrencyBadge } from '@components/currency/CurrencyBadge';
 import { CurrencyChip } from '@components/currency/CurrencyChip';
 import { ErrorState } from '@components/feedback/ErrorState';
 import { LoadingState } from '@components/feedback/LoadingState';
+import { StaleDataBanner } from '@components/feedback/StaleDataBanner';
 import { Screen } from '@components/layout/Screen';
 import { ScreenHeader } from '@components/layout/ScreenHeader';
 import { ListRow } from '@components/list/ListRow';
@@ -16,6 +17,8 @@ import { FONTS, RADIUS, SIZES, TAB_SCREEN_EDGES, TYPE } from '@constants/theme';
 import { usePreferences } from '@contexts/PreferencesContext';
 import type { CurrencyCodeValue } from '@enums/currency-code.enum';
 import { useLatestRates } from '@hooks/useLatestRates';
+import { useOnline } from '@hooks/useOnline';
+import { getMissingDataKind } from '@utils/api-error.util';
 import { formatConversionRate, formatDate } from '@utils/format.util';
 import { useTheme } from '@theme/ThemeProvider';
 
@@ -35,8 +38,10 @@ export default function RatesScreen() {
 
   const [base, setBase] = useState<CurrencyCodeValue>(primaryCurrency);
   const latest = useLatestRates(base);
+  const online = useOnline();
 
   const rates = latest.data?.base === base ? latest.data.rates : undefined;
+  const errorKind = rates ? undefined : getMissingDataKind(online, latest);
   const rows: RateRow[] = rates
     ? DISPLAY_CURRENCY_ORDER.flatMap((code) => {
         const rate = rates[code];
@@ -44,6 +49,8 @@ export default function RatesScreen() {
         return [{ code, rate, inverse: 1 / rate }];
       })
     : [];
+
+  const refetch = () => void latest.refetch();
 
   const openHistory = (code: CurrencyCodeValue) => {
     navigate({ pathname: '/history', params: { from: base, to: code } });
@@ -75,10 +82,14 @@ export default function RatesScreen() {
   );
 
   const renderList = () => {
-    if (latest.isError) {
+    if (errorKind) {
       return (
         <View style={styles.state}>
-          <ErrorState error={latest.error} onRetry={() => void latest.refetch()} />
+          <ErrorState
+            kind={errorKind}
+            onRetry={refetch}
+            onOpenSyncStatus={() => navigate('/settings')}
+          />
         </View>
       );
     }
@@ -101,7 +112,7 @@ export default function RatesScreen() {
         refreshControl={
           <RefreshControl
             refreshing={latest.isRefetching}
-            onRefresh={() => void latest.refetch()}
+            onRefresh={refetch}
             tintColor={colors.highlight}
           />
         }
@@ -152,9 +163,12 @@ export default function RatesScreen() {
           context={
             rates && latest.data
               ? t('rates.quoteDate', { date: formatDate(latest.data.date) })
-              : undefined
+              : errorKind && t(`errors.states.${errorKind}.context`)
           }
         />
+        {rates && latest.data ? (
+          <StaleDataBanner date={latest.data.date} failed={latest.isError} onRetry={refetch} />
+        ) : null}
       </View>
       {renderBases()}
       <View style={styles.list}>{renderList()}</View>

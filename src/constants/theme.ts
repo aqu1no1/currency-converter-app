@@ -19,6 +19,7 @@ export interface Colors {
   highlightText: string;
   warningBackground: string;
   warningText: string;
+  warningBorder: string;
   successBackground: string;
   successText: string;
   statusSuccess: string;
@@ -74,6 +75,7 @@ export const lightColors: Colors = {
   highlightText: '#1E7A52',
   warningBackground: '#FDECDD',
   warningText: '#8A3A0A',
+  warningBorder: '#F2C9A6',
   successBackground: '#E1F2E7',
   successText: '#14532D',
   statusSuccess: '#1E7A52',
@@ -102,6 +104,7 @@ export const darkColors: Colors = {
   highlightText: '#6FD3A2',
   warningBackground: '#3A2316',
   warningText: '#F7B98A',
+  warningBorder: '#5A3520',
   successBackground: '#173A2D',
   successText: '#9FE1CB',
   statusSuccess: '#4FC38A',

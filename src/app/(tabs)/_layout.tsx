@@ -1,7 +1,12 @@
-import { Tabs } from 'expo-router';
+import { type ErrorBoundaryProps, Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
+import { AppErrorBoundary } from '@components/feedback/AppErrorBoundary';
 import { AppTabBar } from '@components/layout/AppTabBar';
+
+export function ErrorBoundary(props: ErrorBoundaryProps) {
+  return <AppErrorBoundary {...props} />;
+}
 
 export default function TabsLayout() {
   const { t } = useTranslation();

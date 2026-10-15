@@ -9,7 +9,8 @@ export const home = {
   syncedYesterdayAt: 'Synced yesterday at {{time}}',
   syncedOnAt: 'Synced on {{date}} at {{time}}',
   syncFailed: 'The latest update failed',
+  syncFailedDate: 'Showing rates from {{date}}',
+  syncFailedLabel: 'The latest update failed. Showing rates from {{date}}. View sync status',
   syncUnavailable: 'Could not load synchronization status',
-  retryRates: 'Could not load exchange rates',
   rateTrend: 'US dollar to Brazilian real rate over the last 30 days',
 };

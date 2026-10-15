@@ -3,39 +3,85 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '@components/buttons/Button';
 import { Icon } from '@components/icons/Icon';
-import { FONTS, SIZES, TYPE } from '@constants/theme';
+import type { IconName } from '@constants/icons';
+import { FONTS, RADIUS, SIZES, TYPE } from '@constants/theme';
+import { type ErrorKind, getErrorKind } from '@utils/api-error.util';
 import { useTheme } from '@theme/ThemeProvider';
 
+const ICON_BOX = 72;
+const TITLE_SIZE = 22;
+
+const SYNC_STATUS_KINDS: readonly ErrorKind[] = ['server', 'timeout'];
+
+const KIND_ICONS = {
+  offline: 'offline',
+  timeout: 'serverDown',
+  server: 'serverDown',
+  notReady: 'pending',
+  notFound: 'error',
+  unknown: 'error',
+} as const satisfies Record<ErrorKind, IconName>;
+
 interface ErrorStateProps {
-  /** Erro ou mensagem exibida. */
-  error: Error | string;
-  /** Ação do botão "Tentar de novo"; sem ela, o botão não aparece. */
+  /** Erro da consulta; o tipo (sem conexão, servidor, 503...) é descoberto a partir dele. */
+  error?: unknown;
+  /** Tipo do erro, quando a tela já sabe qual é; tem prioridade sobre `error`. */
+  kind?: ErrorKind;
+  /** Ação do botão principal ("Tentar de novo" ou "Atualizar"); sem ela, o botão não aparece. */
   onRetry?: () => void;
+  /** Abre o status da sincronização; vira o link "Ver status da sincronização" quando o servidor falhou. */
+  onOpenSyncStatus?: () => void;
 }
 
 /**
- * Estado de erro com ícone, mensagem e a opção de tentar de novo.
+ * Estado de erro de tela inteira com ícone, título, texto e ações.
  *
- * Usado quando uma tela não tem dados para mostrar porque a chamada à API falhou.
+ * Usado quando a tela não tem nada salvo para mostrar. O ícone, os textos e o rótulo
+ * do botão vêm do tipo do erro: sem conexão, servidor fora do ar ou demorando,
+ * cotações ainda não disponíveis (503), não encontrado (404) ou inesperado. Quando o
+ * servidor falhou, mostra também o link para o status da sincronização.
  *
  * @example
  * ```tsx
- * <ErrorState error={latest.error} onRetry={() => void latest.refetch()} />
+ * <ErrorState
+ *   error={latest.error}
+ *   onRetry={() => void latest.refetch()}
+ *   onOpenSyncStatus={() => navigate('/settings')}
+ * />
  * ```
  */
-export function ErrorState({ error, onRetry }: ErrorStateProps) {
+export function ErrorState({ error, kind, onRetry, onOpenSyncStatus }: ErrorStateProps) {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const message = typeof error === 'string' ? error : error.message;
+  const resolved = kind ?? getErrorKind(error);
+  const showSyncStatus = onOpenSyncStatus && SYNC_STATUS_KINDS.includes(resolved);
 
   return (
     <View accessibilityRole="alert" style={styles.container}>
-      <Icon name="error" size={28} color={colors.warningText} />
-      <Text style={[styles.message, { color: colors.textPrimary }]}>{message}</Text>
-      {onRetry ? (
-        <Button variant="outline" onPress={onRetry}>
-          {t('common.retry')}
-        </Button>
+      <View style={[styles.icon, { backgroundColor: colors.mintSoft }]}>
+        <Icon name={KIND_ICONS[resolved]} size={32} color={colors.textHeading} />
+      </View>
+      <View style={styles.copy}>
+        <Text style={[styles.title, { color: colors.textHeading }]}>
+          {t(`errors.states.${resolved}.title`)}
+        </Text>
+        <Text style={[styles.message, { color: colors.textSecondary }]}>
+          {t(`errors.states.${resolved}.body`)}
+        </Text>
+      </View>
+      {onRetry || showSyncStatus ? (
+        <View style={styles.actions}>
+          {onRetry ? (
+            <Button icon="refresh" onPress={onRetry}>
+              {t(`errors.states.${resolved}.action`)}
+            </Button>
+          ) : null}
+          {showSyncStatus ? (
+            <Button variant="secondary" onPress={onOpenSyncStatus}>
+              {t('errors.viewSyncStatus')}
+            </Button>
+          ) : null}
+        </View>
       ) : null}
     </View>
   );
@@ -43,10 +89,32 @@ export function ErrorState({ error, onRetry }: ErrorStateProps) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: SIZES.itemGap,
-    padding: SIZES.sectionGap,
+    gap: SIZES.sectionGap,
+    paddingHorizontal: SIZES.itemGap,
+    paddingBottom: SIZES.sectionGap,
   },
-  message: { fontFamily: FONTS.body, fontSize: TYPE.body, textAlign: 'center' },
+  icon: {
+    width: ICON_BOX,
+    height: ICON_BOX,
+    borderRadius: RADIUS.card,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  copy: { gap: 8, maxWidth: 300 },
+  title: {
+    fontFamily: FONTS.display,
+    fontSize: TITLE_SIZE,
+    lineHeight: TITLE_SIZE * 1.2,
+    textAlign: 'center',
+  },
+  message: {
+    fontFamily: FONTS.body,
+    fontSize: TYPE.body,
+    lineHeight: TYPE.body * 1.5,
+    textAlign: 'center',
+  },
+  actions: { alignSelf: 'stretch', gap: SIZES.itemGap },
 });

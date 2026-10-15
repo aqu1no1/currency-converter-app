@@ -9,21 +9,36 @@ import {
 } from '@expo-google-fonts/instrument-sans';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { QueryClientProvider } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { type ErrorBoundaryProps, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { AppErrorBoundary } from '@components/feedback/AppErrorBoundary';
 import { RootNavigator } from '@components/layout/RootNavigator';
 import { ApiProvider } from '@contexts/ApiProvider';
 import { PreferencesProvider } from '@contexts/PreferencesContext';
 import { i18nReady } from '@lib/i18n';
-import { queryClient } from '@lib/query-client';
+import { setupOnlineManager } from '@lib/online-manager';
+import { QUERY_CACHE_MAX_AGE, queryClient, queryPersister } from '@lib/query-client';
 import { ThemeProvider } from '@theme/ThemeProvider';
 
 void SplashScreen.preventAutoHideAsync();
+setupOnlineManager();
+
+const PERSIST_OPTIONS = { persister: queryPersister, maxAge: QUERY_CACHE_MAX_AGE };
+
+export function ErrorBoundary(props: ErrorBoundaryProps) {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <AppErrorBoundary {...props} />
+      </ThemeProvider>
+    </SafeAreaProvider>
+  );
+}
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
@@ -56,7 +71,7 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <ThemeProvider>
-        <QueryClientProvider client={queryClient}>
+        <PersistQueryClientProvider client={queryClient} persistOptions={PERSIST_OPTIONS}>
           <ApiProvider>
             <PreferencesProvider>
               <RootNavigator fontsReady={fontsReady} localeReady={localeReady}>
@@ -66,11 +81,13 @@ export default function RootLayout() {
                   <Stack.Screen name="onboarding" options={{ headerShown: false }} />
 
                   <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+
+                  <Stack.Screen name="+not-found" options={{ headerShown: false }} />
                 </Stack>
               </RootNavigator>
             </PreferencesProvider>
           </ApiProvider>
-        </QueryClientProvider>
+        </PersistQueryClientProvider>
       </ThemeProvider>
     </SafeAreaProvider>
   );
