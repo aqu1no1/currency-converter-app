@@ -12,6 +12,20 @@ describe('ListRow', () => {
     expect(screen.getByText('R$ 5,20')).toBeTruthy();
   });
 
+  it('renders a caption below the value', async () => {
+    await renderWithProviders(
+      <ListRow
+        title="USD"
+        subtitle="Dólar americano"
+        value="0,1926"
+        valueCaption="1 USD = 5,1930 BRL"
+      />,
+    );
+
+    expect(screen.getByText('0,1926')).toBeTruthy();
+    expect(screen.getByText('1 USD = 5,1930 BRL')).toBeTruthy();
+  });
+
   it('supports an accessible press action', async () => {
     const onPress = jest.fn();
     await renderWithProviders(<ListRow title="Euro" onPress={onPress} />);
