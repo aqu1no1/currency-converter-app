@@ -15,6 +15,8 @@ interface ListRowProps {
   subtitle?: string;
   /** Valor à direita, em destaque. */
   value?: string;
+  /** Linha menor abaixo do valor, como a taxa inversa nas Cotações. */
+  valueCaption?: string;
   /** Conteúdo à direita do valor, como uma seta. */
   trailing?: ReactNode;
   /** Ícone à esquerda do texto. */
@@ -30,7 +32,8 @@ interface ListRowProps {
 /**
  * Linha de lista com altura mínima de 64, conteúdo à esquerda, textos e valor.
  *
- * Usada nas favoritas do Início, na lista do Converter e no status da sincronização.
+ * Usada nas favoritas do Início, nas listas do Converter e das Cotações e no status da
+ * sincronização.
  *
  * @example
  * ```tsx
@@ -47,6 +50,7 @@ export function ListRow({
   title,
   subtitle,
   value,
+  valueCaption,
   icon,
   leading,
   trailing,
@@ -72,7 +76,16 @@ export function ListRow({
           </Text>
         ) : null}
       </View>
-      {value ? <Text style={[styles.value, { color: colors.textHeading }]}>{value}</Text> : null}
+      {value ? (
+        <View style={styles.values}>
+          <Text style={[styles.value, { color: colors.textHeading }]}>{value}</Text>
+          {valueCaption ? (
+            <Text style={[styles.valueCaption, { color: colors.textSecondary }]}>
+              {valueCaption}
+            </Text>
+          ) : null}
+        </View>
+      ) : null}
       {trailing}
     </>
   );
@@ -109,10 +122,17 @@ const styles = StyleSheet.create({
     fontSize: TYPE.secondary,
     lineHeight: TYPE.secondary * 1.35,
   },
+  values: { alignItems: 'flex-end', gap: 2 },
   value: {
     fontFamily: FONTS.display,
     fontSize: TYPE.value,
     lineHeight: TYPE.value * 1.2,
+    fontVariant: ['tabular-nums'],
+  },
+  valueCaption: {
+    fontFamily: FONTS.body,
+    fontSize: TYPE.caption,
+    lineHeight: TYPE.caption * 1.35,
     fontVariant: ['tabular-nums'],
   },
 });
