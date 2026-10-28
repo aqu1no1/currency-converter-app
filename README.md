@@ -12,6 +12,12 @@ O app é feito com React Native e Expo (Expo Go) e consome a [currency-converter
 
 Moedas suportadas: USD, BRL, EUR, GBP, JPY, CAD, AUD, CHF, CNY e ARS. Textos em português, inglês e espanhol, com valores, taxas e datas formatados no idioma ativo.
 
+## Demonstração
+
+<div align="center">
+  <img src="docs/assets/demo.gif" width="280" alt="Demonstração do app" />
+</div>
+
 ## Stack
 
 <p>
